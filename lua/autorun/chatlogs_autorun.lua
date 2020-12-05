@@ -1,17 +1,15 @@
 --[[
 
-	Chatlogs v1.0.1
+	Chatlog v1.0.2
 	Made by actuallyNothing for the Trouble in Terrorist Town gamemode
 	Based on the "Simple logs" base made by fghdx https://github.com/fghdx/Gmod-Simple-Logs/
 	and the Damagelogs addon made by Tommy228 https://github.com/Tommy228/tttdamagelogs
 
 	https://steamcommunity.com/id/actuallyNothing/
-    https://clan-gameover.com/
-
 --]]
 
 Chatlog = Chatlog or {}
-Chatlog.Version = "v1.0.1"
+Chatlog.Version = "v1.0.2"
 Chatlog.Privileges = Chatlog.Privileges or {}
 Chatlog.TeamChatAccess = Chatlog.TeamChatAccess or {}
 ChatlogLanguage = ChatlogLanguage or {}

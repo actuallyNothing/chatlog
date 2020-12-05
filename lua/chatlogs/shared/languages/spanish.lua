@@ -23,5 +23,5 @@ ChatlogLanguage.spanish = {
 	SelectedMessage = "Mensaje seleccionado:",
 	SelectedMessageNone = "¡Ningún mensaje seleccionado!",
 	LanguageTab = "Idioma",
-	Licensing = "Chatlogs "..Chatlog.Version.." por actuallyNothing, licenciado bajo la Licencia GPL-3.0."
+	Licensing = "Chatlogs "..Chatlog.Version.." por actuallyNothing bajo la Licencia GPL-3.0."
 }

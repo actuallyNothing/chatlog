@@ -12,7 +12,7 @@ function Chatlog:OpenMenu()
 	-- Create the frame
 	self.Menu = vgui.Create("DFrame")
 	self.Menu:SetSize(600, 400)
-	self.Menu:SetTitle("Chatlogs | " .. os.date("%a %x", os.time()))
+	self.Menu:SetTitle("Chatlog | " .. os.date("%a %x", os.time()))
 	self.Menu:MakePopup()
 	self.Menu:Center()
 	self.Menu:SetKeyboardInputEnabled(false)
