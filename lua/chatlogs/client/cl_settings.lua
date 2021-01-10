@@ -49,7 +49,6 @@ function Chatlog.DrawSettings(tabs)
 	-- Add all elements
     languageForm:AddItem(languageSelect)
     languageForm:AddItem(versioning)
-    languageForm:AddItem(community)
 
     -- Add tab
 	tabs:AddSheet(Chatlog.Translate("SettingsTab"), settingsPanel, false, false)
