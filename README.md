@@ -18,7 +18,7 @@ Drop the 'chatlogs' folder into the /addons/ directory, inside your Garry's Mod 
 ## License
 
     Chatlog is a moderation tool designed to provide a TTT administrator with timestamped logs of messages sent in-game.
-    Copyright (C) 2020 actuallyNothing
+    Copyright (C) 2021 actuallyNothing
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
