@@ -72,16 +72,7 @@ function Chatlog.Message( ply, text, teamChat )
 		teamChat = false
 	end
 
-	net.Start("ChatlogData")
-	net.WriteString(playerNick)
-	net.WriteString(text)
-	net.WriteBool(teamChat)
-	net.WriteString(role)
-	net.WriteString(timestamp)
-	net.WriteString(steamID)
-	net.Broadcast()
-
-	-- Insert this line into the server's current round, just in case
+	-- Insert this line into the server's current round
 	table.insert(Chatlog.CurrentRound, {playerNick = playerNick, text = text, teamChat = teamChat, role = role, timestamp = timestamp, steamID = steamID})
 end
 
