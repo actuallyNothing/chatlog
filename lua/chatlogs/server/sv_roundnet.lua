@@ -1,21 +1,49 @@
--- Allow the client to ask the server for a previous round if it doesn't have it
--- Get a round number and send it to the client
+-- Get a round and send it to the client
+
 function Chatlog.SendTable(index, ply)
 	local chatlogTable = {}
-	if Chatlog.Rounds[index] == nil then
-		chatlogTable[1] = 404
+
+	-- Index 0: Current round
+	-- Index -1: Last round from previous map
+	if index == 0 then
+		if Chatlog:CanReadPresent(ply) then
+			chatlogTable = Chatlog.CurrentRound
+		else
+		chatlogTable = {
+			-- Unauthorized
+			[1] = {playerNick = "", role = "144", teamChat = false, text = "", timestamp = "", steamID = ""}
+		}
+		end
+	elseif index == -1 then
+		chatlogTable = Chatlog.LastRoundPrevMap
 	else
 		chatlogTable = Chatlog.Rounds[index]
 	end
+
+	if not chatlogTable then
+		chatlogTable = {
+			-- Empty log / No round found
+			[1] = {playerNick = "", role = "404", teamChat = false, text = "", timestamp = "", steamID = ""}
+		}
+	end
+
 	net.Start("GetChatlogRound")
-	net.WriteTable(chatlogTable)
-	net.WriteInt(index, 4)
+	net.WriteUInt(#chatlogTable, 16)
+	for i=1, #chatlogTable do
+		net.WriteString(chatlogTable[i].playerNick)
+		net.WriteString(chatlogTable[i].role)
+		net.WriteBool(chatlogTable[i].teamChat)
+		net.WriteString(chatlogTable[i].text)
+		net.WriteString(chatlogTable[i].timestamp)
+		net.WriteString(chatlogTable[i].steamID)
+	end
+	net.WriteInt(index, 16)
 	net.Send(ply)
 end
 
 net.Receive("AskChatlogRound", function(len, ply)
 	local index
-	index = net.ReadInt(4)
+	index = net.ReadInt(16)
 	Chatlog.SendTable(index, ply)
 end)
 

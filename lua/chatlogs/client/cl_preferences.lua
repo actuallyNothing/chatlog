@@ -23,13 +23,13 @@ surface.CreateFont("ChatlogVersioning", {
 })
 
 Chatlog.Colors = {
-	["ROLE_INNOCENT"] = Color(0,255,0),
-	["ROLE_TRAITOR"] = Color(255,0,0),
+	["ROLE_INNOCENT"] = Color(0,0,0),
+	["ROLE_TRAITOR"] = Color(150,0,0),
 	["ROLE_DETECTIVE"] = Color(0,0,255),
-	["ROLE_DEAD"] = Color(0,0,0,185),
-	["HIGHLIGHT_TRAITOR"] = Color(255,0,0,100),
-	["HIGHLIGHT_DETECTIVE"] = Color(0,0,255,100),
-	["HIGHLIGHT_DEAD"] = Color(0,0,0,125)
+	["ROLE_SPECTATOR"] = Color(0,0,0,185),
+	["HIGHLIGHT_TRAITOR"] = Color(255,0,0,50),
+	["HIGHLIGHT_DETECTIVE"] = Color(0,0,255,50),
+	["HIGHLIGHT_SPECTATOR"] = Color(0,0,0,125)
 }
 
 function Chatlog.GetColor(type, color)

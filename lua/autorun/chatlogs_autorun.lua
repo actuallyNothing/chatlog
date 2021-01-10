@@ -9,10 +9,14 @@
 --]]
 
 Chatlog = Chatlog or {}
-Chatlog.Version = "v1.0.2"
+Chatlog.Version = "v1.1.0"
 Chatlog.Privileges = Chatlog.Privileges or {}
 Chatlog.TeamChatAccess = Chatlog.TeamChatAccess or {}
 ChatlogLanguage = ChatlogLanguage or {}
+
+if not file.Exists("chatlog", "DATA") then
+    file.CreateDir("chatlog")
+end
 
 function Chatlog:AddUser(user, privileges, teamChat)
     self.Privileges[user] = privileges

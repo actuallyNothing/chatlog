@@ -9,8 +9,9 @@ AddCSLuaFile("chatlogs/client/cl_roundnet.lua")
 include("chatlogs/shared/privileges.lua")
 include("chatlogs/server/sv_roundnet.lua")
 include("chatlogs/config/config.lua")
+include("chatlogs/server/sv_lastround.lua")
 
--- Include network strings
+-- Include network strings 
 util.AddNetworkString( "ChatlogData" )
 util.AddNetworkString( "AskChatlogRound" )
 util.AddNetworkString( "GetChatlogRound" )
@@ -18,11 +19,19 @@ util.AddNetworkString( "GetChatlogRound" )
 -- Initial round tables
 Chatlog.Rounds = {}
 Chatlog.CurrentRound = {}
+Chatlog.LastRoundPrevMap = {}
+
+if file.Exists("chatlog/chatlog_lastroundmap.json", "DATA") then
+	Chatlog.LastRoundPrevMap = util.JSONToTable(file.Read("chatlog/chatlog_lastroundmap.json", "DATA"))
+	SetGlobalBool("ChatlogLastMapExists", true)
+	-- file.Delete("chatlog/chatlog_lastroundmap.json", "DATA")
+else
+	SetGlobalBool("ChatlogLastMapExists", false)
+end
 
 -- Format seconds into an easy to read timestamp
 function Chatlog.FormatTime(seconds)
   local seconds = tonumber(seconds)
-
   if seconds <= 0 then
     return "00:00";
   else
@@ -40,9 +49,9 @@ function Chatlog.Message( ply, text, teamChat )
 	if GetRoundState() != ROUND_ACTIVE then return end
 
 	playerNick = ply:Name()
-	isAlive = ply:Alive()
 	timestamp = Chatlog.FormatTime(timerSeconds)
 	role = ''
+	steamID = ply:SteamID()
 
 	if ply:GetRole() == ROLE_TRAITOR then
 		role = 'traitor'
@@ -52,7 +61,7 @@ function Chatlog.Message( ply, text, teamChat )
 		role = 'innocent'
 	end
 
-	if ply:Team() == TEAM_SPECTATOR then
+	if ply:Team() == TEAM_SPECTATOR || ply:Alive() == false then
 		role = 'spectator'
 	end
 
@@ -68,12 +77,12 @@ function Chatlog.Message( ply, text, teamChat )
 	net.WriteString(text)
 	net.WriteBool(teamChat)
 	net.WriteString(role)
-	net.WriteBool(isAlive)
 	net.WriteString(timestamp)
+	net.WriteString(steamID)
 	net.Broadcast()
 
 	-- Insert this line into the server's current round, just in case
-	table.insert(Chatlog.CurrentRound, {playerNick = playerNick, text = text, teamChat = teamChat, isAlive = isAlive, role = role, timestamp = timestamp})
+	table.insert(Chatlog.CurrentRound, {playerNick = playerNick, text = text, teamChat = teamChat, role = role, timestamp = timestamp, steamID = steamID})
 end
 
 hook.Add("PlayerSay", "ChatlogMessage", Chatlog.Message)

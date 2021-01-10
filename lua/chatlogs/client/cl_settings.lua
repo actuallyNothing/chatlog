@@ -1,5 +1,6 @@
 function Chatlog.DrawSettings(tabs)
 	-- Settings tab
+	local clog = Chatlog
 	local settingsPanel = vgui.Create("DPanel")
 	settingsPanel:SetSize(tabs:GetWide() - 10, tabs:GetTall() - 50)
 	settingsPanel:SetPos(5, 50)
@@ -8,7 +9,7 @@ function Chatlog.DrawSettings(tabs)
 	-- Create a DForm
 	local languageForm = vgui.Create("DForm", settingsPanel)
 	languageForm:SetSize(settingsPanel:GetWide() - 10, tabs:GetTall() - 30)
-	languageForm:SetName(ChatlogTranslate(GetChatlogLanguage, "LanguageTab"))
+	languageForm:SetName(Chatlog.Translate("LanguageTab"))
 	languageForm:Dock(FILL)
 	languageForm:DockMargin(5, 5, 5, 5)
 
@@ -18,19 +19,23 @@ function Chatlog.DrawSettings(tabs)
 		languageSelect:AddChoice(string.upper(string.sub(k, 1, 1)) .. string.sub(k, 2, 100))
 	end
 
-	languageSelect:ChooseOption(string.upper(string.sub(GetConVar("chatlog_language"):GetString(), 1, 1)) .. string.sub(GetConVar("chatlog_language"):GetString(), 2, 100))
+	-- Set initial text to current language
+	languageSelect:SetValue(string.upper(string.sub(GetConVar("chatlog_language"):GetString(), 1, 1)) .. string.sub(GetConVar("chatlog_language"):GetString(), 2, 100))
 
 	-- On select, change language CVar and update GetChatlogLanguage
-	languageSelect.OnSelect = function(panel, index, value, data, Chatlog)
+	languageSelect.OnSelect = function(panel, index, value, data)
         local currentLanguage = GetConVar("chatlog_language"):GetString()
         local newLang = string.lower(value)
         if currentLanguage == newLang then return end
         GetChatlogLanguage = newLang
         RunConsoleCommand("chatlog_language", newLang)
+        clog.Menu:Close()
+        clog:OpenMenu()
+        chat.AddText(Color(255,255,255), Chatlog.Translate("SwitchedLanguage"))
     end
 
 	languageForm:SetSize(settingsPanel:GetWide() - 10, tabs:GetTall() - 30)
-	languageForm:SetName(ChatlogTranslate(GetChatlogLanguage, "LanguageTab"))
+	languageForm:SetName(Chatlog.Translate("LanguageTab"))
 	languageForm:Dock(FILL)
 	languageForm:DockMargin(5, 5, 5, 5)
 
@@ -38,7 +43,7 @@ function Chatlog.DrawSettings(tabs)
     local versioning = vgui.Create("DLabel")
 	versioning:SetTextColor(Color(0,0,0))
 	versioning:SetFont("ChatlogVersioning")
-	versioning:SetText(ChatlogTranslate(GetChatlogLanguage,"Licensing"))
+	versioning:SetText(Chatlog.Translate("Licensing"))
 	versioning:SizeToContents()
 
 	-- Add all elements
@@ -47,5 +52,5 @@ function Chatlog.DrawSettings(tabs)
     languageForm:AddItem(community)
 
     -- Add tab
-	tabs:AddSheet(ChatlogTranslate(GetChatlogLanguage, "SettingsTab"), settingsPanel, false, false)
+	tabs:AddSheet(Chatlog.Translate("SettingsTab"), settingsPanel, false, false)
 end

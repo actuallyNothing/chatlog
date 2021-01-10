@@ -11,12 +11,7 @@ include("chatlogs/client/cl_menu.lua")
 -- Language 
 GetChatlogLanguage = GetConVar("chatlog_language"):GetString()
 
--- An integer to determine what round the client initialized at
--- used in a function below LoadRound()
-Chatlog.RoundJoined = GetGlobalInt("Chatlog.RoundNumber", 0)
-
--- Initial round tables
-Chatlog.CurrentRound = {} --A list that will hold all the information when player sends a message
+-- Initial tables
 Chatlog.Rounds = {}
 Chatlog.Menu = {}
 
@@ -26,77 +21,85 @@ function Chatlog:LoadRound(round, loglist, textPanel, plyFilter, playerFilter)
 	local playerList = {}
 	loglist:Clear()
 
-	if round[1] == 404 then
-		-- Show an error message if neither the client or server were able to get the round
-		loglist:AddLine('','',ChatlogTranslate(GetChatlogLanguage, "EmptyLog"))
+	-- Handle error codes from the server
+	-- 144: Unauthorized reading of current round logs
+	-- 404: Empty logs / No round found
+	if round[1] == nil || tonumber(round[1]['role']) == 404 then
+		-- Show an error message if the round is empty or if it doesn't exist
+		loglist:AddLine('00:00','Chatlog',Chatlog.Translate("EmptyLog"))
 		return false
-	elseif !self.CanReadPresent() && round == self.CurrentRound then
+	elseif tonumber(round[1]['role']) == 144 then
 		-- Show an error message if an unauthorized player tries to see the current round
-		loglist:AddLine('','',ChatlogTranslate(GetChatlogLanguage, "Unauthorized"))
+		loglist:AddLine('00:00','Chatlog',Chatlog.Translate("CantReadPresent"))
+		loglist:AddLine('00:00','Chatlog',Chatlog.Translate("NoFilterChosen"))
 		return false
 	end
+
+	-- We're loading a round, so we shouldn't be
+	-- seeing info from another one
+	Chatlog.ClearTextPanel()
 
 	-- Loop through all messages
 	for i = #round, 1, -1 do
 	  v = round[i]
 
 	  	-- Filtering and privileges
-	 	if v['teamChat'] && !self.CanReadTeam() || !v['isAlive'] && !self.CanReadDead() then goto cont
+	 	if v['teamChat'] && !self:CanReadTeam(LocalPlayer()) || v['role'] == 'spectator' && !self:CanReadDead(LocalPlayer()) then goto cont
 	  	elseif plyFilter != nil && v['playerNick'] != plyFilter then goto cont
-	  	elseif GetConVar("chatlog_hide_dead"):GetBool() && !v['isAlive'] || GetConVar("chatlog_hide_dead"):GetBool() && v['role'] == 'spectator' then goto cont end
+	  	elseif GetConVar("chatlog_hide_dead"):GetBool() && v['role'] == 'spectator' || GetConVar("chatlog_hide_dead"):GetBool() && v['role'] == 'spectator' then goto cont end
 
 	  	local lineMessage = v['text']
 	  	local lineNick = v['playerNick']
 	  	local lineRole = v['role']
 	  	local lineTimestamp = v['timestamp']
+	  	local lineSteamID = v['steamID']
 	  	-- Only using this variable for full text display
 	  	local lineAuthor = lineNick
 
 	  	-- Author prefixes
-	  	if v['teamChat'] then
-	  		lineAuthor = "("..ChatlogTranslate(GetChatlogLanguage,lineRole)..") "..lineNick
-	  	elseif !v['isAlive'] || v['role'] == 'spectator' then
-	  		lineAuthor = "*"..ChatlogTranslate(GetChatlogLanguage,"dead").."* "..lineNick
+	  	if v['teamChat'] || lineRole == 'spectator' then
+	  		lineAuthor = string.format("(%s) %s", string.upper(Chatlog.Translate(lineRole)), lineNick)
 	  	end
 
 	  	-- Add every line according to privileges
 	  	-- If the player shouldn't be allowed to see this line, scrap it
 	  	local line
-		line = loglist:AddLine(lineTimestamp, lineNick, lineMessage, chat_isAlive, chat_teamChat)
+		line = loglist:AddLine(lineTimestamp, lineNick, lineMessage, chat_teamChat)
 
 	  	-- Paint team and dead chat lines
-	  	if v['teamChat'] == true then
+	  	if v['teamChat'] == true || lineRole == 'spectator' then
 	  		function line:PaintOver(w, h)
 	  			draw.RoundedBox( 0, 0, 0, w, h, Chatlog.GetColor('highlight', lineRole))
-	  		end
-	  	elseif v['isAlive'] == false || lineRole == 'spectator' then
-	  		function line:PaintOver(w, h)
-	  			draw.RoundedBox( 0, 0, 0, w, h, Chatlog.GetColor('highlight', 'dead'))
 	  		end
 	  	end
 
 	  	-- Right-click context menu
 	  	line.OnRightClick = function()
 			local contextMenu = DermaMenu()
-			local contextOption = contextMenu:AddOption(ChatlogTranslate(GetChatlogLanguage, "ClipboardCopy"), function()
-				local copy_output = "[" .. lineTimestamp .. "] " .. lineNick .. ": " .. lineMessage
-				SetClipboardText(copy_output)
-				chat.AddText( Color( 255, 255, 255 ), ChatlogTranslate(GetChatlogLanguage, "ClipboardCopied"))
+
+			-- Copy message to clipboard
+			-- example: [01:23] actuallyNothing: hello
+			local contextOption = contextMenu:AddOption(Chatlog.Translate("ClipboardCopy"), function()
+				SetClipboardText(string.format("[%s] %s: %s", lineTimestamp, lineNick, lineMessage))
+				chat.AddText( Color( 255, 255, 255 ), Chatlog.Translate("ClipboardCopied"))
 			end)
-			contextOption:SetIcon("icon16/comments_add.png")
+			contextOption:SetIcon("icon16/comment.png")
+
+			-- Copy player's SteamID
+			contextOption = contextMenu:AddOption(string.format(Chatlog.Translate("GetSteamID"), lineNick), function()
+				SetClipboardText(lineSteamID)
+				chat.AddText( Color( 255, 255, 255 ), string.format(Chatlog.Translate("CopiedSteamID"), lineNick, lineSteamID))
+			end)
+			contextOption:SetIcon("icon16/key.png")
 			contextMenu:Open()
 		end
 
 		-- Set the 'selected message' text labels
 		line.OnSelect = function()
-			textPanel.author:SetText(lineAuthor..":")
-			textPanel.timestamp:SetText("[" .. lineTimestamp .. "]")
+			textPanel.author:SetText(string.format("%s:", lineAuthor))
+			textPanel.timestamp:SetText(string.format("[%s]", lineTimestamp))
 			-- Color the author's name with their role (if they're alive)
-			if !v['isAlive'] || lineRole == 'spectator' then
-				textPanel.author:SetTextColor(Chatlog.GetColor('role', 'dead'))
-			else
-				textPanel.author:SetTextColor(Chatlog.GetColor('role', lineRole))
-			end
+			textPanel.author:SetTextColor(Chatlog.GetColor('role', lineRole))
 			textPanel.fulltext:SetText(lineMessage)
 			textPanel.author:SizeToContents()
 		end
@@ -109,26 +112,23 @@ function Chatlog:LoadRound(round, loglist, textPanel, plyFilter, playerFilter)
 		-- Skip to next line
 		::cont::
 	end
-
-	playerFilter:Clear()
-	for _, v in pairs(playerList) do
-		playerFilter:AddChoice(v, nil, false, "icon16/user.png")
+	
+	-- Add players to player filter
+	-- if a filter is already selected, only 'Remove Filter' option is available
+	if not plyFilter then
+		playerFilter:Clear()
+		for _, v in pairs(playerList) do
+			playerFilter:AddChoice(v, nil, false, "icon16/user.png")
+		end
+		playerFilter:AddChoice(Chatlog.Translate("PlayerFilterNone"), nil, true, "icon16/cancel.png")
+	else
+		playerFilter:Clear()
+		playerFilter:AddChoice(Chatlog.Translate("PlayerFilterRemove"), nil, true, "icon16/cancel.png")
 	end
-	playerFilter:AddChoice(ChatlogTranslate(GetChatlogLanguage, "PlayerFilterNone"), nil, true, "icon16/cancel.png")
+
 	loglist:SortByColumn(1, false)
-end
 
--- On round end, insert the current round onto the previous rounds and clear it
--- Allows you to take a quick look at the logs if the map's changing and you're in a rush
--- If the client joined in the middle of this round, it will be scrapped so it can ask for it later
--- this should fix issues with players having incomplete logs
-hook.Add("TTTEndRound", "ChatlogRoundClear", function()
-	local round = GetGlobalInt("ChatlogRoundNumber", 0)
-	if round != Chatlog.RoundJoined then
-		table.insert(Chatlog.Rounds, GetGlobalInt("ChatlogRoundNumber", 1), Chatlog.CurrentRound)
-	end
-	Chatlog.CurrentRound = {}
-end)
+end
 
 Chatlog.pressedKey = false
 
