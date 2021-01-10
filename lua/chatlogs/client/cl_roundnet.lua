@@ -5,19 +5,7 @@ local teamChat
 local role
 local timestamp
 
--- Receive data for the current round
-function Chatlog.Data()
-	playerNick = net.ReadString()
-	text = net.ReadString()
-	teamChat = net.ReadBool()
-	role = net.ReadString()
-	timestamp = net.ReadString()
-	table.insert(Chatlog.CurrentRound, {playerNick = playerNick, text = text, teamChat = teamChat, role = role, timestamp = timestamp})
-end
-
-net.Receive("ChatlogData", Chatlog.Data)
-
--- Receive a previous round from the server
+-- Receive a round from the server
 function Chatlog:ReceiveRound(dlistview, textpanel, plyfilter,playerFilter)
 	roundtable = {}
 	net.Receive("GetChatlogRound", function()
