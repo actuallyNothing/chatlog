@@ -1,5 +1,5 @@
 function Chatlog:OpenMenu()
-	client = client
+	client = LocalPlayer()
 	-- Don't open the menu if the player is not allowed to
 	if Chatlog:GetAccessLevel(client) <= 0 then 
 		chat.AddText( Color( 255, 0, 0 ), Chatlog.Translate("Unauthorized"))
