@@ -57,13 +57,14 @@ end
 -- Reset this timer every round start
 -- Also, keep track of rounds through this hook 
 hook.Add("TTTBeginRound", "ChatlogRoundStart", function()
+
 	timerSeconds = 0
-	if not timer.Exists("chatlogTimer") then
-		Chatlog.Timer()
-	else
+	
+	if timer.Exists("chatlogTimer") then
 		timer.Remove("chatlogTimer")
-		Chatlog.Timer()
 	end
+
+	Chatlog.Timer()
 
 	SetGlobalInt("ChatlogRoundNumber", (GetGlobalInt("ChatlogRoundNumber") + 1))
 end)

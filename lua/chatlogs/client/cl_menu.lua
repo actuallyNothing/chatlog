@@ -7,7 +7,8 @@ function Chatlog:OpenMenu()
 	end
 
 	local setting
-	local filteredPlayer
+	self.filteredPlayer = nil
+	local filteredPlayer = self.filteredPlayer
 
 	-- Create the frame
 	self.Menu = vgui.Create("DFrame")
@@ -27,7 +28,8 @@ function Chatlog:OpenMenu()
 	chatlogTab:SetSize(tabs:GetWide() - 10, tabs:GetTall() - 50) 
 	chatlogTab:SetPos(5, 90)
 
-	local chatLoglist = vgui.Create("DListView", chatlogTab)
+	self.chatLogList = vgui.Create("DListView", chatlogTab)
+	local chatLoglist = self.chatLogList
 	chatLoglist:SetSize(chatlogTab:GetWide() - 15, chatlogTab:GetTall() - 125) 
 	chatLoglist:SetPos(5, 120)
 	chatLoglist:SetSortable(false)
@@ -40,7 +42,8 @@ function Chatlog:OpenMenu()
 	column:SetFixedWidth(chatLoglist:GetWide() - 110)
 
 	-- "Selected message" panel
-	local textPanel = {}
+	self.textPanel = {}
+	local textPanel = self.textPanel
 	self.DrawTextPanel(textPanel, chatlogTab)
 
 	-- Filter-by-round DComboBox
@@ -78,7 +81,8 @@ function Chatlog:OpenMenu()
 	setting:SetText(Chatlog.Translate("PlayerFilter"))
 	setting:SetSize(125, 20)
 
-	local playerFilter = vgui.Create("DComboBox", chatlogTab)
+	self.playerFilter = vgui.Create("DComboBox", chatlogTab)
+	local playerFilter = self.playerFilter
 	playerFilter:SetSize((chatlogTab:GetWide() - 20) / 2, 20)
 	playerFilter:SetPos(290,20)
 	playerFilter:AddChoice(Chatlog.Translate("PlayerFilterNone"), nil, true, "icon16/cancel.png")
@@ -135,7 +139,6 @@ function Chatlog:OpenMenu()
 			net.Start("AskChatlogRound")
 			net.WriteInt(index, 16)
 			net.SendToServer()
-			Chatlog:ReceiveRound(chatLoglist, textPanel, filteredPlayer, playerFilter)
 		end
 	end
 

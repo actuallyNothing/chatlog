@@ -115,14 +115,13 @@ function Chatlog:LoadRound(round, loglist, textPanel, plyFilter, playerFilter)
 	
 	-- Add players to player filter
 	-- if a filter is already selected, only 'Remove Filter' option is available
+	playerFilter:Clear()
 	if not plyFilter then
-		playerFilter:Clear()
 		for _, v in pairs(playerList) do
 			playerFilter:AddChoice(v, nil, false, "icon16/user.png")
 		end
 		playerFilter:AddChoice(Chatlog.Translate("PlayerFilterNone"), nil, true, "icon16/cancel.png")
 	else
-		playerFilter:Clear()
 		playerFilter:AddChoice(Chatlog.Translate("PlayerFilterRemove"), nil, true, "icon16/cancel.png")
 	end
 
