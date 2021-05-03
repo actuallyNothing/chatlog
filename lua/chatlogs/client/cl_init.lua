@@ -1,4 +1,4 @@
-CreateClientConVar("chatlog_language", "english", FCVAR_ARCHIVE)
+CreateClientConVar("chatlog_language", "en", FCVAR_ARCHIVE)
 include("chatlogs/client/cl_preferences.lua")
 include("chatlogs/config/config.lua")
 include("chatlogs/shared/lang.lua")
@@ -44,7 +44,7 @@ function Chatlog:LoadRound(round, loglist, textPanel, plyFilter, playerFilter)
 	  v = round[i]
 
 	  	-- Filtering and privileges
-	 	if v['teamChat'] && !self:CanReadTeam(LocalPlayer()) || v['role'] == 'spectator' && !self:CanReadDead(LocalPlayer()) then goto cont
+	 	if v['teamChat'] && !self:CanReadTeam(client) || v['role'] == 'spectator' && !self:CanReadDead(client) then goto cont
 	  	elseif plyFilter != nil && v['playerNick'] != plyFilter then goto cont
 	  	elseif GetConVar("chatlog_hide_dead"):GetBool() && v['role'] == 'spectator' || GetConVar("chatlog_hide_dead"):GetBool() && v['role'] == 'spectator' then goto cont end
 
@@ -144,6 +144,31 @@ function Chatlog:Think()
     end
 end
 
-hook.Add("Think", "ThinkChatlog", function()
+hook.Add("Think", "ThinkChatlog", function(version)
     Chatlog:Think()
 end)
+
+-- Check if there's a newer version on Github
+-- if there is, alert the player
+
+Chatlog.outdated = false
+
+http.Fetch("https://raw.githubusercontent.com/actuallyNothing/chatlog/master/VERSION.md",
+	function(version)
+		local cur_version = string.Explode(".", Chatlog.Version)
+        local tbl = string.Explode(".", version)
+
+        for i = 1, 3 do
+            tbl[i] = tonumber(tbl[i])
+            cur_version[i] = tonumber(cur_version[i])
+        end
+
+        if tbl[1] > cur_version[1] then
+            Chatlog.outdated = true
+        elseif tbl[1] == cur_version[1] and tbl[2] > cur_version[2] then
+            Chatlog.outdated = true
+        elseif tbl[1] == cur_version[1] and tbl[2] == cur_version[2] and tbl[3] > cur_version[3] then
+            Chatlog.outdated = true
+        end
+
+	end)

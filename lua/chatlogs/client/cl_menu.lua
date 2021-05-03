@@ -17,6 +17,26 @@ function Chatlog:OpenMenu()
 	self.Menu:MakePopup()
 	self.Menu:Center()
 	self.Menu:SetKeyboardInputEnabled(false)
+
+	-- "This version is outdated" warning
+	if Chatlog.outdated then
+		local outd = vgui.Create("DPanel", self.Menu)
+		outd:SetSize(400,18)
+		outd:SetPos(175,30)
+
+		function outd:Paint(w,h)
+			draw.RoundedBox(0, 0, 0, w, h, Color(0,0,0))
+			draw.RoundedBox(0, 1, 1, w-2, h-2, Color(255,255,0))
+		end
+
+		local outlabel = vgui.Create("DLabel", outd)
+		outlabel:SetFont("ChatlogMessage")
+		outlabel:SetText("This version is outdated! Download latest at github.com/actuallyNothing/chatlog")
+		outlabel:SizeToContents()
+		outlabel:SetColor(Color(0,0,0))
+		outlabel:SetMouseInputEnabled( true )
+		outlabel:Center()
+	end
 	
 	-- DPropertySheet for tabs
 	local tabs = vgui.Create( "DPropertySheet", self.Menu )
@@ -147,4 +167,10 @@ function Chatlog:OpenMenu()
 	self.DrawSettings(tabs)
 end
 
-concommand.Add("chatlog", Chatlog.OpenMenu)
+concommand.Add("chatlog", function()
+	if not IsValid(Chatlog.Menu) then
+        Chatlog:OpenMenu()
+    else
+    	Chatlog.Menu:Close()
+    end
+end)

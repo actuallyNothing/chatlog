@@ -15,17 +15,17 @@ function Chatlog.DrawSettings(tabs)
 
 	-- DComboBox for language selection
 	local languageSelect = vgui.Create("DComboBox")
-	for k in pairs(ChatlogLanguage) do
-		languageSelect:AddChoice(string.upper(string.sub(k, 1, 1)) .. string.sub(k, 2, 100))
+	for k,v in pairs(ChatlogLanguage) do
+		languageSelect:AddChoice(v.DisplayName, k)
 	end
 
 	-- Set initial text to current language
-	languageSelect:SetValue(string.upper(string.sub(GetConVar("chatlog_language"):GetString(), 1, 1)) .. string.sub(GetConVar("chatlog_language"):GetString(), 2, 100))
+	languageSelect:SetValue(ChatlogLanguage[GetConVar("chatlog_language"):GetString()].DisplayName)
 
 	-- On select, change language CVar and update GetChatlogLanguage
 	languageSelect.OnSelect = function(panel, index, value, data)
         local currentLanguage = GetConVar("chatlog_language"):GetString()
-        local newLang = string.lower(value)
+        local newLang = string.lower(data)
         if currentLanguage == newLang then return end
         GetChatlogLanguage = newLang
         RunConsoleCommand("chatlog_language", newLang)

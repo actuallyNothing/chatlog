@@ -19,15 +19,12 @@ util.AddNetworkString( "GetChatlogRound" )
 -- Initial round tables
 Chatlog.Rounds = {}
 Chatlog.CurrentRound = {}
-Chatlog.LastRoundPrevMap = {}
 
-if file.Exists("chatlog/chatlog_lastroundmap.json", "DATA") then
-	Chatlog.LastRoundPrevMap = util.JSONToTable(file.Read("chatlog/chatlog_lastroundmap.json", "DATA"))
-	SetGlobalBool("ChatlogLastMapExists", true)
-	file.Delete("chatlog/chatlog_lastroundmap.json", "DATA")
-else
-	SetGlobalBool("ChatlogLastMapExists", false)
-end
+Chatlog.roleStrings = {
+	[0] = "innocent",
+	[1] = "traitor",
+	[2] = "detective"
+}
 
 -- Format seconds into an easy to read timestamp
 function Chatlog.FormatTime(seconds)
@@ -41,7 +38,7 @@ function Chatlog.FormatTime(seconds)
   end
 end
 
--- Process every message and send it to the client
+-- Process every message and save it for the server
 -- Saving it into Chatlog.CurrentRound for later, too
 function Chatlog.Message( ply, text, teamChat )
 	
@@ -50,27 +47,15 @@ function Chatlog.Message( ply, text, teamChat )
 
 	playerNick = ply:Name()
 	timestamp = Chatlog.FormatTime(timerSeconds)
-	role = ''
 	steamID = ply:SteamID()
-
-	if ply:GetRole() == ROLE_TRAITOR then
-		role = 'traitor'
-	elseif ply:GetRole() == ROLE_DETECTIVE then
-		role = 'detective'
-	else
-		role = 'innocent'
-	end
+	role = Chatlog.roleStrings[ply:GetRole()]
 
 	if ply:Team() == TEAM_SPECTATOR || ply:Alive() == false then
 		role = 'spectator'
-	end
-
-	-- Innocents/spectators have no team chat, but the game still 
-	-- registers messagemode2 as a team message for them 
-	-- so... this negates that nonsense
-	if role == 'innocent' && teamChat == true || role == 'spectator' && teamChat == true then
 		teamChat = false
 	end
+
+	if role == 'innocent' then teamChat = false	end
 
 	-- Insert this line into the server's current round
 	table.insert(Chatlog.CurrentRound, {playerNick = playerNick, text = text, teamChat = teamChat, role = role, timestamp = timestamp, steamID = steamID})
