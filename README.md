@@ -8,7 +8,7 @@ This addon tracks all messages sent in a TTT round and sets a timestamp to each 
 * Messages sent to team chats are highlighted
 * Messages sent by dead people are easily distinguished and filtered out
 * Round and player filtering
-* Easy to translate by writing language files (includes English and Spanish languages by default)
+* Easy to translate by writing language files (includes English, Spanish and Turkish languages by default)
 * Easy configuration of privileges for usergroups, to choose who can or can't see rounds in progress or spectator chats
 
 ### Installation
