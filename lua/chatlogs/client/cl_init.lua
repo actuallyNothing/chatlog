@@ -46,7 +46,7 @@ function Chatlog:LoadRound(round, loglist, textPanel, plyFilter, playerFilter)
 	  	-- Filtering and privileges
 	 	if v['teamChat'] && !self:CanReadTeam(client) || v['role'] == 'spectator' && !self:CanReadDead(client) then goto cont
 	  	elseif plyFilter != nil && v['playerNick'] != plyFilter then goto cont
-	  	elseif GetConVar("chatlog_hide_dead"):GetBool() && v['role'] == 'spectator' || GetConVar("chatlog_hide_dead"):GetBool() && v['role'] == 'spectator' then goto cont end
+	  	elseif GetConVar("chatlog_hide_dead"):GetBool() && v['role'] == 'spectator' then goto cont end
 
 	  	local lineMessage = v['text']
 	  	local lineNick = v['playerNick']
