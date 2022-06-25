@@ -2,8 +2,7 @@
 
 	Chatlog v1.3.0
 	Made by actuallyNothing for the Trouble in Terrorist Town gamemode
-	Based on the "Simple logs" base made by fghdx https://github.com/fghdx/Gmod-Simple-Logs/
-	and the Damagelogs addon made by Tommy228 https://github.com/Tommy228/tttdamagelogs
+	Based on the Damagelogs addon made by Tommy228 https://github.com/Tommy228/tttdamagelogs
 	
     contact:
     Steam: https://steamcommunity.com/id/actuallyNothing/
