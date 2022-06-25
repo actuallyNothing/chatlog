@@ -57,20 +57,16 @@ net.Receive("ChatlogSendConfiguration", function()
     local full = table.Copy(Chatlog.Config)
 
     if partial then
-        print("Got partial config")
         overwriteTable(full, config)
 
         for k, v in pairs(full.privileges) do
             if v.markedForDeletion then
                 full.privileges[k] = nil
-                print("del")
             end
         end
 
-        PrintTable(full)
         Chatlog.Config = full
     else
-        print("Got full config")
         Chatlog.Config = config
         Chatlog.Ready = true
     end
@@ -123,6 +119,3 @@ http.Fetch("https://raw.githubusercontent.com/actuallyNothing/chatlog/master/VER
         Chatlog.outdated = true
     end
 end)
--------------------
--- Notifications --
--------------------
