@@ -1,9 +1,13 @@
 ﻿function Chatlog:OpenMenu()
+
     client = LocalPlayer()
+
+    Chatlog.Filters.players.steamids = {}
+
     local setting
     self.filteredPlayer = nil
     self.Menu = vgui.Create("DFrame")
-    self.Menu:SetSize(600, 400)
+    self.Menu:SetSize(600, 420)
     self.Menu:SetTitle("Chatlog | " .. os.date("%a %x", os.time()))
     self.Menu:MakePopup()
     self.Menu:Center()
@@ -32,39 +36,142 @@
     -- DPropertySheet for tabs
     local tabs = vgui.Create("DPropertySheet", self.Menu)
     tabs:Dock(FILL)
+    tabs:InvalidateLayout(true)
+
     -- Main Chatlog tab
     local chatlogTab = vgui.Create("DPanel", tabs)
     chatlogTab:Dock(FILL)
     chatlogTab:DockMargin(5, -2, 5, 5)
+    chatlogTab:InvalidateLayout(true)
+
+    local roundInfo = vgui.Create("DPanel", chatlogTab)
+    roundInfo:Dock(BOTTOM)
+    roundInfo:DockMargin(0, 0, 5, 0)
+    roundInfo:InvalidateLayout(true)
+    roundInfo.Paint = function() end
+
+    roundInfo.mapIcon = vgui.Create("DImage", roundInfo)
+    roundInfo.mapIcon:SetImage("icon16/map.png")
+    roundInfo.mapIcon:Dock(LEFT)
+    roundInfo.mapIcon:DockMargin(5, 4, 4, 4)
+    roundInfo.mapIcon:InvalidateLayout(true)
+    roundInfo.mapIcon:SetSize(16, 16)
+
+    roundInfo.mapLabel = vgui.Create("DLabel", roundInfo)
+    roundInfo.mapLabel:SetFont("ChatlogMessage")
+    roundInfo.mapLabel:SetText(Chatlog.Translate("NoRoundSelected"))
+    roundInfo.mapLabel:SetColor(Color(0, 0, 0))
+    roundInfo.mapLabel:Dock(LEFT)
+    roundInfo.mapLabel:InvalidateLayout(true)
+    roundInfo.mapLabel:SizeToContents()
+
+    roundInfo.timeLabel = vgui.Create("DLabel", roundInfo)
+    roundInfo.timeLabel:SetFont("ChatlogMessage")
+    roundInfo.timeLabel:SetText(Chatlog.Translate("NoRoundSelected"))
+    roundInfo.timeLabel:SetColor(Color(0, 0, 0))
+    roundInfo.timeLabel:Dock(RIGHT)
+    roundInfo.timeLabel:InvalidateLayout(true)
+    roundInfo.timeLabel:SizeToContents()
+
+    roundInfo.timeIcon = vgui.Create("DImage", roundInfo)
+    roundInfo.timeIcon:SetImage("icon16/calendar.png")
+    roundInfo.timeIcon:Dock(RIGHT)
+    roundInfo.timeIcon:DockMargin(0, 4, 4, 4)
+    roundInfo.timeIcon:InvalidateLayout(true)
+    roundInfo.timeIcon:SetSize(16, 16)
+
+    hook.Add("ChatlogRoundLoaded", "ChatlogUpdateRoundInfo", function(round)
+        roundInfo.mapLabel:SetText(round.map)
+        roundInfo.mapLabel:SizeToContents()
+
+        roundInfo.timeLabel:SetText(os.date(Chatlog.Translate("RoundInfoTime"), round.unix))
+        roundInfo.timeLabel:SizeToContents()
+    end)
+
     self.chatLogList = vgui.Create("DListView", chatlogTab)
     local chatLoglist = self.chatLogList
     chatLoglist:Dock(BOTTOM)
-    chatLoglist:DockMargin(5, 5, 5, 5)
+    chatLoglist:DockMargin(5, 5, 5, 0)
     chatLoglist:SetSortable(false)
     chatLoglist:SetHeight(200)
     chatLoglist:SetMultiSelect(false)
+
     local column = chatLoglist:AddColumn(Chatlog.Translate("Time"))
     column:SetFixedWidth(40)
     column = chatLoglist:AddColumn(Chatlog.Translate("Player"))
     column:SetFixedWidth(80)
     column = chatLoglist:AddColumn(Chatlog.Translate("Message"))
     column:SetFixedWidth(450)
+    column = chatLoglist:AddColumn(Chatlog.Translate("unix"))
+    column:SetFixedWidth(0)
+
+    local filteringPanel = vgui.Create("DPanel", chatlogTab)
+    filteringPanel:Dock(TOP)
+    filteringPanel:DockMargin(5, 5, 5, 5)
+    filteringPanel:InvalidateLayout(true)
+    filteringPanel:SetHeight(50)
+
     -- "Selected message" panel
     self.textPanel = {}
     local textPanel = self.textPanel
     self.DrawTextPanel(textPanel, chatlogTab)
+
     -- Filter-by-round DComboBox
-    setting = vgui.Create("DLabel", chatlogTab)
+    setting = vgui.Create("DLabel", filteringPanel)
     setting:Dock(TOP)
-    setting:DockMargin(7, 5, 5, 0)
+    setting:DockMargin(7, 0, 5, 0)
     setting:SetColor(Color(0, 0, 0))
     setting:SetText(Chatlog.Translate("RoundFilter"))
-    local roundFilter = vgui.Create("DComboBox", chatlogTab)
+
+    local roundFilter = vgui.Create("DComboBox", filteringPanel)
     roundFilter:Dock(LEFT)
-    roundFilter:DockMargin(5, 0, 5, 4)
+    roundFilter:DockMargin(5, 0, 0, 4)
     roundFilter:SetWidth(250)
     roundFilter:SetText(Chatlog.Translate("RoundSelect"))
     roundFilter:SetSortItems(false)
+
+    -- Refresh button for filters and current round
+    local refreshButton = vgui.Create("DButton", filteringPanel)
+    refreshButton:Dock(LEFT)
+    refreshButton:DockMargin(3, 0, 0, 4)
+    refreshButton:SetImage("icon16/arrow_refresh.png")
+    refreshButton:SetText("")
+    refreshButton:InvalidateLayout()
+    refreshButton:SetSize(24, 24)
+
+    local filtersButton = vgui.Create("DButton", filteringPanel)
+    filtersButton:Dock(LEFT)
+    filtersButton:DockMargin(3, 0, 0, 4)
+    filtersButton:SetImage("icon16/wrench.png")
+    filtersButton:SetText(Chatlog.Translate("FiltersButtonShow"))
+    filtersButton:InvalidateLayout(true)
+    filtersButton:SizeToContents()
+
+    Chatlog.DrawMoreFilters(chatlogTab, filteringPanel:GetTall() + 8)
+
+    filtersButton.DoClick = function()
+        if not chatlogTab.moreFilters.showing then
+            filtersButton:SetText(Chatlog.Translate("FiltersButtonHide"))
+            filtersButton:SizeToContents()
+            chatlogTab.moreFilters.showFilters()
+        else
+            filtersButton:SetText(Chatlog.Translate("FiltersButtonShow"))
+            filtersButton:SizeToContents()
+            chatlogTab.moreFilters.hideFilters()
+        end
+    end
+
+    refreshButton.DoClick = function()
+        if roundFilter:GetSelected() then
+            roundFilter:ChooseOption(roundFilter:GetSelected(), roundFilter:GetSelectedID())
+        else
+            roundFilter:ChooseOption(Chatlog.Translate("RoundSelectCurrent"))
+        end
+
+        if (chatlogTab.moreFilters.showing) then
+            filtersButton.DoClick()
+        end
+    end
 
     -- If possible, add the previous map's last round as a choice
     if GetGlobalBool("ChatlogLastMapExists") == true then
@@ -78,55 +185,6 @@
 
     if Chatlog:CanReadPresent(client) then
         roundFilter:AddChoice(Chatlog.Translate("RoundSelectCurrent"), nil, false, "icon16/page_lightning.png")
-    end
-
-    -- Player filter DComboBox
-    setting = vgui.Create("DLabel", chatlogTab)
-    setting:Dock(TOP)
-    setting:DockMargin(40, -20, 0, 0)
-    setting:SetColor(Color(0, 0, 0))
-    setting:SetText(Chatlog.Translate("PlayerFilter"))
-    setting:SetSize(125, 20)
-    self.playerFilter = vgui.Create("DComboBox", chatlogTab)
-    local playerFilter = self.playerFilter
-    playerFilter:Dock(RIGHT)
-    playerFilter:DockMargin(8, 0, 5, 4)
-    playerFilter:SetWidth(275)
-    playerFilter:AddChoice(Chatlog.Translate("PlayerFilterNone"), nil, true, "icon16/cancel.png")
-    playerFilter:SetSortItems(false)
-
-    -- Set the filtered player if one is selected
-    function playerFilter:OnSelect(index, text)
-        if text ~= Chatlog.Translate("PlayerFilterNone") and text ~= Chatlog.Translate("PlayerFilterRemove") then
-            Chatlog.filteredPlayer = text
-        else
-            Chatlog.filteredPlayer = nil
-        end
-    end
-
-    if Chatlog:CanReadDead(client) then
-        local deathCheck = vgui.Create("DCheckBoxLabel", chatlogTab)
-        deathCheck:SetConVar("chatlog_hide_dead")
-        deathCheck:SetPos(300, 53)
-        deathCheck:SetTextColor(Color(0, 0, 0))
-        deathCheck:SetText(Chatlog.Translate("DeadFilter"))
-        deathCheck:SizeToContents()
-    end
-
-    -- Refresh button for filters and current round
-    local refreshButton = vgui.Create("DButton", chatlogTab)
-    refreshButton:Dock(BOTTOM)
-    refreshButton:DockMargin(3, 0, 0, 6)
-    refreshButton:SetImage("icon16/arrow_refresh.png")
-    refreshButton:SetText("")
-    refreshButton:SetTooltip("Refresh")
-
-    refreshButton.DoClick = function()
-        if roundFilter:GetSelected() then
-            roundFilter:ChooseOption(roundFilter:GetSelected(), roundFilter:GetSelectedID())
-        else
-            roundFilter:ChooseOption(Chatlog.Translate("RoundSelectCurrent"))
-        end
     end
 
     -- Manage round selection
@@ -146,19 +204,23 @@
 
         if Chatlog.Rounds[index] ~= nil then
             -- Load the round from the client if possible
-            Chatlog:LoadRound(Chatlog.Rounds[index], chatLoglist, textPanel, Chatlog.filteredPlayer, playerFilter)
+            Chatlog.LoadRound(Chatlog.Rounds[index], chatLoglist, textPanel)
         else
             -- Ask the server for the round
             net.Start("AskChatlogRound")
             net.WriteInt(index, 16)
             net.SendToServer()
         end
+
+        if (chatlogTab.moreFilters.showing) then
+            filtersButton.DoClick()
+        end
     end
 
     tabs:AddSheet(Chatlog.Translate("ChatTab"), chatlogTab, "icon16/page.png")
     self:DrawSettings(tabs)
 
-    if client:GetUserGroup() == "superadmin" then
+    if (client:GetUserGroup() == "superadmin") then
         self:DrawManagerPanel(tabs)
     end
 end

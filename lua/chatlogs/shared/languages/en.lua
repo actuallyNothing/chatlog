@@ -27,10 +27,6 @@ ChatlogLanguage["en"] = {
     RoundFilter = "Filter by round:",
     RoundSelect = "Select round",
     RoundSelectCurrent = "Current round",
-    PlayerFilter = "Filter by player:",
-    PlayerFilterNone = "None",
-    PlayerFilterRemove = "Remove Filter",
-    DeadFilter = "Hide dead",
     CantReadPresent = "You are not allowed to read the current round's chatlog.",
     NoFilterChosen = "Please select a round/filter before refreshing.",
     Refresh = "Refresh",
@@ -43,5 +39,30 @@ ChatlogLanguage["en"] = {
     SwitchedLanguage = "Changed Chatlog language!",
     LastRoundMap = "Last round from the previous map",
     CopiedSteamID = "Copied SteamID of %s (%s)",
-    GetSteamID = "Copy SteamID of %s"
+    GetSteamID = "Copy SteamID of %s",
+
+    SelectARound = "Select a round",
+    NoRoundSelected = "No round selected",
+    -- https://wiki.facepunch.com/gmod/os.date
+    RoundInfoTime = "%A | %B %d, %Y | %X",
+
+    FiltersButtonShow = "  More filters",
+    FiltersButtonHide = "  Less filters",
+    FiltersTitle = "Filters",
+    FiltersOnlyTeam = "Show only team messages",
+
+    FiltersRoles = "Show only messages from:",
+    FiltersRolesInnocent = "Innocents",
+    FiltersRolesTraitor = "Traitors",
+    FiltersRolesDetective = "Detectives",
+
+    FiltersHideDead = "Hide dead players and spectators",
+    FiltersOnlySubstringsTitle = "Show only messages containing these words:",
+    FiltersOnlySubstringsPlaceholder = "Enter words to search for, separated by commas.",
+
+    FiltersPlayers = "Show messages from:",
+    FiltersPlayersNoPlayersFound = "No players found",
+
+    EmptyLogFilters = "No messages found matching the current filters."
+
 }

@@ -1,10 +1,12 @@
 ﻿function Chatlog.DrawTextPanel(textPanel, chatlogTab)
+
     -- Full text panel
     textPanel.frame = vgui.Create("DPanel", chatlogTab)
     textPanel.frame:Dock(BOTTOM)
     textPanel.frame:DockMargin(5, 2, 5, 0)
     textPanel.frame:SetHeight(50)
     textPanel.frame:SetBackgroundColor(Chatlog.Colors["TEXTPANEL_BACKGROUND"])
+
     -- Full text title label
     textPanel.label = vgui.Create("DLabel", chatlogTab)
     textPanel.label:Dock(BOTTOM)
@@ -13,6 +15,7 @@
     textPanel.label:SetFont("ChatlogMessageLabel")
     textPanel.label:SetColor(Chatlog.Colors["BLACK"])
     textPanel.label:SizeToContents()
+
     -- Full text
     -- We're passing this on to LoadRound() so it can modify the
     -- text whenever we click on a line, and declaring it
@@ -41,6 +44,17 @@
         textPanel.fulltext:Dock(BOTTOM)
         textPanel.fulltext:DockMargin(7, -43, 0, 0)
         textPanel.fulltext:SetText(Chatlog.Translate("SelectedMessageNone"))
+    end
+
+    function Chatlog.UpdateTextPanel(log, player, author)
+
+        textPanel.author:SetText(string.format("%s:", author))
+        textPanel.timestamp:SetText(string.format("[%s]", log.timestamp))
+
+        -- Color the author's name with their role (if they're alive)
+        textPanel.author:SetTextColor(Chatlog.GetColor("role", log.role))
+        textPanel.fulltext:SetText(log.text)
+        textPanel.author:SizeToContents()
     end
 
     Chatlog.ClearTextPanel()

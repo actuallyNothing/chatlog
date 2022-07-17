@@ -22,30 +22,51 @@ local function overwriteTable(table1, table2)
 end
 
 net.Receive("GetChatlogRound", function()
+
     roundtable = {}
-    messages = net.ReadInt(16)
 
-    for i = 1, messages do
-        roundtable[i] = {}
-        roundtable[i].playerNick = net.ReadString()
-        roundtable[i].role = net.ReadString()
-        roundtable[i].teamChat = net.ReadBool()
-        roundtable[i].text = net.ReadString()
-        roundtable[i].timestamp = net.ReadString()
-        roundtable[i].steamID = net.ReadString()
+    -- * Reading time OK
+    -- ! Optimize log display
 
-        if roundtable[i].role == "100" then
-            roundtable[i] = nil
+    local bytes = net.ReadUInt(32)
+    roundtable = net.ReadData(bytes)
+    roundtable = util.Decompress(roundtable)
+    roundtable = util.JSONToTable(roundtable)
+
+    local index = net.ReadInt(16)
+
+    if (index ~= 0) then
+
+        if (index == -1) then
+            Chatlog.LastRoundPrevMap = roundtable
         end
-    end
 
-    index = net.ReadInt(16)
-
-    if index ~= 0 then
         Chatlog.Rounds[index] = roundtable
     end
 
-    Chatlog:LoadRound(roundtable, Chatlog.chatLogList, Chatlog.textPanel, Chatlog.filteredPlayer, Chatlog.playerFilter)
+    -- if (GetConVar("chatlog_cache"):GetBool() and index ~= 0) then
+
+    --     if (index == -1) then
+    --         Chatlog.LastRoundPrevMap.log = roundtable
+    --     end
+
+    --     Chatlog.Rounds[index] = roundtable
+
+    -- end
+
+    Chatlog.LoadRound(roundtable, Chatlog.chatLogList, Chatlog.textPanel, Chatlog.filteredPlayer, Chatlog.playerFilter)
+end)
+
+net.Receive("ChatlogSendLastMapData", function()
+
+    local bytes = net.ReadUInt(16)
+    local data = net.ReadData(bytes)
+    data = util.JSONToTable(util.Decompress(data))
+
+    if (data) then
+        Chatlog.LastRoundPrevMap = data
+    end
+
 end)
 
 ----------------
@@ -73,7 +94,7 @@ net.Receive("ChatlogSendConfiguration", function()
 end)
 
 hook.Add("InitPostEntity", "ChatlogClientInit", function()
-    net.Start("ChatlogRequestConfiguration")
+    net.Start("ChatlogClientReady")
     net.SendToServer()
     Chatlog.pressedKey = false
 

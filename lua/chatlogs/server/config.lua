@@ -217,10 +217,6 @@ function Chatlog:CommitConfiguration(config, ply)
     writeConfiguration(newConfig)
 end
 
-net.Receive("ChatlogRequestConfiguration", function(_, ply)
-    Chatlog:SendConfiguration(ply)
-end)
-
 net.Receive("ChatlogCommitConfiguration", function(_, ply)
     local config = net.ReadString()
     Chatlog:CommitConfiguration(config, ply)
