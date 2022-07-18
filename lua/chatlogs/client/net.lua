@@ -25,17 +25,15 @@ net.Receive("GetChatlogRound", function()
 
     roundtable = {}
 
-    -- * Reading time OK
-    -- ! Optimize log display
-
     local bytes = net.ReadUInt(32)
     roundtable = net.ReadData(bytes)
     roundtable = util.Decompress(roundtable)
     roundtable = util.JSONToTable(roundtable)
 
     local index = net.ReadInt(16)
+    local isOld = net.ReadBool()
 
-    if (index ~= 0) then
+    if (index ~= 0 and not isOld) then
 
         if (index == -1) then
             Chatlog.LastRoundPrevMap = roundtable
@@ -44,17 +42,13 @@ net.Receive("GetChatlogRound", function()
         Chatlog.Rounds[index] = roundtable
     end
 
-    -- if (GetConVar("chatlog_cache"):GetBool() and index ~= 0) then
+    if (isOld) then
 
-    --     if (index == -1) then
-    --         Chatlog.LastRoundPrevMap.log = roundtable
-    --     end
+        Chatlog.OldLogs[roundtable.code] = roundtable
 
-    --     Chatlog.Rounds[index] = roundtable
+    end
 
-    -- end
-
-    Chatlog.LoadRound(roundtable, Chatlog.chatLogList, Chatlog.textPanel, Chatlog.filteredPlayer, Chatlog.playerFilter)
+    Chatlog.LoadRound(roundtable)
 end)
 
 net.Receive("ChatlogSendLastMapData", function()

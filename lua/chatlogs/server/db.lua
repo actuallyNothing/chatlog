@@ -4,8 +4,8 @@ function Chatlog.CreateDBTables()
 
         print("Chatlog: Creating SQLite database tables...")
 
-        Chatlog.SQLite.Query("CREATE TABLE IF NOT EXISTS chatlog_v1_oldlogs (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, year INTEGER NOT NULL, month INTEGER NOT NULL, day INTEGER NOT NULL, unix INTEGER NOT NULL, round INTEGER NOT NULL, map TEXT NOT NULL, log TEXT NOT NULL);")
-        Chatlog.SQLite.Query("CREATE TABLE IF NOT EXISTS chatlog_v1_lastround (id INTEGER NOT NULL, map TEXT, unix INTEGER, log TEXT, players TEXT)")
+        Chatlog.SQLite.Query("CREATE TABLE IF NOT EXISTS chatlog_v2_oldlogs (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, code TEXT NOT NULL, year INTEGER NOT NULL, month INTEGER NOT NULL, day INTEGER NOT NULL, unix INTEGER NOT NULL, round INTEGER NOT NULL, map TEXT NOT NULL, log TEXT NOT NULL, players TEXT NOT NULL);")
+        Chatlog.SQLite.Query("CREATE TABLE IF NOT EXISTS chatlog_v2_lastround (id INTEGER NOT NULL, map TEXT, unix INTEGER, log TEXT, players TEXT)")
     else
 
         -- MySQL queries

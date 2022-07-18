@@ -1,5 +1,7 @@
 ﻿-- This function is in charge of loading a round into the listview and informing files of relevant information
-function Chatlog.LoadRound(round, loglist, textPanel)
+function Chatlog.LoadRound(round)
+
+    local loglist = Chatlog.chatLogList
 
     if (not IsValid(loglist)) then return end
 

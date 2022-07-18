@@ -1,4 +1,5 @@
 ﻿Chatlog.Rounds = Chatlog.Rounds or {}
+Chatlog.OldLogs = {}
 Chatlog.CurrentRound = Chatlog.CurrentRound or {}
 
 Chatlog.roleStrings = {
@@ -15,6 +16,7 @@ AddCSLuaFile("chatlogs/client/settings.lua")
 AddCSLuaFile("chatlogs/client/admin.lua")
 AddCSLuaFile("chatlogs/client/filters.lua")
 AddCSLuaFile("chatlogs/client/playerlist.lua")
+AddCSLuaFile("chatlogs/client/oldlogs.lua")
 AddCSLuaFile("chatlogs/client/menu.lua")
 AddCSLuaFile("chatlogs/client/loadround.lua")
 AddCSLuaFile("chatlogs/client/net.lua")
@@ -23,6 +25,7 @@ include("chatlogs/shared/privileges.lua")
 include("chatlogs/server/roundlogic.lua")
 include("chatlogs/server/sqlite.lua")
 include("chatlogs/server/db.lua")
+include("chatlogs/server/oldlogs.lua")
 include("chatlogs/server/lastround.lua")
 
 util.AddNetworkString("ChatlogClientReady")
@@ -32,6 +35,8 @@ util.AddNetworkString("ChatlogRequestConfiguration")
 util.AddNetworkString("ChatlogSendConfiguration")
 util.AddNetworkString("ChatlogCommitConfiguration")
 util.AddNetworkString("ChatlogSendLastMapData")
+util.AddNetworkString("AskOldChatlog")
+util.AddNetworkString("SendOldChatlogResult")
 
 Chatlog:ValidateConfiguration()
 Chatlog.CreateDBTables()

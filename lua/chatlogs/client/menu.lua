@@ -54,11 +54,33 @@
     roundInfo.timeLabel:SizeToContents()
 
     roundInfo.timeIcon = vgui.Create("DImage", roundInfo)
-    roundInfo.timeIcon:SetImage("icon16/calendar.png")
+    roundInfo.timeIcon:SetImage("icon16/date.png")
     roundInfo.timeIcon:Dock(RIGHT)
-    roundInfo.timeIcon:DockMargin(0, 4, 4, 4)
+    roundInfo.timeIcon:DockMargin(4, 4, 4, 4)
     roundInfo.timeIcon:InvalidateLayout(true)
     roundInfo.timeIcon:SetSize(16, 16)
+
+    roundInfo.codeLabel = vgui.Create("DLabel", roundInfo)
+    roundInfo.codeLabel:SetFont("ChatlogMessage")
+    roundInfo.codeLabel:SetText(Chatlog.Translate("NoRoundSelected"))
+    roundInfo.codeLabel:SetColor(Color(0, 0, 0))
+    roundInfo.codeLabel:SetPos((Chatlog.Menu:GetWide() / 2) - 32, 5)
+    roundInfo.codeLabel:InvalidateLayout(true)
+    roundInfo.codeLabel:SizeToContents()
+
+    roundInfo.copyCode = vgui.Create("DImageButton", roundInfo)
+    roundInfo.copyCode:SetImage("icon16/tag_blue.png")
+    roundInfo.copyCode:SetSize(16, 16)
+    roundInfo.copyCode:SetPos(roundInfo.codeLabel:GetX() - 20, 5)
+    roundInfo.copyCode:SetTooltip("Copy this round's code")
+    roundInfo.copyCode.DoClick = function()
+        SetClipboardText(roundInfo.codeLabel:GetText())
+        chat.AddText(Chatlog.Colors.WHITE, "Copied this round's code to clipboard! (" .. roundInfo.codeLabel:GetText() .. ")")
+    end
+
+    function roundInfo.copyCode:Think()
+        self:SetEnabled(#roundInfo.codeLabel:GetText() == 6)
+    end
 
     hook.Add("ChatlogRoundLoaded", "ChatlogUpdateRoundInfo", function(round)
         roundInfo.mapLabel:SetText(round.map or Chatlog.Translate("RoundInfoError"))
@@ -66,6 +88,10 @@
 
         roundInfo.timeLabel:SetText(round.unix and os.date(Chatlog.Translate("RoundInfoTime"), round.unix) or Chatlog.Translate("RoundInfoError"))
         roundInfo.timeLabel:SizeToContents()
+
+        roundInfo.codeLabel:SetText(round.code or Chatlog.Translate("RoundInfoError"))
+        roundInfo.codeLabel:SizeToContents()
+        -- roundInfo.copyCode
     end)
 
     self.chatLogList = vgui.Create("DListView", chatlogTab)
@@ -257,10 +283,16 @@
 
     tabs:AddSheet(Chatlog.Translate("ChatTab"), chatlogTab, "icon16/page.png")
     self:DrawSettings(tabs)
+    self:DrawOldLogs(tabs)
 
     if (client:GetUserGroup() == "superadmin") then
         self:DrawManagerPanel(tabs)
     end
+
+    function tabs:OnActiveTabChanged(old, new)
+        Chatlog.Menu:SetKeyboardInputEnabled(new:GetText() == "Old logs")
+    end
+
 end
 
 concommand.Add("chatlog", function()

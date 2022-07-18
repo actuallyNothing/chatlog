@@ -1,6 +1,7 @@
 ﻿CreateClientConVar("chatlog_language", "en", FCVAR_ARCHIVE)
 
 Chatlog.Rounds = {}
+Chatlog.OldLogs = {}
 Chatlog.Menu = {}
 Chatlog.Filters = {
     text = {
@@ -33,6 +34,7 @@ include("chatlogs/client/settings.lua")
 include("chatlogs/client/admin.lua")
 include("chatlogs/client/filters.lua")
 include("chatlogs/client/playerlist.lua")
+include("chatlogs/client/oldlogs.lua")
 include("chatlogs/client/menu.lua")
 
 -- Language

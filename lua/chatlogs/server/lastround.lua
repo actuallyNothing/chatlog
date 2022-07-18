@@ -2,7 +2,7 @@
 
 function Chatlog.LastRoundPrevMapSetup()
 
-    local q = Chatlog.Query("SELECT * FROM chatlog_v1_lastround ORDER BY id DESC LIMIT 1")
+    local q = Chatlog.Query("SELECT * FROM chatlog_v2_lastround ORDER BY id DESC LIMIT 1")
 
     if (q and q[1]) then
         local round = q[1]
@@ -24,8 +24,6 @@ end
 
 hook.Add("TTTEndRound", "ChatlogLastRound", function()
 
-    print("Getting last round")
-
     local round = Chatlog.Rounds[GetGlobalInt("ChatlogRoundNumber")]
 
     local log = round.Log
@@ -36,9 +34,9 @@ hook.Add("TTTEndRound", "ChatlogLastRound", function()
 
     sql.Begin()
 
-    Chatlog.Query("DELETE FROM chatlog_v1_lastround WHERE id = 1")
+    Chatlog.Query("DELETE FROM chatlog_v2_lastround WHERE id = 1")
 
-    Chatlog.Query(string.format("INSERT INTO chatlog_v1_lastround (id, map, unix, log, players) VALUES (1, %s, %s, %s, %s);",
+    Chatlog.Query(string.format("INSERT INTO chatlog_v2_lastround (id, map, unix, log, players) VALUES (1, %s, %s, %s, %s);",
         SQLStr(round.map),
         SQLStr(round.unix),
         SQLStr(log),
