@@ -13,26 +13,6 @@
     self.Menu:Center()
     self.Menu:SetKeyboardInputEnabled(false)
 
-    -- "This version is outdated" warning
-    if Chatlog.outdated then
-        local outd = vgui.Create("DPanel", self.Menu)
-        outd:SetSize(400, 18)
-        outd:SetPos(175, 30)
-
-        function outd:Paint(w, h)
-            draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0))
-            draw.RoundedBox(0, 1, 1, w - 2, h - 2, Color(255, 255, 0))
-        end
-
-        local outlabel = vgui.Create("DLabel", outd)
-        outlabel:SetFont("ChatlogMessage")
-        outlabel:SetText("This version is outdated! Download latest at github.com/actuallyNothing/chatlog")
-        outlabel:SizeToContents()
-        outlabel:SetColor(Color(0, 0, 0))
-        outlabel:SetMouseInputEnabled(true)
-        outlabel:Center()
-    end
-
     -- DPropertySheet for tabs
     local tabs = vgui.Create("DPropertySheet", self.Menu)
     tabs:Dock(FILL)
@@ -215,6 +195,26 @@
         if (chatlogTab.moreFilters.showing) then
             filtersButton.DoClick()
         end
+    end
+
+    -- "This version is outdated" warning
+    if (Chatlog.outdated) then
+        local outd = vgui.Create("DPanel", chatlogTab)
+        outd:SetSize(400, 18)
+        outd:SetPos(180, 0)
+
+        function outd:Paint(w, h)
+            draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0))
+            draw.RoundedBox(0, 1, 1, w - 2, h - 2, Color(255, 255, 0))
+        end
+
+        local outlabel = vgui.Create("DLabel", outd)
+        outlabel:SetFont("ChatlogMessage")
+        outlabel:SetText("This version is outdated! Download latest at github.com/actuallyNothing/chatlog")
+        outlabel:SizeToContents()
+        outlabel:SetColor(Color(0, 0, 0))
+        outlabel:SetMouseInputEnabled(true)
+        outlabel:Center()
     end
 
     tabs:AddSheet(Chatlog.Translate("ChatTab"), chatlogTab, "icon16/page.png")
