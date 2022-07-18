@@ -44,7 +44,7 @@ Chatlog.Colors = {
     ["HIGHLIGHT_TRAITOR"] = Color(255, 0, 0, 50),
     ["HIGHLIGHT_DETECTIVE"] = Color(0, 0, 255, 50),
     ["HIGHLIGHT_SPECTATOR"] = Color(0, 0, 0, 125),
-    ["TEXTPANEL_BACKGROUND"] = Color(200, 200, 200)
+    ["TEXTPANEL_BACKGROUND"] = Color(75, 75, 75)
 }
 
 function Chatlog.GetColor(type, color)

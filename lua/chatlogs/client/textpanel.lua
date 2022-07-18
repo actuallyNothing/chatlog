@@ -1,60 +1,86 @@
-﻿function Chatlog.DrawTextPanel(textPanel, chatlogTab)
+﻿local textColors = {
+    innocent = {0, 255, 0, 255},
+    traitor = {255, 0, 0, 255},
+    detective = {64, 64, 255, 255},
+    spectator = {200, 200, 200, 255},
+
+    name_alive = {0, 201, 0, 255},
+    name_traitor = {255, 201, 12, 255},
+    name_detective = {18, 201, 255, 255},
+    name_spectator = {255, 255, 0, 255},
+
+    text_traitor = {255, 255, 201, 255},
+    text_detective = {201, 255, 255, 255},
+}
+
+function Chatlog.DrawTextPanel(textPanel, chatlogTab)
 
     -- Full text panel
     textPanel.frame = vgui.Create("DPanel", chatlogTab)
     textPanel.frame:Dock(BOTTOM)
     textPanel.frame:DockMargin(5, 2, 5, 0)
-    textPanel.frame:SetHeight(50)
+    textPanel.frame:SetHeight(80)
     textPanel.frame:SetBackgroundColor(Chatlog.Colors["TEXTPANEL_BACKGROUND"])
 
-    -- Full text title label
-    textPanel.label = vgui.Create("DLabel", chatlogTab)
-    textPanel.label:Dock(BOTTOM)
-    textPanel.label:DockMargin(7, 5, 0, 0)
-    textPanel.label:SetText(Chatlog.Translate("SelectedMessage"))
-    textPanel.label:SetFont("ChatlogMessageLabel")
-    textPanel.label:SetColor(Chatlog.Colors["BLACK"])
-    textPanel.label:SizeToContents()
-
     -- Full text
-    -- We're passing this on to LoadRound() so it can modify the
-    -- text whenever we click on a line, and declaring it
-    -- as a function so we can clear it when changing rounds
-    textPanel.fulltext = vgui.Create("DLabel", textPanel.frame)
-    textPanel.fulltext:SetFont("ChatlogMessage")
-    textPanel.timestamp = vgui.Create("DLabel", textPanel.frame)
-    textPanel.timestamp:SetFont("ChatlogAuthor")
-    textPanel.author = vgui.Create("DLabel", textPanel.frame)
-    textPanel.author:SetFont("ChatlogAuthor")
+    textPanel.richText = vgui.Create("RichText", textPanel.frame)
+    textPanel.richText:Dock(FILL)
+    textPanel.richText:DockMargin(7, 5, 7, 5)
+    textPanel.richText:SetVerticalScrollbarEnabled(true)
+
+    function textPanel.richText:PerformLayout()
+        self:SetFontInternal( "ChatFont" )
+        self:SetFGColor( color_white )
+    end
 
     function Chatlog.ClearTextPanel()
-        textPanel.timestamp:SetColor(Chatlog.Colors["BLACK"])
-        textPanel.timestamp:SetText("[00:00]")
-        textPanel.timestamp:Dock(LEFT)
-        textPanel.timestamp:DockMargin(7, 0, 5, 32)
-        textPanel.timestamp:SizeToContents()
-        textPanel.author:SetText(Chatlog.Translate("Player"))
-        textPanel.author:SetColor(Chatlog.Colors["BLACK"])
-        textPanel.author:Dock(LEFT)
-        textPanel.author:DockMargin(0, 0, 2, 32)
-        textPanel.author:SizeToContents()
-        textPanel.fulltext:SetColor(Chatlog.Colors["BLACK"])
-        textPanel.fulltext:SetSize(chatlogTab:GetWide() - 15, 40)
-        textPanel.fulltext:SetWrap(true)
-        textPanel.fulltext:Dock(BOTTOM)
-        textPanel.fulltext:DockMargin(7, -43, 0, 0)
-        textPanel.fulltext:SetText(Chatlog.Translate("SelectedMessageNone"))
+        textPanel.richText:SetText("")
+
+        textPanel.richText:InsertColorChange(255, 255, 255, 255)
+        textPanel.richText:AppendText("[00:00] ")
+        textPanel.richText:InsertColorChange(255, 255, 0, 255)
+        textPanel.richText:AppendText("Message Information\n")
+        textPanel.richText:InsertColorChange(0, 255, 0, 255)
+        textPanel.richText:AppendText("Chatlog: ")
+        textPanel.richText:InsertColorChange(255, 255, 255, 255)
+        textPanel.richText:AppendText("Select a message to display here!")
     end
 
     function Chatlog.UpdateTextPanel(log, player, author)
+        textPanel.richText:SetText("")
 
-        textPanel.author:SetText(string.format("%s:", author))
-        textPanel.timestamp:SetText(string.format("[%s]", log.timestamp))
+        textPanel.richText:InsertColorChange(255, 255, 255, 255)
+        textPanel.richText:AppendText(string.format("[%s] ", log.timestamp))
+        textPanel.richText:InsertColorChange(unpack(textColors[log.role]))
+        textPanel.richText:AppendText(log.role:upper() .. " to " .. (log.teamChat and "TEAM" or "ALL") .. ":\n")
 
-        -- Color the author's name with their role (if they're alive)
-        textPanel.author:SetTextColor(Chatlog.GetColor("role", log.role))
-        textPanel.fulltext:SetText(log.text)
-        textPanel.author:SizeToContents()
+        if (log.teamChat) then
+            textPanel.richText:InsertColorChange(unpack(textColors[log.role]))
+            textPanel.richText:AppendText(string.format("(%s) ", log.role:upper()))
+            textPanel.richText:InsertColorChange(unpack(textColors["name_" .. log.role]))
+            textPanel.richText:AppendText(player.nick .. ": ")
+            textPanel.richText:InsertColorChange(unpack(textColors["text_" .. log.role]))
+            textPanel.richText:AppendText(log.text)
+
+            return
+        end
+
+        if (log.role == "spectator") then
+            textPanel.richText:InsertColorChange(255, 0, 0, 255)
+            textPanel.richText:AppendText("*DEAD* ")
+            textPanel.richText:InsertColorChange(unpack(textColors["name_spectator"]))
+            textPanel.richText:AppendText(player.nick .. ": ")
+            textPanel.richText:InsertColorChange(255, 255, 255, 255)
+            textPanel.richText:AppendText(log.text)
+
+            return
+        end
+
+        textPanel.richText:InsertColorChange(unpack(textColors["name_" .. (log.role == "detective" and "detective" or "alive")]))
+        textPanel.richText:AppendText(player.nick .. ": ")
+
+        textPanel.richText:InsertColorChange(255, 255, 255, 255)
+        textPanel.richText:AppendText(log.text)
     end
 
     Chatlog.ClearTextPanel()

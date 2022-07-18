@@ -7,7 +7,7 @@
     local setting
     self.filteredPlayer = nil
     self.Menu = vgui.Create("DFrame")
-    self.Menu:SetSize(600, 420)
+    self.Menu:SetSize(600, 440)
     self.Menu:SetTitle("Chatlog | " .. os.date("%a %x", os.time()))
     self.Menu:MakePopup()
     self.Menu:Center()
@@ -73,7 +73,7 @@
     chatLoglist:Dock(BOTTOM)
     chatLoglist:DockMargin(5, 5, 5, 0)
     chatLoglist:SetSortable(false)
-    chatLoglist:SetHeight(200)
+    chatLoglist:SetHeight(210)
     chatLoglist:SetMultiSelect(false)
 
     local column = chatLoglist:AddColumn(Chatlog.Translate("Time"))
@@ -127,17 +127,47 @@
     filtersButton:InvalidateLayout(true)
     filtersButton:SizeToContents()
 
-    Chatlog.DrawMoreFilters(chatlogTab, filteringPanel:GetTall() + 8)
+    Chatlog.DrawMoreFilters(chatlogTab, filteringPanel:GetTall() + 6)
+
+    local playersButton = vgui.Create("DButton", filteringPanel)
+    playersButton:Dock(LEFT)
+    playersButton:DockMargin(3, 0, 0, 4)
+    playersButton:SetImage("icon16/user.png")
+    playersButton:SetText("  Show players")
+    playersButton:InvalidateLayout(true)
+    playersButton:SizeToContents()
+
+    Chatlog.DrawPlayerList(chatlogTab, filteringPanel:GetTall() + 6)
 
     filtersButton.DoClick = function()
-        if not chatlogTab.moreFilters.showing then
+        if (not chatlogTab.moreFilters.showing) then
             filtersButton:SetText(Chatlog.Translate("FiltersButtonHide"))
             filtersButton:SizeToContents()
             chatlogTab.moreFilters.showFilters()
+
+            if (chatlogTab.playerList.showing) then
+                playersButton.DoClick()
+            end
         else
             filtersButton:SetText(Chatlog.Translate("FiltersButtonShow"))
             filtersButton:SizeToContents()
             chatlogTab.moreFilters.hideFilters()
+        end
+    end
+
+    playersButton.DoClick = function()
+        if (not chatlogTab.playerList.showing) then
+            playersButton:SetText("  Hide players")
+            playersButton:SizeToContents()
+            chatlogTab.playerList.showPlayers()
+
+            if (chatlogTab.moreFilters.showing) then
+                filtersButton.DoClick()
+            end
+        else
+            playersButton:SetText("  Show players")
+            playersButton:SizeToContents()
+            chatlogTab.playerList.hidePlayers()
         end
     end
 
@@ -150,6 +180,10 @@
 
         if (chatlogTab.moreFilters.showing) then
             filtersButton.DoClick()
+        end
+
+        if (chatlogTab.playerList.showing) then
+            playersButton.DoClick()
         end
     end
 
@@ -194,6 +228,10 @@
 
         if (chatlogTab.moreFilters.showing) then
             filtersButton.DoClick()
+        end
+
+        if (chatlogTab.playerList.showing) then
+            playersButton.DoClick()
         end
     end
 
