@@ -1,6 +1,6 @@
 ﻿--[[
 
-	Chatlog v1.3.0
+	Chatlog v2.0.0
 	Made by actuallyNothing for the Trouble in Terrorist Town gamemode
 	Based on the Damagelogs addon made by Tommy228 https://github.com/Tommy228/tttdamagelogs
 	
@@ -10,7 +10,7 @@
 
 --]]
 Chatlog = Chatlog or {}
-Chatlog.Version = "1.3.0"
+Chatlog.Version = "2.0.0"
 Chatlog.Privileges = Chatlog.Privileges or {}
 Chatlog.TeamChatAccess = Chatlog.TeamChatAccess or {}
 ChatlogLanguage = ChatlogLanguage or {}
