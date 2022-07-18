@@ -61,10 +61,10 @@
     roundInfo.timeIcon:SetSize(16, 16)
 
     hook.Add("ChatlogRoundLoaded", "ChatlogUpdateRoundInfo", function(round)
-        roundInfo.mapLabel:SetText(round.map)
+        roundInfo.mapLabel:SetText(round.map or Chatlog.Translate("RoundInfoError"))
         roundInfo.mapLabel:SizeToContents()
 
-        roundInfo.timeLabel:SetText(os.date(Chatlog.Translate("RoundInfoTime"), round.unix))
+        roundInfo.timeLabel:SetText(round.unix and os.date(Chatlog.Translate("RoundInfoTime"), round.unix) or Chatlog.Translate("RoundInfoError"))
         roundInfo.timeLabel:SizeToContents()
     end)
 

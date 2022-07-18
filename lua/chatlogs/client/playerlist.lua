@@ -29,6 +29,8 @@ function Chatlog.DrawPlayerList(parent, y, height)
     hook.Add("ChatlogRoundLoaded", "ChatlogPlayerList", function(round)
         listview:Clear()
 
+        if (not round.Players) then round.Players = {} end
+
         for k, v in pairs(round.Players) do
             local line = listview:AddLine(v.nick, k)
 
@@ -44,6 +46,10 @@ function Chatlog.DrawPlayerList(parent, y, height)
                 contextOption:SetIcon("icon16/key.png")
                 contextMenu:Open()
             end
+        end
+
+        if (#round.Players < 1) then
+            listview:AddLine(Chatlog.Translate("PlayerListNoPlayers"), "")
         end
     end)
 

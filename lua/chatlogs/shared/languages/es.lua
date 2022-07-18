@@ -35,6 +35,7 @@ ChatlogLanguage["es"] = {
     NoRoundSelected = "Ninguna ronda seleccionada",
     -- https://wiki.facepunch.com/gmod/os.date
     RoundInfoTime = "%A | %d de %B, %Y | %X",
+    RoundInfoError = "Error encontrado",
 
     FiltersButtonShow = "  Más filtros",
     FiltersButtonHide = "  Menos filtros",
@@ -66,6 +67,7 @@ ChatlogLanguage["es"] = {
     PlayerListButtonShow = "  Mostrar jugadores",
     PlayerListButtonHide = "  Esconder jugadores",
     PlayerList = "Jugadores",
-    PlayerListName = "Nombre"
+    PlayerListName = "Nombre",
+    PlayerListNoPlayers = "No se encontraron jugadores"
 
 }
