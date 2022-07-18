@@ -9,7 +9,7 @@ function Chatlog.DrawMoreFilters(parent, y, height)
     panel:SetPos(-575, y)
 
     panel.Paint = function(self, w, h)
-        draw.RoundedBox(0, 0, 0, w, h, Color(172, 172, 172))
+        draw.RoundedBox(8, 0, 0, w, h, Color(172, 172, 172))
     end
 
     local title = vgui.Create("DLabel", panel)
@@ -192,11 +192,6 @@ function Chatlog.DrawMoreFilters(parent, y, height)
 
                     self.icon:SetImage(line.showPlayer and "icon16/accept.png" or "icon16/cancel.png")
                 end
-            end
-
-            line.Paint = function(self, w, h)
-                surface.SetDrawColor(self.showPlayer and Color(0, 255, 0, 100) or Color(255, 0, 0, 100))
-                surface.DrawRect(0, 1, 16, h - 1)
             end
         end
 
