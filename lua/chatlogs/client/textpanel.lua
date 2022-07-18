@@ -39,11 +39,11 @@ function Chatlog.DrawTextPanel(textPanel, chatlogTab)
         textPanel.richText:InsertColorChange(255, 255, 255, 255)
         textPanel.richText:AppendText("[00:00] ")
         textPanel.richText:InsertColorChange(255, 255, 0, 255)
-        textPanel.richText:AppendText("Message Information\n")
+        textPanel.richText:AppendText(Chatlog.Translate("TextPanelMessageInfo") .. "\n")
         textPanel.richText:InsertColorChange(0, 255, 0, 255)
         textPanel.richText:AppendText("Chatlog: ")
         textPanel.richText:InsertColorChange(255, 255, 255, 255)
-        textPanel.richText:AppendText("Select a message to display here!")
+        textPanel.richText:AppendText(Chatlog.Translate("TextPanelTip"))
     end
 
     function Chatlog.UpdateTextPanel(log, player, author)
@@ -52,7 +52,7 @@ function Chatlog.DrawTextPanel(textPanel, chatlogTab)
         textPanel.richText:InsertColorChange(255, 255, 255, 255)
         textPanel.richText:AppendText(string.format("[%s] ", log.timestamp))
         textPanel.richText:InsertColorChange(unpack(textColors[log.role]))
-        textPanel.richText:AppendText(log.role:upper() .. " to " .. (log.teamChat and "TEAM" or "ALL") .. ":\n")
+        textPanel.richText:AppendText(Chatlog.Translate(log.role) .. Chatlog.Translate("TextPanelTo") .. (log.teamChat and Chatlog.Translate("TextPanelTeam") or Chatlog.Translate("TextPanelAll")) .. ":\n")
 
         if (log.teamChat) then
             textPanel.richText:InsertColorChange(unpack(textColors[log.role]))
@@ -67,7 +67,7 @@ function Chatlog.DrawTextPanel(textPanel, chatlogTab)
 
         if (log.role == "spectator") then
             textPanel.richText:InsertColorChange(255, 0, 0, 255)
-            textPanel.richText:AppendText("*DEAD* ")
+            textPanel.richText:AppendText(Chatlog.Translate("TextPanelDeadPrefix"))
             textPanel.richText:InsertColorChange(unpack(textColors["name_spectator"]))
             textPanel.richText:AppendText(player.nick .. ": ")
             textPanel.richText:InsertColorChange(255, 255, 255, 255)

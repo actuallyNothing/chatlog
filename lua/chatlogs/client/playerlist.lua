@@ -13,7 +13,7 @@ function Chatlog.DrawPlayerList(parent, y, height)
     end
 
     local title = vgui.Create("DLabel", panel)
-    title:SetText("Players")
+    title:SetText(Chatlog.Translate("PlayerList"))
     title:SetFont("ChatlogMessageLabel")
     title:SetTextColor(Color(0, 0, 0))
     title:SetPos(10, 5)
@@ -22,7 +22,7 @@ function Chatlog.DrawPlayerList(parent, y, height)
     listview:SetSize(550, 100)
     listview:SetPos(10, 30)
     listview:SetMultiSelect(false)
-    listview:AddColumn("Name")
+    listview:AddColumn(Chatlog.Translate("PlayerListName"))
     listview:AddColumn("SteamID")
     listview:AddLine(Chatlog.Translate("SelectARound"), "")
 

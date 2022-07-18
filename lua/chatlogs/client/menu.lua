@@ -133,7 +133,7 @@
     playersButton:Dock(LEFT)
     playersButton:DockMargin(3, 0, 0, 4)
     playersButton:SetImage("icon16/user.png")
-    playersButton:SetText("  Show players")
+    playersButton:SetText(Chatlog.Translate("PlayerListButtonShow"))
     playersButton:InvalidateLayout(true)
     playersButton:SizeToContents()
 
@@ -157,7 +157,7 @@
 
     playersButton.DoClick = function()
         if (not chatlogTab.playerList.showing) then
-            playersButton:SetText("  Hide players")
+            playersButton:SetText(Chatlog.Translate("PlayerListButtonHide"))
             playersButton:SizeToContents()
             chatlogTab.playerList.showPlayers()
 
@@ -165,7 +165,7 @@
                 filtersButton.DoClick()
             end
         else
-            playersButton:SetText("  Show players")
+            playersButton:SetText(Chatlog.Translate("PlayerListButtonShow"))
             playersButton:SizeToContents()
             chatlogTab.playerList.hidePlayers()
         end

@@ -63,6 +63,19 @@ ChatlogLanguage["en"] = {
     FiltersPlayers = "Show messages from:",
     FiltersPlayersNoPlayersFound = "No players found",
 
-    EmptyLogFilters = "No messages found matching the current filters."
+    EmptyLogFilters = "No messages found matching the current filters.",
+
+    TextPanelMessageInfo = "Message Information",
+    TextPanelTip = "Select a message to display here!",
+
+    TextPanelTo = " to ",
+    TextPanelTeam = "TEAM",
+    TextPanelAll = "ALL",
+    TextPanelDeadPrefix = "*DEAD* ",
+
+    PlayerListButtonShow = "  Show players",
+    PlayerListButtonHide = "  Hide players",
+    PlayerList = "Players",
+    PlayerListName = "Name"
 
 }

@@ -10,7 +10,7 @@ ChatlogLanguage["es"] = {
     innocent = "INOCENTE",
     traitor = "TRAIDOR",
     detective = "DETECTIVE",
-    spectator = "MUERTO",
+    spectator = "ESPECTADOR",
     ClipboardCopy = "Copiar al portapapeles",
     ClipboardCopied = "¡Mensaje copiado al portapapeles!",
     Round = "Ronda ",
@@ -54,5 +54,18 @@ ChatlogLanguage["es"] = {
     FiltersPlayersNoPlayersFound = "No se encontraron jugadores",
 
     EmptyLogFilters = "No hay mensajes que coincidan con los filtros seleccionados.",
+
+    TextPanelMessageInfo = "Información del Mensaje",
+    TextPanelTip = "¡Seleciona un mensaje para verlo aquí!",
+
+    TextPanelTo = " para ",
+    TextPanelTeam = "EQUIPO",
+    TextPanelAll = "TODOS",
+    TextPanelDeadPrefix = "*MUERTO* ",
+
+    PlayerListButtonShow = "  Mostrar jugadores",
+    PlayerListButtonHide = "  Esconder jugadores",
+    PlayerList = "Jugadores",
+    PlayerListName = "Nombre"
 
 }
