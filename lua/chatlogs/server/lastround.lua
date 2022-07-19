@@ -36,11 +36,12 @@ hook.Add("TTTEndRound", "ChatlogLastRound", function()
 
     Chatlog.Query("DELETE FROM chatlog_v2_lastround WHERE id = 1")
 
-    Chatlog.Query(string.format("INSERT INTO chatlog_v2_lastround (id, map, unix, log, players) VALUES (1, %s, %s, %s, %s);",
+    Chatlog.Query(string.format("INSERT INTO chatlog_v2_lastround (id, map, unix, log, players, code) VALUES (1, %s, %s, %s, %s %s);",
         SQLStr(round.map),
         SQLStr(round.unix),
         SQLStr(log),
-        SQLStr(players)
+        SQLStr(players),
+        SQLStr(round.code)
     ))
 
     sql.Commit()
