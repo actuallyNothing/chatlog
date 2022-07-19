@@ -38,7 +38,7 @@ hook.Add("TTTEndRound", "ChatlogLastRound", function()
 
     Chatlog.Query(string.format("INSERT INTO chatlog_v2_lastround (id, map, unix, log, players, code) VALUES (1, %s, %s, %s, %s %s);",
         SQLStr(round.map),
-        SQLStr(round.unix),
+        round.unix,
         SQLStr(log),
         SQLStr(players),
         SQLStr(round.code)

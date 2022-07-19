@@ -32,6 +32,16 @@ function Chatlog.SaveOldLog(round, roundNumber)
     local month = os.date("%m")
     local day = os.date("%d")
 
-    Chatlog.Query(string.format("INSERT INTO chatlog_v2_oldlogs (code, year, month, day, unix, round, map, log, players) VALUES (\'%s\', %s, %s, %s, %s, %s, \'%s\', \'%s\', \'%s\')", code, year, month, day, unix, roundNumber, map, log, players))
+    Chatlog.Query(string.format("INSERT INTO chatlog_v2_oldlogs (code, year, month, day, unix, round, map, log, players) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+        SQLStr(code),
+        year,
+        month,
+        day,
+        unix,
+        roundNumber,
+        SQLStr(map),
+        SQLStr(log),
+        SQLStr(players)
+    ))
 
 end
