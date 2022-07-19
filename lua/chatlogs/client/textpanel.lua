@@ -46,11 +46,14 @@ function Chatlog.DrawTextPanel(textPanel, chatlogTab)
         textPanel.richText:AppendText(Chatlog.Translate("TextPanelTip"))
     end
 
-    function Chatlog.UpdateTextPanel(log, player, author)
+    function Chatlog.UpdateTextPanel(round, log)
+
+        local ply = round.Players[log.steamID]
+
         textPanel.richText:SetText("")
 
         textPanel.richText:InsertColorChange(255, 255, 255, 255)
-        textPanel.richText:AppendText(string.format("[%s] ", log.timestamp))
+        textPanel.richText:AppendText(string.format("[%s] ", Chatlog.FormatTime(log.curtime - round.curtime)))
         textPanel.richText:InsertColorChange(unpack(textColors[log.role]))
         textPanel.richText:AppendText(Chatlog.Translate(log.role) .. Chatlog.Translate("TextPanelTo") .. (log.teamChat and Chatlog.Translate("TextPanelTeam") or Chatlog.Translate("TextPanelAll")) .. ":\n")
 
@@ -58,7 +61,7 @@ function Chatlog.DrawTextPanel(textPanel, chatlogTab)
             textPanel.richText:InsertColorChange(unpack(textColors[log.role]))
             textPanel.richText:AppendText(string.format("(%s) ", log.role:upper()))
             textPanel.richText:InsertColorChange(unpack(textColors["name_" .. log.role]))
-            textPanel.richText:AppendText(player.nick .. ": ")
+            textPanel.richText:AppendText(ply.nick .. ": ")
             textPanel.richText:InsertColorChange(unpack(textColors["text_" .. log.role]))
             textPanel.richText:AppendText(log.text)
 
@@ -69,7 +72,7 @@ function Chatlog.DrawTextPanel(textPanel, chatlogTab)
             textPanel.richText:InsertColorChange(255, 0, 0, 255)
             textPanel.richText:AppendText(Chatlog.Translate("TextPanelDeadPrefix"))
             textPanel.richText:InsertColorChange(unpack(textColors["name_spectator"]))
-            textPanel.richText:AppendText(player.nick .. ": ")
+            textPanel.richText:AppendText(ply.nick .. ": ")
             textPanel.richText:InsertColorChange(255, 255, 255, 255)
             textPanel.richText:AppendText(log.text)
 
@@ -77,7 +80,7 @@ function Chatlog.DrawTextPanel(textPanel, chatlogTab)
         end
 
         textPanel.richText:InsertColorChange(unpack(textColors["name_" .. (log.role == "detective" and "detective" or "alive")]))
-        textPanel.richText:AppendText(player.nick .. ": ")
+        textPanel.richText:AppendText(ply.nick .. ": ")
 
         textPanel.richText:InsertColorChange(255, 255, 255, 255)
         textPanel.richText:AppendText(log.text)

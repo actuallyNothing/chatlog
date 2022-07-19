@@ -108,7 +108,7 @@
     column:SetFixedWidth(80)
     column = chatLoglist:AddColumn(Chatlog.Translate("Message"))
     column:SetFixedWidth(450)
-    column = chatLoglist:AddColumn(Chatlog.Translate("unix"))
+    column = chatLoglist:AddColumn(Chatlog.Translate("curtime"))
     column:SetFixedWidth(0)
 
     local filteringPanel = vgui.Create("DPanel", chatlogTab)

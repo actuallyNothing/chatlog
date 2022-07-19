@@ -18,6 +18,8 @@ function Chatlog:DrawOldLogs(tabs)
     local oldLogsPanel = vgui.Create("DPanel")
     -- oldLogsPanel.Paint = function() end
 
+    -- Search by code
+
     local codePanel = vgui.Create("DPanel", oldLogsPanel)
     codePanel:Dock(TOP)
     codePanel:DockMargin(5, 5, 5, 5)

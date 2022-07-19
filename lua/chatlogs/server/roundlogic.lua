@@ -149,6 +149,7 @@ hook.Add("TTTBeginRound", "ChatlogRoundStart", function()
     Chatlog.CurrentRound.Log = {}
     Chatlog.CurrentRound.Players = {}
     Chatlog.CurrentRound.unix = os.time()
+    Chatlog.CurrentRound.curtime = CurTime()
     Chatlog.CurrentRound.map = game.GetMap()
 
     local code
@@ -170,6 +171,7 @@ hook.Add("TTTEndRound", "ChatlogRoundEnd", function()
         Log = Chatlog.CurrentRound.Log,
         Players = Chatlog.CurrentRound.Players,
         unix = Chatlog.CurrentRound.unix,
+        curtime = CurTime(),
         map = game.GetMap(),
         code = Chatlog.CurrentRound.code
     }

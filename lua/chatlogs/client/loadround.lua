@@ -1,4 +1,19 @@
 ﻿-- This function is in charge of loading a round into the listview and informing files of relevant information
+
+-- Format seconds into an easy to read timestamp
+function Chatlog.FormatTime(seconds)
+    local seconds = tonumber(seconds)
+
+    if seconds <= 0 then
+        return "00:00"
+    else
+        local mins = string.format("%02.f", math.floor(seconds / 60))
+        local secs = string.format("%02.f", math.floor(seconds - mins * 60))
+
+        return mins .. ":" .. secs
+    end
+end
+
 function Chatlog.LoadRound(round)
 
     local loglist = Chatlog.chatLogList
@@ -65,16 +80,14 @@ function Chatlog.LoadRound(round)
                 local lineMessage = v["text"]
                 local lineNick = playerList[v.steamID]["nick"]
                 local lineRole = v["role"]
-                local lineTimestamp = v["timestamp"]
+                local lineTimestamp = Chatlog.FormatTime(v.curtime - round.curtime)
                 local lineSteamID = v["steamID"]
-                -- Only using this variable for full text display
-                local lineAuthor = lineNick
 
                 if (v["teamChat"] or lineRole == "spectator") then
                     lineAuthor = string.format("(%s) %s", string.upper(Chatlog.Translate(lineRole)), lineNick)
                 end
 
-                local line = loglist:AddLine(lineTimestamp, lineNick, lineMessage, v.unix)
+                local line = loglist:AddLine(lineTimestamp, lineNick, lineMessage, v.curtime)
 
                 -- Paint team and dead chat lines
                 if (v["teamChat"] == true or lineRole == "spectator") then
@@ -108,7 +121,7 @@ function Chatlog.LoadRound(round)
 
                 -- Set the "selected message" text labels
                 line.OnSelect = function()
-                    Chatlog.UpdateTextPanel(v, playerList[lineSteamID], lineAuthor)
+                    Chatlog.UpdateTextPanel(round, v)
                 end
             end
         end

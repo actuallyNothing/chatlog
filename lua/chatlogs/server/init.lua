@@ -41,25 +41,10 @@ util.AddNetworkString("SendOldChatlogResult")
 Chatlog:ValidateConfiguration()
 Chatlog.CreateDBTables()
 
--- Format seconds into an easy to read timestamp
-function Chatlog.FormatTime(seconds)
-    local seconds = tonumber(seconds)
-
-    if seconds <= 0 then
-        return "00:00"
-    else
-        mins = string.format("%02.f", math.floor(seconds / 60))
-        secs = string.format("%02.f", math.floor(seconds - mins * 60))
-
-        return mins .. ":" .. secs
-    end
-end
-
 function Chatlog.Message(ply, text, teamChat)
     if GetRoundState() ~= ROUND_ACTIVE then return end
 
     local playerNick = ply:Nick()
-    local timestamp = Chatlog.FormatTime(Chatlog.timerSeconds)
     local steamID = ply:SteamID()
     local role = (ply:Team() == TEAM_SPECTATOR or not ply:Alive()) and "spectator" or Chatlog.roleStrings[ply:GetRole()]
 
@@ -71,10 +56,9 @@ function Chatlog.Message(ply, text, teamChat)
     table.insert(Chatlog.CurrentRound.Log, {
         text = text,
         teamChat = teamChat,
-        timestamp = timestamp,
         steamID = steamID,
         role = role,
-        unix = CurTime()
+        curtime = CurTime()
     })
 
     -- Save player
@@ -107,3 +91,10 @@ net.Receive("ChatlogClientReady", function(len, ply)
         net.Send(ply)
     end
 end)
+
+-- Function to add a number of fake messages
+function FakeMessages(num)
+    for i = 1, num do
+        Chatlog.Message(player.GetAll()[1], "Fake message " .. i, false)
+    end
+end
