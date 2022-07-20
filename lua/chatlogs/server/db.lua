@@ -18,14 +18,14 @@ function Chatlog.CreateDBTables()
 
         Chatlog.SQLite.Query("CREATE TABLE IF NOT EXISTS chatlog_v2_oldlogs (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, code TEXT NOT NULL, year INTEGER NOT NULL, month INTEGER NOT NULL, day INTEGER NOT NULL, unix INTEGER NOT NULL, round INTEGER NOT NULL, curtime DOUBLE NOT NULL, map TEXT NOT NULL, log TEXT NOT NULL, players TEXT NOT NULL);")
 
-        Chatlog.SQLite.Query("CREATE TABLE IF NOT EXISTS chatlog_v2_lastround (id INTEGER NOT NULL, map TEXT, unix INTEGER, log TEXT, players TEXT, code TEXT)")
+        Chatlog.SQLite.Query("CREATE TABLE IF NOT EXISTS chatlog_v2_lastround (code TEXT)")
     else
 
         print("Chatlog: Creating MySQL database tables...")
 
         local query1 = Chatlog.MySQL.Database:query("CREATE TABLE IF NOT EXISTS chatlog_v2_oldlogs (id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT, code CHAR(6) NOT NULL, year INTEGER NOT NULL, month INTEGER NOT NULL, day INTEGER NOT NULL, unix INTEGER NOT NULL, round INTEGER NOT NULL, curtime DOUBLE NOT NULL, map VARCHAR(255) NOT NULL, log MEDIUMTEXT NOT NULL, players TEXT NOT NULL);")
 
-        local query2 = Chatlog.MySQL.Database:query("CREATE TABLE IF NOT EXISTS chatlog_v2_lastround (id INTEGER NOT NULL, map VARCHAR(255), unix INTEGER, log MEDIUMTEXT, players TEXT, code CHAR(6));")
+        local query2 = Chatlog.MySQL.Database:query("CREATE TABLE IF NOT EXISTS chatlog_v2_lastround (code CHAR(6));")
 
         local transaction = Chatlog.MySQL.Database:createTransaction()
 

@@ -2,23 +2,29 @@
 
 function Chatlog.LastRoundPrevMapSetup()
 
-    local q = Chatlog.Query("SELECT * FROM chatlog_v2_lastround ORDER BY id DESC LIMIT 1")
+    Chatlog.Query("SELECT code FROM chatlog_v2_lastround LIMIT 1", function(success, code)
 
-    if (q and q[1]) then
-        local round = q[1]
+        Chatlog.Query("SELECT * FROM chatlog_v2_oldlogs WHERE code = \'" .. code[1].code .. "\'", function(success, data)
 
-        round.Log = util.JSONToTable(round.log)
-        round.log = nil
+            if (not success or not data or table.IsEmpty(data)) then
+                SetGlobalBool("ChatlogLastMapExists", false)
+                return
+            end
 
-        round.Players = util.JSONToTable(round.players)
-        round.players = nil
+            data = data[1]
 
-        Chatlog.LastRoundPrevMap = round
+            data.Log = util.JSONToTable(data.log)
+            data.log = nil
+            data.Players = util.JSONToTable(data.players)
+            data.players = nil
 
-        SetGlobalBool("ChatlogLastMapExists", true)
-    else
-        SetGlobalBool("ChatlogLastMapExists", false)
-    end
+            Chatlog.LastRoundPrevMap = data
+
+            SetGlobalBool("ChatlogLastMapExists", true)
+
+        end)
+
+    end)
 
 end
 
@@ -28,9 +34,7 @@ hook.Add("TTTEndRound", "ChatlogLastRound", function()
 
     Chatlog.Query("DELETE FROM chatlog_v2_lastround", function(_, data)
 
-        Chatlog.Query(string.format("INSERT INTO chatlog_v2_lastround (code) VALUES (\'%s\');",
-            SQLStr(code)
-        ))
+        Chatlog.Query("INSERT INTO chatlog_v2_lastround (code) VALUES (\'" .. code .. "\');")
 
     end)
 
