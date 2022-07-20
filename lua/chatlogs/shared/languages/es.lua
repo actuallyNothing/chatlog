@@ -123,6 +123,31 @@ ChatlogLanguage["es"] = {
     AdminServerUseMySQL = "Usar MySQL para guardar registros",
     AdminServerUseMySQLTooltip = "Al desactivarse, el servidor usará la base de datos SQLite incluida",
 
-    AdminServerDayLimit = "Límite de entradas en la base de datos"
+    AdminServerDayLimit = "Límite de entradas en la base de datos",
+
+    Month1 = "Enero",
+    Month2 = "Febrero",
+    Month3 = "Marzo",
+    Month4 = "Abril",
+    Month5 = "Mayo",
+    Month6 = "Junio",
+    Month7 = "Julio",
+    Month8 = "Agosto",
+    Month9 = "Septiembre",
+    Month10 = "Octubre",
+    Month11 = "Noviembre",
+    Month12 = "Diciembre",
+
+    OldLogsTab = "Logs antiguos",
+
+    OldLogsCodeTitle = "Buscar por código",
+    OldLogsCodeTip = "Cada ronda tiene un código único de 6 carácteres que puede usarse para buscarla en los logs antiguos.",
+    OldLogsCodeLabel = "Código:",
+    OldLogsCodeButton = "Buscar",
+
+    OldLogsDateTitle = "Buscar por fecha",
+    OldLogsDateTip = "Cada ronda puede buscarse por la fecha y hora en que se jugó.",
+    OldLogsDateBetween = "Rondas entre %s y %s",
+    OldLogsDateLoad = "Cargar ronda",
 
 }

@@ -133,6 +133,31 @@ ChatlogLanguage["en"] = {
     AdminServerUseMySQL = "Use MySQL for storing logs",
     AdminServerUseMySQLTooltip = "When disabled, the server will use the built-in SQLite database",
 
-    AdminServerDayLimit = "Database entries day limit"
+    AdminServerDayLimit = "Database entries day limit",
+
+    Month1 = "January",
+    Month2 = "February",
+    Month3 = "March",
+    Month4 = "April",
+    Month5 = "May",
+    Month6 = "June",
+    Month7 = "July",
+    Month8 = "August",
+    Month9 = "September",
+    Month10 = "October",
+    Month11 = "November",
+    Month12 = "December",
+
+    OldLogsTab = "Old Logs",
+
+    OldLogsCodeTitle = "Search by code",
+    OldLogsCodeTip = "Rounds have a unique 6-character code that can be used to search for a specific round.",
+    OldLogsCodeLabel = "Code:",
+    OldLogsCodeButton = "Search",
+
+    OldLogsDateTitle = "Search by date",
+    OldLogsDateTip = "Rounds can be searched by the date and time they started.",
+    OldLogsDateBetween = "Rounds between %s and %s",
+    OldLogsDateLoad = "Load round",
 
 }

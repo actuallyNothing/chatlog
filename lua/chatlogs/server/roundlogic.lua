@@ -37,7 +37,7 @@ function Chatlog.SendTable(index, ply, oldTable)
     else
 
         chatlogTable = table.Copy(oldTable)
-        Chatlog.OldLogs[oldTable.code] = chatlogTable
+        Chatlog.OldRounds[oldTable.code] = chatlogTable
 
     end
 
@@ -100,8 +100,8 @@ net.Receive("AskOldChatlog", function(len, ply)
 
     local tosend
 
-    if (Chatlog.OldLogs[code]) then
-        tosend = Chatlog.OldLogs[code]
+    if (Chatlog.OldRounds[code]) then
+        tosend = Chatlog.OldRounds[code]
     else
         Chatlog.Query("SELECT * FROM chatlog_v2_oldlogs WHERE code = " .. SQLStr(code), function(success, data)
 
@@ -119,14 +119,14 @@ net.Receive("AskOldChatlog", function(len, ply)
             tosend.log = nil
             tosend.Players = util.JSONToTable(tosend.players)
             tosend.players = nil
+
+            net.Start("SendOldChatlogResult")
+            net.WriteUInt(3, 2)
+            net.Send(ply)
+
+            Chatlog.SendTable(-2, ply, tosend)
         end)
     end
-
-    net.Start("SendOldChatlogResult")
-    net.WriteUInt(3, 2)
-    net.Send(ply)
-
-    Chatlog.SendTable(-2, ply, tosend)
 
 end)
 

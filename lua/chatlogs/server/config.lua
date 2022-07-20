@@ -55,7 +55,18 @@ end
 
 function Chatlog:UpdateConfiguration(broadcast)
     self.JSONconfig = file.Read("chatlog/chatlog_config.json", "data")
-    self.Config = util.JSONToTable(self.JSONconfig)
+    local refreshDB = false
+    local configTable = util.JSONToTable(self.JSONconfig)
+
+    if (self.Config and self.Config.database_use_mysql ~= configTable.database_use_mysql) then
+        refreshDB = true
+    end
+
+    self.Config = configTable
+    if (refreshDB) then
+        print("[Chatlog] Switched to " .. (self.Config.database_use_mysql and "MySQL" or "SQLite"))
+        Chatlog.InitializeDB()
+    end
 
     if broadcast then
         self:SendConfiguration("all", false)
@@ -69,11 +80,14 @@ end
 
 --[[
 	If no "chatlog_config.json" file is found, 'defaultConfig'
-	will be the one created by the addon, and used as
+	will be the one created by the addon, and will be used as
 	a blank slate to compare against the file in /data/chatlog/.
 
 	After this, the file will be editable in-game through
-	a superadmin-exclusive tab in the Chatlog window.
+	a superadmin-exclusive tab in the Chatlog window. You
+    can also edit the file directly in /data/chatlog/chatlog_config.json
+    and synchronize the changes by typing "chatlog_sync_config"
+    in the server's console.
 ]]
 local defaultConfig = {
     ["privileges"] = {
@@ -215,7 +229,6 @@ end
 function Chatlog:CommitConfiguration(config, ply)
     -- Write configuration and send it
     local newConfig = Chatlog:CompleteConfiguration(config)
-    local oldDB = self.Config.database_use_mysql
 
     self:SendConfiguration("all", true, newConfig)
 
@@ -226,11 +239,6 @@ function Chatlog:CommitConfiguration(config, ply)
     end
 
     writeConfiguration(newConfig)
-
-    if (oldDB ~= newConfig.database_use_mysql) then
-        print("[Chatlog] Switched to " .. (newConfig.database_use_mysql and "MySQL" or "SQLite"))
-        Chatlog.InitializeDB()
-    end
 end
 
 net.Receive("ChatlogCommitConfiguration", function(_, ply)
@@ -245,3 +253,8 @@ net.Receive("ChatlogGetMySQLConfiguration", function(_, ply)
     net.WriteTable(Chatlog.Config.mysql)
     net.Send(ply)
 end)
+
+concommand.Add("chatlog_sync_config", function()
+    Chatlog:UpdateConfiguration(true)
+    print("[Chatlog] Configuration synced.")
+end, nil, "Synchronize the JSON configuration file with the server")

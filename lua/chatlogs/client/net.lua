@@ -44,7 +44,7 @@ net.Receive("GetChatlogRound", function()
 
     if (isOld) then
 
-        Chatlog.OldLogs[roundtable.code] = roundtable
+        Chatlog.OldRounds[roundtable.code] = roundtable
 
     end
 

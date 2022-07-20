@@ -16,7 +16,8 @@ function Chatlog.MySQL.Initialize()
         print("Connected to MySQL database")
 
         Chatlog.CreateDBTables()
-
+        Chatlog.LastRoundPrevMapSetup()
+        Chatlog.OldLogsSetup()
 
     end
 

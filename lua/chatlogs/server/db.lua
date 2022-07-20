@@ -1,11 +1,15 @@
 function Chatlog.InitializeDB()
 
     if (Chatlog.Config.database_use_mysql) then
+        -- Using MySQL
         Chatlog.MySQL.Initialize()
         return
     end
 
+    -- Using SQLite
     Chatlog.CreateDBTables()
+    Chatlog.LastRoundPrevMapSetup()
+    Chatlog.OldLogsSetup()
 
 end
 
@@ -15,9 +19,15 @@ function Chatlog.CreateDBTables()
 
         print("[Chatlog] Creating SQLite database tables...")
 
-        Chatlog.SQLite.Query("CREATE TABLE IF NOT EXISTS chatlog_v2_oldlogs (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, code TEXT NOT NULL, year INTEGER NOT NULL, month INTEGER NOT NULL, day INTEGER NOT NULL, unix INTEGER NOT NULL, round INTEGER NOT NULL, curtime DOUBLE NOT NULL, map TEXT NOT NULL, log TEXT NOT NULL, players TEXT NOT NULL);")
+        local q1 = Chatlog.SQLite.Query("CREATE TABLE IF NOT EXISTS chatlog_v2_oldlogs (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, code TEXT NOT NULL, year INTEGER NOT NULL, month INTEGER NOT NULL, day INTEGER NOT NULL, unix INTEGER NOT NULL, round INTEGER NOT NULL, curtime DOUBLE NOT NULL, map TEXT NOT NULL, log TEXT NOT NULL, players TEXT NOT NULL);")
 
-        Chatlog.SQLite.Query("CREATE TABLE IF NOT EXISTS chatlog_v2_lastround (code TEXT)")
+        local q2 = Chatlog.SQLite.Query("CREATE TABLE IF NOT EXISTS chatlog_v2_lastround (code TEXT)")
+
+        if (q1 ~= false and q2 ~= false) then
+            print("[Chatlog] SQLite database tables created successfully!")
+        else
+            print("[Chatlog] SQLite database tables creation failed!")
+        end
     else
 
         print("[Chatlog] Creating MySQL database tables...")
@@ -32,11 +42,11 @@ function Chatlog.CreateDBTables()
         transaction:addQuery(query2)
 
         function transaction.onSuccess()
-            print("[Chatlog] MySQL Database tables created successfully!")
+            print("[Chatlog] MySQL database tables created successfully!")
         end
 
         function transaction.onError(_, err)
-            print("[Chatlog] MySQL Database tables creation failed!")
+            print("[Chatlog] MySQL database tables creation failed!")
             print(err)
         end
 
@@ -78,6 +88,8 @@ function Chatlog.Query(query, callback, ...)
         end
 
         function q:onError(err)
+            print("[Chatlog] MySQL Query failed!")
+            print(err)
             success = false
         end
 

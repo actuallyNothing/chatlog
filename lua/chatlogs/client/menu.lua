@@ -8,7 +8,7 @@
     self.filteredPlayer = nil
     self.Menu = vgui.Create("DFrame")
     self.Menu:SetSize(600, 440)
-    self.Menu:SetTitle("Chatlog | " .. os.date("%a %x", os.time()))
+    self.Menu:SetTitle("TTT Chatlog - v" .. self.Version)
     self.Menu:MakePopup()
     self.Menu:Center()
     self.Menu:SetKeyboardInputEnabled(false)
@@ -292,11 +292,8 @@
     end
 
     function tabs:OnActiveTabChanged(old, new)
-        Chatlog.Menu:SetKeyboardInputEnabled(new:GetText() == "Old logs")
+        Chatlog.Menu:SetKeyboardInputEnabled(new:GetText() == Chatlog.Translate("OldLogsTab"))
     end
-
-    -- -- ! DEBUG
-    -- tabs:SwitchToName("Old logs")
 
 end
 
@@ -307,10 +304,3 @@ concommand.Add("chatlog", function()
         Chatlog.Menu:Close()
     end
 end)
-
--- -- ! DEBUG
--- if (IsValid(Chatlog.Menu)) then
---     Chatlog.Menu:Close()
--- end
-
--- RunConsoleCommand("chatlog")

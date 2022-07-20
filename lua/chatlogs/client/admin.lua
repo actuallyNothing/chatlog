@@ -395,6 +395,7 @@ function Chatlog:DrawManagerPanel(tabs)
 
     local dbDayLimit = serverView:Add("DNumSlider")
     dbDayLimit:SetText(Chatlog.Translate("AdminServerDayLimit"))
+    dbDayLimit:SetTooltip(Chatlog.Translate("AdminServerDayLimit"))
     dbDayLimit:SetDark(true)
     dbDayLimit:Dock(TOP)
     dbDayLimit:DockMargin(5, 0, 5, 5)

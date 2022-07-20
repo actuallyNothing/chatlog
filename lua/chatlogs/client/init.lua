@@ -1,7 +1,7 @@
 ﻿CreateClientConVar("chatlog_language", "en", FCVAR_ARCHIVE)
 
-Chatlog.Rounds = {}
-Chatlog.OldLogs = {}
+Chatlog.Rounds = Chatlog.Rounds or {}
+Chatlog.OldRounds = Chatlog.OldRounds or {}
 Chatlog.Menu = {}
 Chatlog.Filters = {
     text = {

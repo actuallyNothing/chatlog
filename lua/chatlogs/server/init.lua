@@ -1,5 +1,5 @@
 ﻿Chatlog.Rounds = Chatlog.Rounds or {}
-Chatlog.OldLogs = {}
+Chatlog.OldRounds = {}
 Chatlog.CurrentRound = Chatlog.CurrentRound or {}
 
 Chatlog.roleStrings = {
@@ -42,6 +42,8 @@ util.AddNetworkString("AskOldChatlog")
 util.AddNetworkString("SendOldChatlogResult")
 util.AddNetworkString("AskChatlogDates")
 util.AddNetworkString("SendChatlogDates")
+util.AddNetworkString("AskOldChatlogRounds")
+util.AddNetworkString("SendOldChatlogRounds")
 
 Chatlog:ValidateConfiguration()
 Chatlog.InitializeDB()
@@ -78,7 +80,6 @@ hook.Add("PlayerSay", "ChatlogMessage", Chatlog.Message)
 
 hook.Add("InitPostEntity", "ChatlogServerInit", function()
     Chatlog:UpdateConfiguration(false)
-    Chatlog.LastRoundPrevMapSetup()
 end)
 
 net.Receive("ChatlogClientReady", function(len, ply)

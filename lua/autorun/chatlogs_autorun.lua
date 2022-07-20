@@ -2,13 +2,14 @@
 
 	Chatlog v2.0.0
 	Made by actuallyNothing for the Trouble in Terrorist Town gamemode
-	Based on the Damagelogs addon made by Tommy228 https://github.com/Tommy228/tttdamagelogs
+	Format and date browser code based on the Damagelogs addon made by Tommy228 https://github.com/Tommy228/tttdamagelogs
 	
     contact:
     Steam: https://steamcommunity.com/id/actuallyNothing/
     GitHub: https://github.com/actuallyNothing/
 
 --]]
+
 Chatlog = Chatlog or {}
 Chatlog.Version = "2.0.0"
 Chatlog.Privileges = Chatlog.Privileges or {}
