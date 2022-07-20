@@ -34,5 +34,6 @@ jobs:
           lint_profanity: false
           lint_unusedParameters: false
           lint_unusedLoopVars: false
+          lint_maxScopeDepth: 0
           failOnWarning: true
 
