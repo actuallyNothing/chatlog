@@ -48,7 +48,7 @@ function Chatlog.DrawPlayerList(parent, y, height)
             end
         end
 
-        if (#round.Players < 1) then
+        if (table.Count(round.Players) < 1) then
             listview:AddLine(Chatlog.Translate("PlayerListNoPlayers"), "")
         end
     end)
