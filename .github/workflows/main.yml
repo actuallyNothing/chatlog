@@ -6,9 +6,9 @@ name: glualint
 on:
   # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
-    branches: [ "master", "v1.3" ]
+    branches: [ "master", "v2.0" ]
   pull_request:
-    branches: [ "master", "v1.3" ]
+    branches: [ "master", "v2.0" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
