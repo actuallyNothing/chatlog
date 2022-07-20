@@ -30,7 +30,7 @@ function Chatlog:DrawManagerPanel(tabs)
     -- Sidebar
 
     local usergroups = sidebar:Add("DListView")
-    usergroups:AddColumn("Usergroups")
+    usergroups:AddColumn(Chatlog.Translate("AdminUsergroups"))
     usergroups:Dock(TOP)
     usergroups:DockMargin(5, 5, 5, 5)
     usergroups:SetMultiSelect(false)
@@ -43,7 +43,7 @@ function Chatlog:DrawManagerPanel(tabs)
     local addGroup = sidebar:Add("DButton")
     addGroup:Dock(TOP)
     addGroup:DockMargin(5, 0, 5, 5)
-    addGroup:SetText("New group")
+    addGroup:SetText(Chatlog.Translate("AdminNewGroup"))
 
     addGroup.DoClick = function()
         local addGroupFrame = self.Menu:Add("DFrame")
@@ -51,12 +51,12 @@ function Chatlog:DrawManagerPanel(tabs)
         addGroupFrame:SetDraggable(false)
         addGroupFrame:Center()
         addGroupFrame:SetSize(245, 100)
-        addGroupFrame:SetTitle("Adding a group")
+        addGroupFrame:SetTitle(Chatlog.Translate("AdminNewGroupTitle"))
         addGroupFrame:ShowCloseButton(false)
         addGroupFrame:MakePopup()
 
         local title = addGroupFrame:Add("DLabel")
-        title:SetText("Enter the name for the new group:")
+        title:SetText(Chatlog.Translate("AdminNewGroupTip"))
         title:Dock(TOP)
         title:DockMargin(5, 0, 5, -5)
 
@@ -68,14 +68,14 @@ function Chatlog:DrawManagerPanel(tabs)
         local confirm = addGroupFrame:Add("DButton")
         confirm:SetSize(w, h)
         confirm:SetPos(5, 75)
-        confirm:SetText("Add Group")
+        confirm:SetText(Chatlog.Translate("AdminNewGroupAdd"))
 
         confirm.DoClick = function()
             local group = groupEntry:GetText()
 
             if localConfig.privileges[group] ~= nil then
                 addGroupFrame:Close()
-                chat.AddText(Chatlog.Colors["YELLOW"], "Error adding group: ", Chatlog.Colors["WHITE"], "That group already exists!")
+                chat.AddText(Chatlog.Colors["YELLOW"], Chatlog.Translate("AdminNewGroupError"), Chatlog.Colors["WHITE"], Chatlog.Translate("AdminGroupExists"))
             else
                 localConfig.privileges[group] = table.Copy(localConfig.privileges["user"])
                 addGroupFrame:Close()
@@ -94,7 +94,7 @@ function Chatlog:DrawManagerPanel(tabs)
         local cancel = addGroupFrame:Add("DButton")
         cancel:SetSize(w, h)
         cancel:SetPos(addGroupFrame:GetWide() - w - 5, 75)
-        cancel:SetText("Cancel")
+        cancel:SetText(Chatlog.Translate("Cancel"))
 
         cancel.DoClick = function()
             addGroupFrame:Close()
@@ -104,150 +104,139 @@ function Chatlog:DrawManagerPanel(tabs)
     local mySqlConfig = sidebar:Add("DButton")
     mySqlConfig:Dock(TOP)
     mySqlConfig:DockMargin(5, 0, 5, 5)
-    mySqlConfig:SetText("MySQL settings")
+    mySqlConfig:SetText(Chatlog.Translate("AdminMySQLSettings"))
 
-    mySqlConfig.DoClick = function()
+    mySqlConfig.DoClick = function(self, reviewing)
         local mySqlConfigFrame = vgui.Create("DFrame")
         mySqlConfigFrame:SetBackgroundBlur(true)
         mySqlConfigFrame:SetSize(245, 290)
         mySqlConfigFrame:Center()
-        mySqlConfigFrame:SetTitle("MySQL settings")
+        mySqlConfigFrame:SetTitle(Chatlog.Translate("AdminMySQLSettings"))
         mySqlConfigFrame:MakePopup()
 
+        if (reviewing) then
+            local reviewLabel = mySqlConfigFrame:Add("DLabel")
+            reviewLabel:SetWrap(true)
+            reviewLabel:SetAutoStretchVertical(true)
+            reviewLabel:SetContentAlignment(5)
+            reviewLabel:SetText(Chatlog.Translate("AdminMySQLReview"))
+            reviewLabel:Dock(TOP)
+            reviewLabel:DockMargin(5, 0, 5, 5)
+            reviewLabel:SetTextColor(Chatlog.Colors.YELLOW)
+            reviewLabel:SetAutoStretchVertical(true)
+        end
+
         local ipLabel = mySqlConfigFrame:Add("DLabel")
-        ipLabel:SetText("IP:")
+        ipLabel:SetText(Chatlog.Translate("MySQLHost"))
         ipLabel:Dock(TOP)
         ipLabel:DockMargin(5, 0, 5, -5)
         ipLabel:SetTextColor(Chatlog.Colors.WHITE)
 
+        local fields = {}
+
         local ip = mySqlConfigFrame:Add("DTextEntry")
-        ip:SetText("a")
+        ip:SetPlaceholderText("127.0.0.1")
         ip:Dock(TOP)
         ip:DockMargin(5, 5, 5, 5)
-        ip:SetTooltip("The IP of the MySQL server")
         ip:SetHeight(20)
         ip:SetValue(localConfig.mysql.ip)
 
-        function ip:PaintOver(w, h)
-            -- WilliamVenner @ SQLWorkbench
-            -- https://github.com/WilliamVenner/SQLWorkbench
-            if (not self:IsHovered()) then
-                surface.SetDrawColor(Chatlog.Colors.BLACK)
-                surface.DrawRect(2,2,w-4,h-4)
-                draw.SimpleText("Hover to show", "Default", w / 2, h / 2, Chatlog.Colors.WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-            end
-        end
+        table.insert(fields, ip)
 
         function ip:OnValueChange(text)
             localConfig.mysql.ip = text
         end
 
         local portLabel = mySqlConfigFrame:Add("DLabel")
-        portLabel:SetText("Port:")
+        portLabel:SetText(Chatlog.Translate("MySQLPort"))
         portLabel:Dock(TOP)
         portLabel:DockMargin(5, 0, 5, -5)
         portLabel:SetTextColor(Chatlog.Colors.WHITE)
 
         local port = mySqlConfigFrame:Add("DTextEntry")
-        port:SetText("a")
+        port:SetPlaceholderText("3306")
         port:Dock(TOP)
         port:DockMargin(5, 5, 5, 5)
-        port:SetTooltip("The port of the MySQL server")
         port:SetHeight(20)
         port:SetValue(localConfig.mysql.port)
 
-        function port:PaintOver(w, h)
-            if (not self:IsHovered()) then
-                surface.SetDrawColor(Chatlog.Colors.BLACK)
-                surface.DrawRect(2,2,w-4,h-4)
-                draw.SimpleText("Hover to show", "Default", w / 2, h / 2, Chatlog.Colors.WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-            end
-        end
+        table.insert(fields, port)
 
         function port:OnValueChange(text)
             localConfig.mysql.port = text
         end
 
         local usernameLabel = mySqlConfigFrame:Add("DLabel")
-        usernameLabel:SetText("Username:")
+        usernameLabel:SetText(Chatlog.Translate("MySQLUsername"))
         usernameLabel:Dock(TOP)
         usernameLabel:DockMargin(5, 0, 5, -5)
         usernameLabel:SetTextColor(Chatlog.Colors.WHITE)
 
         local username = mySqlConfigFrame:Add("DTextEntry")
-        username:SetText("a")
+        username:SetPlaceholderText("root")
         username:Dock(TOP)
         username:DockMargin(5, 5, 5, 5)
-        username:SetTooltip("The username to connect to the MySQL server with")
         username:SetHeight(20)
         username:SetValue(localConfig.mysql.username)
 
-        function username:PaintOver(w, h)
-            if (not self:IsHovered()) then
-                surface.SetDrawColor(Chatlog.Colors.BLACK)
-                surface.DrawRect(2,2,w-4,h-4)
-                draw.SimpleText("Hover to show", "Default", w / 2, h / 2, Chatlog.Colors.WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-            end
-        end
+        table.insert(fields, username)
 
         function username:OnValueChange(text)
             localConfig.mysql.username = text
         end
 
         local passwordLabel = mySqlConfigFrame:Add("DLabel")
-        passwordLabel:SetText("Password:")
+        passwordLabel:SetText(Chatlog.Translate("MySQLPassword"))
         passwordLabel:Dock(TOP)
         passwordLabel:DockMargin(5, 0, 5, -5)
         passwordLabel:SetTextColor(Chatlog.Colors.WHITE)
 
         local password = mySqlConfigFrame:Add("DTextEntry")
-        password:SetText("a")
+        password:SetPlaceholderText("admin")
         password:Dock(TOP)
         password:DockMargin(5, 5, 5, 5)
-        password:SetTooltip("The password to your MySQL server")
         password:SetHeight(20)
         password:SetValue(localConfig.mysql.password)
 
-        function password:PaintOver(w, h)
-            if (not self:IsHovered()) then
-                surface.SetDrawColor(Chatlog.Colors.BLACK)
-                surface.DrawRect(2,2,w-4,h-4)
-                draw.SimpleText("Hover to show", "Default", w / 2, h / 2, Chatlog.Colors.WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-            end
-        end
+        table.insert(fields, password)
 
         function password:OnValueChange(text)
             localConfig.mysql.password = text
         end
 
         local databaseLabel = mySqlConfigFrame:Add("DLabel")
-        databaseLabel:SetText("Database:")
+        databaseLabel:SetText(Chatlog.Translate("MySQLDatabase"))
         databaseLabel:Dock(TOP)
         databaseLabel:DockMargin(5, 0, 5, -5)
         databaseLabel:SetTextColor(Chatlog.Colors.WHITE)
 
         local database = mySqlConfigFrame:Add("DTextEntry")
-        database:SetText("a")
+        database:SetPlaceholderText("chatlog")
         database:Dock(TOP)
         database:DockMargin(5, 5, 5, 5)
-        database:SetTooltip("The name of the database to use")
         database:SetHeight(20)
         database:SetValue(localConfig.mysql.database)
 
-        function database:PaintOver(w, h)
-            if (not self:IsHovered()) then
-                surface.SetDrawColor(Chatlog.Colors.BLACK)
-                surface.DrawRect(2,2,w-4,h-4)
-                draw.SimpleText("Hover to show", "Default", w / 2, h / 2, Chatlog.Colors.WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-            end
-        end
+        table.insert(fields, database)
 
         function database:OnValueChange(text)
             localConfig.mysql.database = text
         end
 
+        for _, field in pairs(fields) do
+            function field:PaintOver(w, h)
+                -- WilliamVenner @ SQLWorkbench
+                -- https://github.com/WilliamVenner/SQLWorkbench
+                if (not self:IsHovered()) then
+                    surface.SetDrawColor(Chatlog.Colors.BLACK)
+                    surface.DrawRect(2,2,w-4,h-4)
+                    draw.SimpleText(Chatlog.Translate("AdminHoverToShow"), "DermaDefaultBold", w / 2, h / 2, Chatlog.Colors.WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+                end
+            end
+        end
+
         local saveButton = mySqlConfigFrame:Add("DButton")
-        saveButton:SetText("Save changes")
+        saveButton:SetText(Chatlog.Translate("SaveChanges"))
         saveButton:Dock(TOP)
         saveButton:DockMargin(5, 5, 5, 5)
 
@@ -259,53 +248,32 @@ function Chatlog:DrawManagerPanel(tabs)
             localConfig.mysql.database = database:GetValue()
             mySqlConfigFrame:Close()
         end
+
+        mySqlConfigFrame:InvalidateChildren(true)
+        mySqlConfigFrame:SizeToChildren(false, true)
     end
 
     local commit = sidebar:Add("DButton")
     commit:Dock(TOP)
     commit:DockMargin(5, 0, 5, 5)
-    commit:SetText("Save changes")
+    commit:SetText(Chatlog.Translate("SaveChanges"))
 
     commit.DoClick = function()
-        local confirmFrame = self.Menu:Add("DFrame")
-        confirmFrame:SetSize(245, 90)
-        confirmFrame:SetBackgroundBlur(true)
-        confirmFrame:SetDraggable(false)
-        confirmFrame:Center()
-        confirmFrame:SetTitle("Commit configuration changes")
-        confirmFrame:ShowCloseButton(false)
 
-        local warn = confirmFrame:Add("DLabel")
-        warn:SetText("Commiting changes will re-send the configuration\nfile to all players. Confirm?")
-        warn:SetColor(Chatlog.Colors["YELLOW"])
-        warn:SizeToContents()
-        warn:Dock(TOP)
+        Derma_Query(Chatlog.Translate("AdminCommitWarning"),
+            Chatlog.Translate("AdminCommitTitle"),
+            Chatlog.Translate("Confirm"),
+            function()
+                chat.AddText(Chatlog.Colors["YELLOW"], "Commiting...")
+                confirmCommit(localConfig)
 
-        local w, h = confirmFrame:GetWide() / 2 - 10, 20
-        local confirm = confirmFrame:Add("DButton")
-        confirm:SetSize(w, h)
-        confirm:SetPos(5, 65)
-        confirm:SetText("Confirm")
-        confirm:SetColor(Chatlog.Colors["MAGENTA"])
+                if Chatlog.Menu:IsValid() then
+                    Chatlog.Menu:Close()
+                end
+            end,
 
-        confirm.DoClick = function()
-            chat.AddText(Chatlog.Colors["YELLOW"], "Commiting...")
-            confirmCommit(localConfig)
-            confirmFrame:Close()
-
-            if Chatlog.Menu:IsValid() then
-                Chatlog.Menu:Close()
-            end
-        end
-
-        local cancel = confirmFrame:Add("DButton")
-        cancel:SetSize(w, h)
-        cancel:SetPos(confirmFrame:GetWide() - w - 5, 65)
-        cancel:SetText("Cancel")
-
-        cancel.DoClick = function()
-            confirmFrame:Close()
-        end
+            Chatlog.Translate("Cancel")
+        )
     end
 
     -- Privilege settings 
@@ -316,19 +284,26 @@ function Chatlog:DrawManagerPanel(tabs)
     groupView:SetHeight(150)
     groupView:SetBackgroundColor(Chatlog.Colors["PANEL_DARK"])
 
+    local groupViewTitle = groupView:Add("DLabel")
+    groupViewTitle:SetText(Chatlog.Translate("AdminPrivilegeTitle"))
+    groupViewTitle:SetFont("ChatlogPanelTitle")
+    groupViewTitle:SizeToContents()
+    groupViewTitle:SetColor(Chatlog.Colors["WHITE"])
+    groupViewTitle:SetPos(6, 3)
+
     local readPresentLabel = groupView:Add("DLabel")
-    readPresentLabel:SetText("Can read messages in the current round:")
+    readPresentLabel:SetText(Chatlog.Translate("AdminPrivilegeReadPresent"))
     readPresentLabel:Dock(TOP)
     readPresentLabel:DockMargin(5, 25, 5, 5)
 
     local readPresent = groupView:Add("DComboBox")
-    readPresent:SetText("Select a group to edit")
+    readPresent:SetText(Chatlog.Translate("AdminPrivilegeSelectGroup"))
     readPresent:SetDisabled(true)
     readPresent:Dock(TOP)
     readPresent:DockMargin(5, -5, 5, 5)
-    readPresent:AddChoice("Always", "true", false, "icon16/accept.png")
-    readPresent:AddChoice("Only when dead or spectating", "spec_only", false, "icon16/eye.png")
-    readPresent:AddChoice("Never", "false", false, "icon16/delete.png")
+    readPresent:AddChoice(Chatlog.Translate("AdminPrivilegeReadPresentAlways"), "true", false, "icon16/accept.png")
+    readPresent:AddChoice(Chatlog.Translate("AdminPrivilegeReadPresentSpecOnly"), "spec_only", false, "icon16/eye.png")
+    readPresent:AddChoice(Chatlog.Translate("AdminPrivilegeReadPresentNever"), "false", false, "icon16/delete.png")
 
     function readPresent:OnSelect(_, _, data)
         -- option data sucks ass holy shit
@@ -340,7 +315,7 @@ function Chatlog:DrawManagerPanel(tabs)
     end
 
     local readTeam = groupView:Add("DCheckBoxLabel")
-    readTeam:SetText("Can read team chat messages (traitor and detective)")
+    readTeam:SetText(Chatlog.Translate("AdminPrivilegeReadTeam"))
     readTeam:SetDisabled(true)
     readTeam:Dock(TOP)
     readTeam:DockMargin(5, 0, 5, 5)
@@ -350,7 +325,7 @@ function Chatlog:DrawManagerPanel(tabs)
     end
 
     local readDead = groupView:Add("DCheckBoxLabel")
-    readDead:SetText("Can read messages from dead players / spectators")
+    readDead:SetText(Chatlog.Translate("AdminPrivilegeReadDead"))
     readDead:SetDisabled(true)
     readDead:Dock(TOP)
     readDead:DockMargin(5, 0, 5, 5)
@@ -360,7 +335,7 @@ function Chatlog:DrawManagerPanel(tabs)
     end
 
     local searchByDate = groupView:Add("DCheckBoxLabel")
-    searchByDate:SetText("Can search old logs by date")
+    searchByDate:SetText(Chatlog.Translate("AdminPrivilegeSearchByDate"))
     searchByDate:SetDisabled(true)
     searchByDate:Dock(TOP)
     searchByDate:DockMargin(5, 0, 5, 5)
@@ -369,18 +344,11 @@ function Chatlog:DrawManagerPanel(tabs)
         localConfig.privileges[selGroup]["can_search_old_logs_by_date"] = val
     end
 
-    local groupViewTitle = groupView:Add("DLabel")
-    groupViewTitle:SetText("Privilege configuration")
-    groupViewTitle:SetFont("ChatlogPanelTitle")
-    groupViewTitle:SizeToContents()
-    groupViewTitle:SetColor(Chatlog.Colors["WHITE"])
-    groupViewTitle:SetPos(6, 3)
-
     local groupName = groupView:Add("DLabel")
     groupName:Dock(BOTTOM)
     groupName:DockMargin(5, 0, 0, 5)
     groupName:Center()
-    groupName:SetText("Select a group to edit.")
+    groupName:SetText(Chatlog.Translate("AdminPrivilegeSelectGroup"))
     groupName:SetColor(Chatlog.Colors["YELLOW"])
     groupName:SizeToContents()
 
@@ -392,15 +360,15 @@ function Chatlog:DrawManagerPanel(tabs)
     serverView:SetBackgroundColor(Chatlog.Colors["PANEL_LIGHT"])
 
     local serverViewTitle = serverView:Add("DLabel")
-    serverViewTitle:SetText("Server configuration")
+    serverViewTitle:SetText(Chatlog.Translate("AdminServerTitle"))
     serverViewTitle:SetFont("ChatlogPanelTitle")
     serverViewTitle:SizeToContents()
     serverViewTitle:SetColor(Chatlog.Colors["BLACK"])
     serverViewTitle:SetPos(6, 3)
 
     local quickKeybind = serverView:Add("DCheckBoxLabel")
-    quickKeybind:SetText("Enable opening Chatlog window with F7")
-    quickKeybind:SetTooltip("When disabled, users must use the 'chatlog' console command to open the menu.")
+    quickKeybind:SetText(Chatlog.Translate("AdminServerKeybind"))
+    quickKeybind:SetTooltip(Chatlog.Translate("AdminServerKeybindTooltip"))
     quickKeybind:SetTextColor(Chatlog.Colors["BLACK"])
     quickKeybind:SetChecked(localConfig.keybind)
     quickKeybind:Dock(TOP)
@@ -411,8 +379,8 @@ function Chatlog:DrawManagerPanel(tabs)
     end
 
     local dbUseMySQL = serverView:Add("DCheckBoxLabel")
-    dbUseMySQL:SetText("Use MySQL")
-    dbUseMySQL:SetTooltip("When disabled, the server will use its SQLite database for any queries.")
+    dbUseMySQL:SetText(Chatlog.Translate("AdminServerUseMySQL"))
+    dbUseMySQL:SetTooltip(Chatlog.Translate("AdminServerUseMySQLTooltip"))
     dbUseMySQL:SetTextColor(Chatlog.Colors["BLACK"])
     dbUseMySQL:SetChecked(localConfig.database_use_mysql)
     dbUseMySQL:Dock(TOP)
@@ -420,10 +388,13 @@ function Chatlog:DrawManagerPanel(tabs)
 
     function dbUseMySQL:OnChange(val)
         localConfig.database_use_mysql = val
+        if (val) then
+            mySqlConfig:DoClick(true)
+        end
     end
 
     local dbDayLimit = serverView:Add("DNumSlider")
-    dbDayLimit:SetText("Database entries day limit")
+    dbDayLimit:SetText(Chatlog.Translate("AdminServerDayLimit"))
     dbDayLimit:SetDark(true)
     dbDayLimit:Dock(TOP)
     dbDayLimit:DockMargin(5, 0, 5, 5)
@@ -448,7 +419,7 @@ function Chatlog:DrawManagerPanel(tabs)
         end
 
         if group then
-            groupName:SetText(string.format("Editing: (%s)", group))
+            groupName:SetText(string.format(Chatlog.Translate("AdminPrivilegeEditing"), group))
 
             readPresent:SetText(readPresent:GetOptionTextByData(tostring(localConfig.privileges[group]["can_read_current_round"])))
 
@@ -478,13 +449,13 @@ function Chatlog:DrawManagerPanel(tabs)
         local group = line:GetColumnText(1)
         local menu = DermaMenu()
 
-        menu:AddOption("Copy this group's name to clipboard", function()
+        menu:AddOption(Chatlog.Translate("AdminCopyGroup"), function()
             SetClipboardText(group)
-            chat.AddText(Chatlog.Colors["WHITE"], "Copied groupname to clipboard!")
+            chat.AddText(Chatlog.Colors["WHITE"], Chatlog.Translate("AdminCopiedGroup"))
         end):SetIcon("icon16/page_copy.png")
 
         if group ~= LocalPlayer():GetUserGroup() and group ~= "user" then
-            menu:AddOption("Delete this group", function()
+            menu:AddOption(Chatlog.Translate("AdminDeleteGroup"), function()
                 localConfig.privileges[group] = {
                     ["markedForDeletion"] = true
                 }
@@ -496,5 +467,5 @@ function Chatlog:DrawManagerPanel(tabs)
         menu:Open()
     end
 
-    tabs:AddSheet("Manage", managerPanel, "icon16/application_xp_terminal.png")
+    tabs:AddSheet(Chatlog.Translate("AdminTab"), managerPanel, "icon16/application_xp_terminal.png")
 end

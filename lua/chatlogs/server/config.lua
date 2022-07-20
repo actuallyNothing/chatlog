@@ -62,6 +62,11 @@ function Chatlog:UpdateConfiguration(broadcast)
     end
 end
 
+function Chatlog:SaveCurrentConfiguration()
+    file.Write("chatlog/chatlog_config.json", util.TableToJSON(self.Config, true))
+    Chatlog:UpdateConfiguration(true)
+end
+
 --[[
 	If no "chatlog_config.json" file is found, 'defaultConfig'
 	will be the one created by the addon, and used as
@@ -223,6 +228,7 @@ function Chatlog:CommitConfiguration(config, ply)
     writeConfiguration(newConfig)
 
     if (oldDB ~= newConfig.database_use_mysql) then
+        print("[Chatlog] Switched to " .. (newConfig.database_use_mysql and "MySQL" or "SQLite"))
         Chatlog.InitializeDB()
     end
 end

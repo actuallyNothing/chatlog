@@ -69,6 +69,60 @@ ChatlogLanguage["es"] = {
     PlayerListButtonHide = "  Esconder jugadores",
     PlayerList = "Jugadores",
     PlayerListName = "Nombre",
-    PlayerListNoPlayers = "No se encontraron jugadores"
+    PlayerListNoPlayers = "No se encontraron jugadores",
+
+    Cancel = "Cancelar",
+    SaveChanges = "Guardar cambios",
+    Confirm = "Confirmar",
+
+    AdminTab = "Administrar",
+    AdminUsergroups = "Grupos",
+
+    AdminNewGroup = "Nuevo grupo",
+    AdminNewGroupTitle = "Añadiendo un grupo",
+    AdminNewGroupTip = "Ingrese el nombre del nuevo grupo:",
+    AdminNewGroupAdd = "Añadir grupo",
+    AdminNewGroupError = "Error añadiendo grupo: ",
+    AdminGroupExists = "¡Ese grupo ya existe!",
+    AdminCopyGroup = "Copiar el nombre de este grupo al portapapeles",
+    AdminCopiedGroup = "¡Nombre del grupo copiado al portapapeles!",
+    AdminDeleteGroup = "Eliminar este grupo",
+
+    AdminMySQLSettings = "Opciones de MySQL",
+    AdminHoverToShow = "Pase el ratón para ver",
+    AdminMySQLReview = "Antes de establecer MySQL como su base de datos, revise la siguiente información:",
+
+    MySQLHost = "IP / Host:",
+    MySQLPort = "Puerto:",
+    MySQLUsername = "Nombre de usuario:",
+    MySQLPassword = "Contraseña:",
+    MySQLDatabase = "Base de datos:",
+
+    AdminCommitTitle = "Confirmar cambios a la configuración",
+    AdminCommitWarning = "Confirmar los cambios re-enviará el archivo de configuración a todos los jugadores. Confirmar?",
+    AdminCommiting = "Confirmando cambios...",
+
+    AdminPrivilegeTitle = "Configuración de privilegios",
+    AdminPrivilegeSelectGroup = "Seleccione un grupo para editar",
+    AdminPrivilegeEditing = "Editando: (%s)",
+
+    AdminPrivilegeReadPresent = "Puede leer mensajes de la ronda actual:",
+    AdminPrivilegeReadPresentAlways = "Siempre",
+    AdminPrivilegeReadPresentNever = "Nunca",
+    AdminPrivilegeReadPresentSpecOnly = "Solo estando muerto o de espectador",
+
+    AdminPrivilegeReadTeam = "Puede leer mensajes de equipo (traidores y detectives)",
+    AdminPrivilegeReadDead = "Puede leer a jugadores muertos o espectadores",
+    AdminPrivilegeSearchByDate = "Puede buscar registros por fecha",
+
+    AdminServerTitle = "Configuración del servidor",
+
+    AdminServerKeybind = "Activar F7 como tecla rápida de Chatlog",
+    AdminServerKeybindTooltip = "Al desactivarse, los jugadores deben escribir el comando 'chatlog' para abrir la ventana de Chatlog",
+
+    AdminServerUseMySQL = "Usar MySQL para guardar registros",
+    AdminServerUseMySQLTooltip = "Al desactivarse, el servidor usará la base de datos SQLite incluida",
+
+    AdminServerDayLimit = "Límite de entradas en la base de datos"
 
 }

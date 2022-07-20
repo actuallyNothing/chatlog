@@ -25,6 +25,12 @@ function Chatlog.MySQL.Initialize()
         file.Append("chatlog/mysql_errors.txt", err)
 
         print("[Chatlog] MySQL connection failed: " .. err)
+        print("[Chatlog] See chatlog/mysql_errors.txt for more information")
+        print("[Chatlog] Switching to SQLite")
+
+        Chatlog.Config.database_use_mysql = false
+        Chatlog:SaveCurrentConfiguration()
+        Chatlog.InitializeDB()
 
     end
 

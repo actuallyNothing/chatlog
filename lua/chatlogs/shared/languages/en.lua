@@ -79,6 +79,60 @@ ChatlogLanguage["en"] = {
     PlayerListButtonHide = "  Hide players",
     PlayerList = "Players",
     PlayerListName = "Name",
-    PlayerListNoPlayers = "No players found"
+    PlayerListNoPlayers = "No players found",
+
+    Cancel = "Cancel",
+    SaveChanges = "Save changes",
+    Confirm = "Confirm",
+
+    AdminTab = "Administrate",
+    AdminUsergroups = "Usergroups",
+
+    AdminNewGroup = "New group",
+    AdminNewGroupTitle = "Adding a group",
+    AdminNewGroupTip = "Enter the name for the new group:",
+    AdminNewGroupAdd = "Add group",
+    AdminNewGroupError = "Error adding group: ",
+    AdminGroupExists = "That group already exists!",
+    AdminCopyGroup = "Copy this group's name to clipboard",
+    AdminCopiedGroup = "Copied groupname to clipboard!",
+    AdminDeleteGroup = "Delete this group",
+
+    AdminMySQLSettings = "MySQL Settings",
+    AdminHoverToShow = "Hover to show",
+    AdminMySQLReview = "Before setting MySQL as your database, please review the following settings:",
+
+    MySQLHost = "IP / Host:",
+    MySQLPort = "Port:",
+    MySQLUsername = "Username:",
+    MySQLPassword = "Password:",
+    MySQLDatabase = "Database:",
+
+    AdminCommitTitle = "Commit configuration changes",
+    AdminCommitWarning = "Commiting changes will re-send the configuration file to all players. Commit?",
+    AdminCommiting = "Commiting changes...",
+
+    AdminPrivilegeTitle = "Privilege configuration",
+    AdminPrivilegeSelectGroup = "Select a group to edit",
+    AdminPrivilegeEditing = "Editing: (%s)",
+
+    AdminPrivilegeReadPresent = "Can read messages in the current round:",
+    AdminPrivilegeReadPresentAlways = "Always",
+    AdminPrivilegeReadPresentNever = "Never",
+    AdminPrivilegeReadPresentSpecOnly = "Only when dead or spectating",
+
+    AdminPrivilegeReadTeam = "Can read team chat messages (traitor and detective)",
+    AdminPrivilegeReadDead = "Can read messages from dead players / spectators",
+    AdminPrivilegeSearchByDate = "Can search old logs by date",
+
+    AdminServerTitle = "Server configuration",
+
+    AdminServerKeybind = "Enable opening Chatlog window with F7",
+    AdminServerKeybindTooltip = "When disabled, users must use the 'chatlog' console command to open the menu",
+
+    AdminServerUseMySQL = "Use MySQL for storing logs",
+    AdminServerUseMySQLTooltip = "When disabled, the server will use the built-in SQLite database",
+
+    AdminServerDayLimit = "Database entries day limit"
 
 }

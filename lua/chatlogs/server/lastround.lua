@@ -4,6 +4,11 @@ function Chatlog.LastRoundPrevMapSetup()
 
     Chatlog.Query("SELECT code FROM chatlog_v2_lastround LIMIT 1", function(success, code)
 
+        if (not success or not code or table.IsEmpty(code)) then
+            SetGlobalBool("ChatlogLastMapExists", false)
+            return
+        end
+
         Chatlog.Query("SELECT * FROM chatlog_v2_oldlogs WHERE code = \'" .. code[1].code .. "\'", function(success, data)
 
             if (not success or not data or table.IsEmpty(data)) then
