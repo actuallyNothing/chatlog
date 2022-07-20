@@ -87,8 +87,6 @@ net.Receive("ChatlogClientReady", function(len, ply)
     if (GetGlobalBool("ChatlogLastMapExists")) then
         local data = Chatlog.LastRoundPrevMap
 
-        PrintTable(data)
-
         data = util.Compress(util.TableToJSON(Chatlog.LastRoundPrevMap))
 
         net.Start("ChatlogSendLastMapData")

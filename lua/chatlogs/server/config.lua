@@ -222,8 +222,6 @@ function Chatlog:CommitConfiguration(config, ply)
 
     writeConfiguration(newConfig)
 
-    print(oldDB, newConfig.database_use_mysql)
-
     if (oldDB ~= newConfig.database_use_mysql) then
         Chatlog.InitializeDB()
     end

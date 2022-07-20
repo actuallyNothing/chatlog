@@ -141,7 +141,6 @@ function Chatlog.DrawMoreFilters(parent, y, height)
             end
         end
         Chatlog.Filters.text.strings = strings
-        PrintTable(Chatlog.Filters.text.strings)
     end
 
     local filterPlayers = vgui.Create("DCheckBoxLabel", panel)
