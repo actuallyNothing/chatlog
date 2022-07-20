@@ -9,7 +9,7 @@ local serverResponses = {
 
     [3] = function(tabs)
         chat.AddText(Color(0, 255, 0), "Loading round...")
-        tabs:SwitchToName("Chatlog")
+        tabs:SwitchToName(Chatlog.Translate("ChatTab"))
     end
 }
 
@@ -92,12 +92,14 @@ function Chatlog:DrawOldLogs(tabs)
         if (Chatlog.OldLogs[code]) then
             Chatlog.LoadRound(Chatlog.OldLogs[code])
             serverResponses[3](tabs)
+            Chatlog.Menu.roundFilter:SetText("Old Chatlog round")
             return
         else
             for _, v in ipairs(Chatlog.Rounds) do
                 if (v.code == code) then
                     Chatlog.LoadRound(v)
                     serverResponses[3](tabs)
+                    Chatlog.Menu.roundFilter:SetText("Old Chatlog round")
                     return
                 end
             end

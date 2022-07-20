@@ -121,9 +121,7 @@
     filteringPanel:SetHeight(50)
 
     -- "Selected message" panel
-    self.textPanel = {}
-    local textPanel = self.textPanel
-    self.DrawTextPanel(textPanel, chatlogTab)
+    self.DrawTextPanel(chatlogTab)
 
     -- Filter-by-round DComboBox
     setting = vgui.Create("DLabel", filteringPanel)
@@ -132,7 +130,8 @@
     setting:SetColor(Color(0, 0, 0))
     setting:SetText(Chatlog.Translate("RoundFilter"))
 
-    local roundFilter = vgui.Create("DComboBox", filteringPanel)
+    self.Menu.roundFilter = vgui.Create("DComboBox", filteringPanel)
+    local roundFilter = self.Menu.roundFilter
     roundFilter:Dock(LEFT)
     roundFilter:DockMargin(5, 0, 0, 4)
     roundFilter:SetWidth(250)
@@ -226,7 +225,7 @@
         roundFilter:AddChoice(Chatlog.Translate("Round") .. i, nil, false, "icon16/page.png")
     end
 
-    if Chatlog:CanReadPresent(client) then
+    if Chatlog:CanReadPresent(client) and GetGlobalInt("ChatlogRoundNumber") > 0 then
         roundFilter:AddChoice(Chatlog.Translate("RoundSelectCurrent"), nil, false, "icon16/page_lightning.png")
     end
 
@@ -247,7 +246,7 @@
 
         if Chatlog.Rounds[index] ~= nil then
             -- Load the round from the client if possible
-            Chatlog.LoadRound(Chatlog.Rounds[index], chatLoglist, textPanel)
+            Chatlog.LoadRound(Chatlog.Rounds[index])
         else
             -- Ask the server for the round
             net.Start("AskChatlogRound")

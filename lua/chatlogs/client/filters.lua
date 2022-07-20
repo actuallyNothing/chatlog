@@ -5,7 +5,7 @@ function Chatlog.DrawMoreFilters(parent, y, height)
     parent.moreFilters = vgui.Create("DPanel", parent)
     local panel = parent.moreFilters
 
-    panel:SetSize(570, 200)
+    panel:SetSize(570, 215)
     panel:SetPos(-575, y)
 
     panel.Paint = function(self, w, h)
@@ -142,6 +142,12 @@ function Chatlog.DrawMoreFilters(parent, y, height)
         end
         Chatlog.Filters.text.strings = strings
     end
+
+    local filterTextTip = vgui.Create("DLabel", panel)
+        filterTextTip:SetText(Chatlog.Translate("FiltersOnlySubstringsTip"))
+        filterTextTip:SetTextColor(Color(0, 0, 0))
+        filterTextTip:SetPos(10, 195)
+        filterTextTip:SizeToContents()
 
     local filterPlayers = vgui.Create("DCheckBoxLabel", panel)
         filterPlayers:SetText(Chatlog.Translate("FiltersPlayers"))

@@ -14,7 +14,7 @@ function Chatlog.FormatTime(seconds)
     end
 end
 
-function Chatlog.LoadRound(round)
+function Chatlog.LoadRound(round, isOld)
 
     local loglist = Chatlog.chatLogList
 
@@ -133,6 +133,8 @@ function Chatlog.LoadRound(round)
     end
 
     loglist:SortByColumn(4, false)
+
+    if (isOld) then Chatlog.Menu.roundFilter:SetText("Old Chatlog round") end
 
     hook.Run("ChatlogRoundLoaded", round)
 

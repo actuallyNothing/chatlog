@@ -58,8 +58,9 @@ ChatlogLanguage["en"] = {
     FiltersRolesDetective = "Detectives",
 
     FiltersHideDead = "Hide dead players and spectators",
-    FiltersOnlySubstringsTitle = "Show only messages containing these words:",
-    FiltersOnlySubstringsPlaceholder = "Enter words to search for, separated by commas.",
+    FiltersOnlySubstringsTitle = "Show only messages containing:",
+    FiltersOnlySubstringsPlaceholder = "c4, traitor, detective",
+    FiltersOnlySubstringsTip = "Use commas to filter various words. Example: 'hello, world'",
 
     FiltersPlayers = "Show messages from:",
     FiltersPlayersNoPlayersFound = "No players found",

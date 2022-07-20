@@ -48,7 +48,7 @@ net.Receive("GetChatlogRound", function()
 
     end
 
-    Chatlog.LoadRound(roundtable)
+    Chatlog.LoadRound(roundtable, isOld)
 end)
 
 net.Receive("ChatlogSendLastMapData", function()
