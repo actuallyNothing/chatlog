@@ -88,9 +88,13 @@ function Chatlog.Query(query, callback, ...)
         end
 
         function q:onError(err)
-            print("[Chatlog] MySQL Query failed!")
-            print(err)
+
+            local longErr = string.format("[%s] Error in MySQL query:\n%s\n\n", os.date("%c"), err)
+            file.Append("chatlog/mysql_errors.txt", longErr)
+
+            print("[Chatlog] MySQL Query failed! Details in data/chatlog/mysql_errors.txt")
             success = false
+
         end
 
         q:start()

@@ -48,8 +48,6 @@ net.Receive("GetChatlogRound", function()
 
     end
 
-    PrintTable(roundtable)
-
     Chatlog.LoadRound(roundtable, isOld)
 end)
 

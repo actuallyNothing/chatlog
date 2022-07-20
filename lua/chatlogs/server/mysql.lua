@@ -13,7 +13,7 @@ function Chatlog.MySQL.Initialize()
 
         Chatlog.MySQL.Connected = true
 
-        print("Connected to MySQL database")
+        print("[Chatlog] Connected to MySQL database")
 
         Chatlog.CreateDBTables()
         Chatlog.LastRoundPrevMapSetup()
@@ -23,10 +23,11 @@ function Chatlog.MySQL.Initialize()
 
     function Chatlog.MySQL.Database.onConnectionFailed(self, err)
 
-        file.Append("chatlog/mysql_errors.txt", err)
+        local longErr = string.format("[%s] Error connecting to MySQL database:\n%s\n\n", os.date("%c"), err)
+        file.Append("chatlog/mysql_errors.txt", longErr)
 
         print("[Chatlog] MySQL connection failed: " .. err)
-        print("[Chatlog] See chatlog/mysql_errors.txt for more information")
+        print("[Chatlog] See data/chatlog/mysql_errors.txt for more information")
         print("[Chatlog] Switching to SQLite")
 
         Chatlog.Config.database_use_mysql = false
