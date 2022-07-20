@@ -59,7 +59,7 @@ function Chatlog.OldLogsSetup()
             if (not success or not data or table.IsEmpty(data)) then return end
             local oldest, latest = data[1]["MIN(unix)"], data[1]["MAX(unix)"]
 
-            if (oldest == "NULL" or latest == "NULL") then return end 
+            if (oldest == "NULL" or latest == "NULL") then return end
 
             Chatlog.Dates.oldest = oldest
             Chatlog.Dates.latest = latest

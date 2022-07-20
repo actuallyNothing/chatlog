@@ -87,6 +87,7 @@ net.Receive("AskChatlogRound", function(len, ply)
 end)
 
 net.Receive("AskOldChatlog", function(len, ply)
+
     local code
     code = net.ReadString():upper()
 
@@ -101,7 +102,11 @@ net.Receive("AskOldChatlog", function(len, ply)
     local tosend
 
     if (Chatlog.OldRounds[code]) then
-        tosend = Chatlog.OldRounds[code]
+        net.Start("SendOldChatlogResult")
+        net.WriteUInt(3, 2)
+        net.Send(ply)
+
+        Chatlog.SendTable(-2, ply, Chatlog.OldRounds[code])
     else
         Chatlog.Query("SELECT * FROM chatlog_v2_oldlogs WHERE code = " .. SQLStr(code), function(success, data)
 
@@ -171,7 +176,7 @@ hook.Add("TTTEndRound", "ChatlogRoundEnd", function()
         Log = Chatlog.CurrentRound.Log,
         Players = Chatlog.CurrentRound.Players,
         unix = Chatlog.CurrentRound.unix,
-        curtime = CurTime(),
+        curtime = Chatlog.CurrentRound.curtime,
         map = game.GetMap(),
         code = Chatlog.CurrentRound.code
     }

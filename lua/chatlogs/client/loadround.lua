@@ -77,6 +77,8 @@ function Chatlog.LoadRound(round, isOld)
             end
 
             if isValid then
+                print(v.curtime, round.curtime)
+                print(Chatlog.FormatTime(v.curtime - round.curtime))
 
                 local lineMessage = v["text"]
                 local lineNick = playerList[v.steamID]["nick"]
