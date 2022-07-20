@@ -103,43 +103,54 @@ net.Receive("AskOldChatlog", function(len, ply)
     if (Chatlog.OldLogs[code]) then
         tosend = Chatlog.OldLogs[code]
     else
-        tosend = Chatlog.Query("SELECT * FROM chatlog_v2_oldlogs WHERE code = \'" .. code .. "\'")
 
-        if (not tosend) then
+        Chatlog.Query("SELECT * FROM chatlog_v2_oldlogs WHERE code = " .. SQLStr(code), function(success, data)
+
+            if (not data or table.IsEmpty(data)) then
+                net.Start("SendOldChatlogResult")
+                net.WriteUInt(1, 2)
+                net.Send(ply)
+
+                return
+            end
+
+            tosend = data[1]
+
+            tosend.Log = util.JSONToTable(tosend.log)
+            tosend.log = nil
+            tosend.Players = util.JSONToTable(tosend.players)
+            tosend.players = nil
+
             net.Start("SendOldChatlogResult")
-            net.WriteUInt(1, 2)
+            net.WriteUInt(3, 2)
             net.Send(ply)
 
+            Chatlog.SendTable(-2, ply, tosend)
+
+        end)
+
+
+    end
+
+end)
+
+local function setValidCode()
+
+    local code = Chatlog.randomCode()
+
+    local q = string.format("SELECT * FROM chatlog_v2_oldlogs WHERE code = \'%s\'", code)
+
+    Chatlog.Query(q, function(_, data)
+
+        if (not data or table.IsEmpty(data)) then
+            Chatlog.CurrentRound.code = code
             return
         end
 
-        tosend = tosend[1]
+        setValidCode()
 
-        tosend.Log = util.JSONToTable(tosend.log)
-        tosend.log = nil
-        tosend.Players = util.JSONToTable(tosend.players)
-        tosend.players = nil
-    end
-
-
-    net.Start("SendOldChatlogResult")
-    net.WriteUInt(3, 2)
-    net.Send(ply)
-
-    Chatlog.SendTable(-2, ply, tosend)
-end)
-
--- Manage the timer used for timestamping messages
-function Chatlog:Timer()
-    self.timerSeconds = 0
-
-    if timer.Exists("chatlogTimer") then
-        timer.Remove("chatlogTimer")
-    end
-
-    timer.Create("chatlogTimer", 1, 0, function()
-        self.timerSeconds = self.timerSeconds + 1
     end)
+
 end
 
 -- Reset this timer every round start
@@ -152,14 +163,7 @@ hook.Add("TTTBeginRound", "ChatlogRoundStart", function()
     Chatlog.CurrentRound.curtime = CurTime()
     Chatlog.CurrentRound.map = game.GetMap()
 
-    local code
-    repeat
-        code = Chatlog.randomCode()
-    until (not Chatlog.codeExists(code))
-
-    Chatlog.CurrentRound.code = code
-
-    Chatlog:Timer()
+    setValidCode()
 end)
 
 -- On round end, insert the current round onto the previous rounds and clear it

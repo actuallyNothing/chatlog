@@ -11,9 +11,9 @@ function Chatlog:SendConfiguration(ply, partial, config)
     local tosend
 
     if partial then
-        tosend = config
+        tosend = table.Copy(config)
     else
-        tosend = self.Config
+        tosend = table.Copy(self.Config)
     end
 
     if tosend["mysql"] ~= nil then
@@ -75,22 +75,26 @@ local defaultConfig = {
         ["superadmin"] = {
             can_read_current_round = true,
             can_read_dead_players = true,
-            can_read_team_messages = true
+            can_read_team_messages = true,
+            can_search_old_logs_by_date = true
         },
         ["admin"] = {
             can_read_current_round = "spec_only",
             can_read_dead_players = true,
-            can_read_team_messages = true
+            can_read_team_messages = true,
+            can_search_old_logs_by_date = true
         },
         ["operator"] = {
             can_read_current_round = "spec_only",
             can_read_dead_players = false,
-            can_read_team_messages = true
+            can_read_team_messages = true,
+            can_search_old_logs_by_date = true
         },
         ["user"] = {
             can_read_current_round = false,
             can_read_dead_players = false,
-            can_read_team_messages = false
+            can_read_team_messages = false,
+            can_search_old_logs_by_date = true
         }
     },
     ["database_day_limit"] = 30,
@@ -206,6 +210,8 @@ end
 function Chatlog:CommitConfiguration(config, ply)
     -- Write configuration and send it
     local newConfig = Chatlog:CompleteConfiguration(config)
+    local oldDB = self.Config.database_use_mysql
+
     self:SendConfiguration("all", true, newConfig)
 
     for k, v in pairs(newConfig.privileges) do
@@ -215,9 +221,23 @@ function Chatlog:CommitConfiguration(config, ply)
     end
 
     writeConfiguration(newConfig)
+
+    print(oldDB, newConfig.database_use_mysql)
+
+    if (oldDB ~= newConfig.database_use_mysql) then
+        Chatlog.InitializeDB()
+    end
 end
 
 net.Receive("ChatlogCommitConfiguration", function(_, ply)
+    if (ply:GetUserGroup() ~= "superadmin") then return end
+
     local config = net.ReadString()
     Chatlog:CommitConfiguration(config, ply)
+end)
+
+net.Receive("ChatlogGetMySQLConfiguration", function(_, ply)
+    net.Start("ChatlogSendMySQLConfiguration")
+    net.WriteTable(Chatlog.Config.mysql)
+    net.Send(ply)
 end)

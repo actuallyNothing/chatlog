@@ -77,6 +77,7 @@ function Chatlog.LoadRound(round)
             end
 
             if isValid then
+
                 local lineMessage = v["text"]
                 local lineNick = playerList[v.steamID]["nick"]
                 local lineRole = v["role"]

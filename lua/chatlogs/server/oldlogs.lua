@@ -13,13 +13,6 @@ function Chatlog.randomCode()
 
 end
 
-function Chatlog.codeExists(code)
-    -- Check if code exists in database
-    local data = Chatlog.Query(string.format("SELECT * FROM chatlog_v2_oldlogs WHERE code = \'%s\'", code))
-
-    return data ~= nil
-end
-
 function Chatlog.SaveOldLog(round, roundNumber)
 
     local log = util.TableToJSON(round.Log)
@@ -27,18 +20,20 @@ function Chatlog.SaveOldLog(round, roundNumber)
     local unix = round.unix
     local map = round.map
     local code = round.code
-
+    local curtime = round.curtime
     local year = os.date("%Y")
     local month = os.date("%m")
     local day = os.date("%d")
 
-    Chatlog.Query(string.format("INSERT INTO chatlog_v2_oldlogs (code, year, month, day, unix, round, map, log, players) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+    Chatlog.Query(string.format("INSERT INTO chatlog_v2_oldlogs (code, year, month, day, unix, round, curtime, map, log, players) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+
         SQLStr(code),
         year,
         month,
         day,
         unix,
         roundNumber,
+        curtime,
         SQLStr(map),
         SQLStr(log),
         SQLStr(players)

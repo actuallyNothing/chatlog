@@ -85,6 +85,18 @@ net.Receive("ChatlogSendConfiguration", function()
         Chatlog.Config = config
         Chatlog.Ready = true
     end
+
+    if (LocalPlayer():GetUserGroup() == "superadmin") then
+        net.Start("ChatlogGetMySQLConfiguration")
+        net.SendToServer()
+    end
+end)
+
+net.Receive("ChatlogSendMySQLConfiguration", function()
+
+    local dbdata = net.ReadTable()
+    Chatlog.Config.mysql = dbdata
+
 end)
 
 hook.Add("InitPostEntity", "ChatlogClientInit", function()

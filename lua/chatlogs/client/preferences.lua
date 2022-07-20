@@ -33,9 +33,11 @@ Chatlog.Colors = {
     ["YELLOW"] = Color(255, 255, 0),
     ["RED"] = Color(255, 0, 0),
     ["MAGENTA"] = Color(255, 0, 255),
+
     -- Panel colors
-    ["PANEL_ADMIN_GROUPVIEW"] = Color(0, 0, 0, 245),
-    ["PANEL_ADMIN_SERVERVIEW"] = Color(0, 0, 0, 95),
+    ["PANEL_DARK"] = Color(0, 0, 0, 245),
+    ["PANEL_LIGHT"] = Color(0, 0, 0, 95),
+
     -- Log colors
     ["ROLE_INNOCENT"] = Color(0, 0, 0),
     ["ROLE_TRAITOR"] = Color(150, 0, 0),

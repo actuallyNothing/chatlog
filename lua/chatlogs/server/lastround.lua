@@ -24,26 +24,14 @@ end
 
 hook.Add("TTTEndRound", "ChatlogLastRound", function()
 
-    local round = Chatlog.Rounds[GetGlobalInt("ChatlogRoundNumber")]
+    local code = Chatlog.Rounds[GetGlobalInt("ChatlogRoundNumber")].code
 
-    local log = round.Log
-    log = util.TableToJSON(log)
+    Chatlog.Query("DELETE FROM chatlog_v2_lastround", function(_, data)
 
-    local players = round.Players
-    players = util.TableToJSON(players)
+        Chatlog.Query(string.format("INSERT INTO chatlog_v2_lastround (code) VALUES (\'%s\');",
+            SQLStr(code)
+        ))
 
-    sql.Begin()
-
-    Chatlog.Query("DELETE FROM chatlog_v2_lastround WHERE id = 1")
-
-    Chatlog.Query(string.format("INSERT INTO chatlog_v2_lastround (id, map, unix, log, players, code) VALUES (1, %s, %s, %s, %s %s);",
-        SQLStr(round.map),
-        round.unix,
-        SQLStr(log),
-        SQLStr(players),
-        SQLStr(round.code)
-    ))
-
-    sql.Commit()
+    end)
 
 end)

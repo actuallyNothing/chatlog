@@ -13,6 +13,11 @@ local serverResponses = {
     end
 }
 
+Chatlog.Dates = Chatlog.Dates or {
+    oldest = 0,
+    latest = 0
+}
+
 function Chatlog:DrawOldLogs(tabs)
 
     local oldLogsPanel = vgui.Create("DPanel")
@@ -24,7 +29,7 @@ function Chatlog:DrawOldLogs(tabs)
     codePanel:Dock(TOP)
     codePanel:DockMargin(5, 5, 5, 5)
     codePanel:SetHeight(100)
-    codePanel:SetBackgroundColor(Chatlog.Colors["PANEL_ADMIN_GROUPVIEW"])
+    codePanel:SetBackgroundColor(Chatlog.Colors["PANEL_DARK"])
 
     local codeTitle = vgui.Create("DLabel", codePanel)
     codeTitle:SetText("Search by code")
@@ -81,24 +86,47 @@ function Chatlog:DrawOldLogs(tabs)
     end
 
     function codeEnterButton:DoClick()
+
         local code = codeEntry:GetValue()
 
         if (Chatlog.OldLogs[code]) then
             Chatlog.LoadRound(Chatlog.OldLogs[code])
             serverResponses[3](tabs)
             return
+        else
+            for _, v in ipairs(Chatlog.Rounds) do
+                if (v.code == code) then
+                    Chatlog.LoadRound(v)
+                    serverResponses[3](tabs)
+                    return
+                end
+            end
         end
 
         net.Start("AskOldChatlog")
         net.WriteString(code)
         net.SendToServer()
-
-        net.Receive("SendOldChatlogResult", function()
-            local result = net.ReadUInt(2)
-
-            serverResponses[result](tabs)
-        end)
     end
 
     return tabs:AddSheet("Old logs", oldLogsPanel, "icon16/time.png")
 end
+
+net.Receive("SendOldChatlogResult", function()
+    local result = net.ReadUInt(2)
+
+    serverResponses[result](Chatlog.Menu.tabs)
+end)
+
+net.Start("AskChatlogDates")
+net.SendToServer()
+
+net.Receive("SendChatlogDates", function()
+
+    local oldest = net.ReadUInt(32)
+    local latest = net.ReadUInt(32)
+
+    Chatlog.Dates.oldest = oldest
+    Chatlog.Dates.latest = latest
+
+end)
+

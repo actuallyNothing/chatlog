@@ -14,7 +14,8 @@
     self.Menu:SetKeyboardInputEnabled(false)
 
     -- DPropertySheet for tabs
-    local tabs = vgui.Create("DPropertySheet", self.Menu)
+    self.Menu.tabs = vgui.Create("DPropertySheet", self.Menu)
+    local tabs = self.Menu.tabs
     tabs:Dock(FILL)
     tabs:InvalidateLayout(true)
 
@@ -67,6 +68,7 @@
     roundInfo.codeLabel:SetPos((Chatlog.Menu:GetWide() / 2) - 32, 5)
     roundInfo.codeLabel:InvalidateLayout(true)
     roundInfo.codeLabel:SizeToContents()
+    roundInfo.codeLabel:SetMouseInputEnabled(true)
 
     roundInfo.copyCode = vgui.Create("DImageButton", roundInfo)
     roundInfo.copyCode:SetImage("icon16/tag_blue.png")
@@ -77,6 +79,7 @@
         SetClipboardText(roundInfo.codeLabel:GetText())
         chat.AddText(Chatlog.Colors.WHITE, "Copied this round's code to clipboard! (" .. roundInfo.codeLabel:GetText() .. ")")
     end
+    roundInfo.codeLabel.DoClick = roundInfo.copyCode.DoClick
 
     function roundInfo.copyCode:Think()
         self:SetEnabled(#roundInfo.codeLabel:GetText() == 6)
@@ -293,6 +296,9 @@
         Chatlog.Menu:SetKeyboardInputEnabled(new:GetText() == "Old logs")
     end
 
+    -- -- ! DEBUG
+    -- tabs:SwitchToName("Old logs")
+
 end
 
 concommand.Add("chatlog", function()
@@ -302,3 +308,10 @@ concommand.Add("chatlog", function()
         Chatlog.Menu:Close()
     end
 end)
+
+-- -- ! DEBUG
+-- if (IsValid(Chatlog.Menu)) then
+--     Chatlog.Menu:Close()
+-- end
+
+-- RunConsoleCommand("chatlog")
