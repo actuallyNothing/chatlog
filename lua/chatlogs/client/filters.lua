@@ -13,7 +13,7 @@ function Chatlog.DrawMoreFilters(parent, y, height)
     end
 
     local title = vgui.Create("DLabel", panel)
-        title:SetText("Filters")
+        title:SetText(Chatlog.Translate("FiltersTitle"))
         title:SetFont("ChatlogMessageLabel")
         title:SetTextColor(Color(0, 0, 0))
         title:SetPos(10, 5)
