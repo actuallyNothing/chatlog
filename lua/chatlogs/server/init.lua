@@ -96,10 +96,3 @@ net.Receive("ChatlogClientReady", function(len, ply)
         net.Send(ply)
     end
 end)
-
--- Function to add a number of fake messages
-function FakeMessages(num)
-    for i = 1, num do
-        Chatlog.Message(player.GetAll()[1], "Fake message " .. i, false)
-    end
-end
