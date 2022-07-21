@@ -301,6 +301,10 @@ function Chatlog:DrawOldLogs(tabs)
 
     end
 
+    loadButton.Think = function()
+        loadButton:SetEnabled(rounds:GetSelectedLine() ~= nil)
+    end
+
     net.Start("AskChatlogDates")
     net.SendToServer()
 
