@@ -39,10 +39,10 @@ function Chatlog.DrawPlayerList(parent, y, height)
 
         for k, v in pairs(round.Players) do
 
-            rolestr = onlyFirstLetterCapital(Chatlog.Translate(Chatlog.roleStrings[v.role]))
+            rolestr = onlyFirstLetterCapital(Chatlog.Translate(v.role))
 
             local line = listview:AddLine(v.nick, k, rolestr)
-            line:GetChild(2):SetTextColor(Chatlog.GetColor("name", Chatlog.roleStrings[v.role]))
+            line:GetChild(2):SetTextColor(Chatlog.GetColor("name", v.role))
 
             line.OnRightClick = function()
                 local contextMenu = DermaMenu()

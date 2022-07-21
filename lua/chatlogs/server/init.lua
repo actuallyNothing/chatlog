@@ -42,11 +42,15 @@ util.AddNetworkString("SendOldChatlogRounds")
 Chatlog:ValidateConfiguration()
 Chatlog.InitializeDB()
 
+function Chatlog.RoleStringFromPlayer(ply)
+    return (ply:Team() == TEAM_SPECTATOR or not ply:Alive()) and "spectator" or Chatlog.roleStrings[ply:GetRole()]
+end
+
 function Chatlog.Message(ply, text, teamChat, isRadio, radioTarget)
     if GetRoundState() ~= ROUND_ACTIVE then return end
 
     local steamID = ply:SteamID()
-    local role = (ply:Team() == TEAM_SPECTATOR or not ply:Alive()) and "spectator" or Chatlog.roleStrings[ply:GetRole()]
+    local role = Chatlog.RoleStringFromPlayer(ply)
 
     if (role == "innocent" or role == "spectator") then
         teamChat = false
@@ -73,6 +77,13 @@ function Chatlog.Message(ply, text, teamChat, isRadio, radioTarget)
                 steamID = radioTarget.steamID
             }
         end
+    end
+
+    if (not Chatlog.CurrentRound.Players[steamID]) then
+        Chatlog.CurrentRound.Players[steamID] = {
+            nick = ply:Nick(),
+            role = Chatlog.RoleStringFromPlayer(ply)
+        }
     end
 
     table.insert(Chatlog.CurrentRound.Log, line)

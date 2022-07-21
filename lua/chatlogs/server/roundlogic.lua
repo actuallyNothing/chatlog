@@ -165,7 +165,7 @@ hook.Add("TTTBeginRound", "ChatlogRoundStart", function()
     for k,v in pairs(player.GetAll()) do
         Chatlog.CurrentRound.Players[v:SteamID()] = {
             nick = v:Nick(),
-            role = v:GetRole()
+            role = Chatlog.RoleStringFromPlayer(v)
         }
     end
 
