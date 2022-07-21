@@ -19,7 +19,7 @@ function Chatlog.RadioToReadable(players, log)
     -- TTT @ cl_voice.lua
     local target = log.target
     local cmd = log.cmd
-    local param = target and target.name
+    local param = target and (target.isTranslationString and LANG.NameParam(target.name) or target.name)
     local lang_param = LANG.GetNameParam(param)
 
     if (lang_param) then

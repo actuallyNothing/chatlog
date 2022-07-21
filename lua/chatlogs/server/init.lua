@@ -83,15 +83,21 @@ function Chatlog.RadioMessage(ply, cmdName, cmdTarget)
     local target = {}
 
     if isstring(cmdTarget) then
-        target.name = LANG.NameParam(cmdTarget)
+        -- target.name = LANG.NameParam(cmdTarget)
+        target.name = cmdTarget
+        target.isTranslationString = true
     else
         if IsValid(cmdTarget) then
             if cmdTarget:IsPlayer() then
                 target.name = cmdTarget:Nick()
                 target.steamID = cmdTarget:SteamID()
             elseif cmdTarget:GetClass() == "prop_ragdoll" then
-                -- target.name = CORPSE.GetPlayerNick(cmdTarget, "[disconnected]") .. "\'s corpse"
-                target.name = LANG.NameParam("quick_corpse_id")
+                -- target.name = LANG.NameParam("quick_corpse_id")
+                    -- tab breaks JSON so we'll let the
+                    -- client do the job of translating
+                    -- this by themselves
+                target.name = "quick_corpse_id"
+                target.isTranslationString = true
                 target.steamID = cmdTarget.sid
             end
         end

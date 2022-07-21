@@ -41,7 +41,7 @@ function Chatlog.SendTable(index, ply, oldTable)
 
     end
 
-    if (not isOld and (chatlogTable.Log == nil or table.IsEmpty(chatlogTable.Log))) then
+    if (chatlogTable.Log == nil or table.IsEmpty(chatlogTable.Log)) then
         chatlogTable.Log = {
             -- Empty log / No round found
             [1] = {
@@ -99,8 +99,6 @@ net.Receive("AskOldChatlog", function(len, ply)
         return
     end
 
-    local tosend
-
     if (Chatlog.OldRounds[code]) then
         net.Start("SendOldChatlogResult")
         net.WriteUInt(3, 2)
@@ -118,7 +116,7 @@ net.Receive("AskOldChatlog", function(len, ply)
                 return
             end
 
-            tosend = data[1]
+            local tosend = data[1]
 
             tosend.Log = util.JSONToTable(tosend.log)
             tosend.log = nil
