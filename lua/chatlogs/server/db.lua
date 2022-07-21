@@ -93,7 +93,11 @@ function Chatlog.Query(query, callback, ...)
             file.Append("chatlog/mysql_errors.txt", longErr)
 
             print("[Chatlog] MySQL Query failed! Details in data/chatlog/mysql_errors.txt")
+
             success = false
+            if (callback) then
+                callback(success)
+            end
 
         end
 
