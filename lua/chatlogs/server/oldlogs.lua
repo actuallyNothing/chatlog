@@ -121,6 +121,7 @@ end
 
 net.Receive("AskChatlogDates", function(_, ply)
 
+    if (not Chatlog:CanSearchByDate(ply)) then return end
     if not (Chatlog.Dates.oldest or Chatlog.Dates.latest) then return end
 
     local days = util.Compress(util.TableToJSON(Chatlog.OldLogsDays))
@@ -145,6 +146,8 @@ local function getOldRoundsQuery(mysql, date)
 end
 
 net.Receive("AskOldChatlogRounds", function(_, ply)
+
+    if (not Chatlog:CanSearchByDate(ply)) then return end
 
     local id = net.ReadUInt(32)
     local year = net.ReadUInt(32)
