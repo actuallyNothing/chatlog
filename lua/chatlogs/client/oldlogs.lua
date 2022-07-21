@@ -73,7 +73,7 @@ function Chatlog:DrawOldLogs(tabs)
     local codePanel = vgui.Create("DPanel", panel)
     codePanel:Dock(TOP)
     codePanel:DockMargin(5, 5, 5, 5)
-    codePanel:SetHeight(100)
+    codePanel:SetHeight(80)
     codePanel:SetBackgroundColor(Chatlog.Colors["PANEL_DARK"])
 
     local codeTitle = vgui.Create("DLabel", codePanel)
@@ -269,18 +269,17 @@ function Chatlog:DrawOldLogs(tabs)
             lunix = nil
             roundColumn:SetName(string.format(Chatlog.Translate("OldLogsDateBetween"), node.hour .. "hs", node.hour + 1 .. "hs"))
 
-            local linestr = "[%s] %s - " .. Chatlog.Translate("Round")  .. "%s [%s]"
+            local linestr = "%s - %s - " .. Chatlog.Translate("Round")  .. "%s [%s]"
 
             for _, v in ipairs(node.rounds) do
 
                 if (v.unix ~= lunix) then
 
-                    local hour = (string.sub(tostring(os.date("%I:%M", v.unix)), 1, 1) == "0" and string.sub(tostring(os.date("%I:%M", v.unix)), 2, 5) or (tostring(os.date("%I:%M", v.unix))))
+                    local hour = os.date("%H:%M", v.unix)
                     local line = rounds:AddLine(string.format(linestr, hour, v.map, v.round, v.code))
                     line.time = v.unix
                     line.code = v.code
                     lunix = v.unix
-
 
                 end
 
@@ -342,7 +341,7 @@ net.Receive("SendOldChatlogRounds", function()
         local dates = {}
 
         for _, v in pairs(list) do
-            local _time = string.Explode(",", os.date("%H,%M", v.date))
+            local _time = string.Explode(",", os.date("%H,%M", v.unix))
             local hour = _time[1]
             hour = tonumber(hour)
             v.min = tonumber(_time[2])
