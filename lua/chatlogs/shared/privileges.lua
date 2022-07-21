@@ -1,28 +1,41 @@
--- Modify privileges in config/config.lua
--- these are some helper functions
+﻿-- Privilege helper functions
+local function getGroup(ply)
+    if (CLIENT) then ply = LocalPlayer() end
+    local group = ply:GetUserGroup()
 
--- Return a player's access level to the addon
-function Chatlog:GetAccessLevel(ply)
-	if ply:GetUserGroup() then
-		return Chatlog.Privileges[ply:GetUserGroup()]
-	else return 0 end
+    if Chatlog.Config.privileges[group] ~= nil then
+        return group
+    else
+        return "user"
+    end
 end
 
--- Return a boolean on whether the player should get team lines 
+-- Return a boolean on whether the player should get team lines
 function Chatlog:CanReadTeam(ply)
-	if ply:GetUserGroup() then
-		return Chatlog.TeamChatAccess[ply:GetUserGroup()]
-	else return false end
+    if (CLIENT) then ply = LocalPlayer() end
+    local group = getGroup(ply)
+
+    return Chatlog.Config.privileges[group]["can_read_team_messages"]
 end
 
 -- Return a boolean on whether the player should get dead lines
 function Chatlog:CanReadDead(ply)
-	return Chatlog:GetAccessLevel(ply) >= 2
+    if (CLIENT) then ply = LocalPlayer() end
+    local group = getGroup(ply)
+
+    return Chatlog.Config.privileges[group]["can_read_dead_players"]
 end
 
 -- Return a boolean on whether the player should be able to see the logs from an ongoing round
 function Chatlog:CanReadPresent(ply)
-	if Chatlog:GetAccessLevel(ply) == 4 || Chatlog:GetAccessLevel(ply) == 3 && ply:Alive() == false then
-		return true
-	end
+    if (CLIENT) then ply = LocalPlayer() end
+    local group = getGroup(ply)
+    if Chatlog.Config.privileges[group]["can_read_current_round"] == true or Chatlog.Config.privileges[group]["can_read_current_round"] == "spec_only" and ply:Alive() == false then return true end
+end
+
+-- Return a boolean on whether the player should be able to search old logs by date
+function Chatlog:CanSearchByDate(ply)
+    if (CLIENT) then ply = LocalPlayer() end
+    local group = getGroup(ply)
+    return Chatlog.Config.privileges[group]["can_search_old_logs_by_date"]
 end
