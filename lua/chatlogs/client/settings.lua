@@ -24,14 +24,19 @@
 
     -- On select, change language CVar and update GetChatlogLanguage
     languageSelect.OnSelect = function(panel, index, value, data)
+
         local currentLanguage = GetConVar("chatlog_language"):GetString()
         local newLang = string.lower(data)
-        if currentLanguage == newLang then return end
+
+        if (currentLanguage == newLang) then return end
         GetChatlogLanguage = newLang
+
         RunConsoleCommand("chatlog_language", newLang)
         self.Menu:Close()
+
         chat.AddText(Color(255, 255, 255), self.Translate("SwitchedLanguage"))
         RunConsoleCommand("chatlog")
+
     end
 
     languageForm:SetSize(settingsPanel:GetWide() - 10, tabs:GetTall() - 30)

@@ -23,13 +23,13 @@ function Chatlog:DrawManagerPanel(tabs)
 
     local selGroup
     local managerPanel = vgui.Create("DPanel")
-    local sidebar = managerPanel:Add("DPanel")
+    local sidebar = vgui.Create("DPanel", managerPanel)
     sidebar:Dock(LEFT)
     sidebar:SetWidth(125)
 
     -- Sidebar
 
-    local usergroups = sidebar:Add("DListView")
+    local usergroups = vgui.Create("DListView", sidebar)
     usergroups:AddColumn(Chatlog.Translate("AdminUsergroups"))
     usergroups:Dock(TOP)
     usergroups:DockMargin(5, 5, 5, 5)
@@ -40,13 +40,13 @@ function Chatlog:DrawManagerPanel(tabs)
         usergroups:AddLine(k)
     end
 
-    local addGroup = sidebar:Add("DButton")
+    local addGroup = vgui.Create("DButton", sidebar)
     addGroup:Dock(TOP)
     addGroup:DockMargin(5, 0, 5, 5)
     addGroup:SetText(Chatlog.Translate("AdminNewGroup"))
 
     addGroup.DoClick = function()
-        local addGroupFrame = self.Menu:Add("DFrame")
+        local addGroupFrame = vgui.Create("DFrame", self.Menu)
         addGroupFrame:SetBackgroundBlur(true)
         addGroupFrame:SetDraggable(false)
         addGroupFrame:Center()
@@ -55,17 +55,17 @@ function Chatlog:DrawManagerPanel(tabs)
         addGroupFrame:ShowCloseButton(false)
         addGroupFrame:MakePopup()
 
-        local title = addGroupFrame:Add("DLabel")
+        local title = vgui.Create("DLabel", addGroupFrame)
         title:SetText(Chatlog.Translate("AdminNewGroupTip"))
         title:Dock(TOP)
         title:DockMargin(5, 0, 5, -5)
 
-        local groupEntry = addGroupFrame:Add("DTextEntry")
+        local groupEntry = vgui.Create("DTextEntry", addGroupFrame)
         groupEntry:Dock(TOP)
         groupEntry:DockMargin(5, 5, 5, 5)
 
         local w, h = addGroupFrame:GetWide() / 2 - 10, 20
-        local confirm = addGroupFrame:Add("DButton")
+        local confirm = vgui.Create("DButton", addGroupFrame)
         confirm:SetSize(w, h)
         confirm:SetPos(5, 75)
         confirm:SetText(Chatlog.Translate("AdminNewGroupAdd"))
@@ -91,7 +91,7 @@ function Chatlog:DrawManagerPanel(tabs)
             end
         end
 
-        local cancel = addGroupFrame:Add("DButton")
+        local cancel = vgui.Create("DButton", addGroupFrame)
         cancel:SetSize(w, h)
         cancel:SetPos(addGroupFrame:GetWide() - w - 5, 75)
         cancel:SetText(Chatlog.Translate("Cancel"))
@@ -101,7 +101,7 @@ function Chatlog:DrawManagerPanel(tabs)
         end
     end
 
-    local mySqlConfig = sidebar:Add("DButton")
+    local mySqlConfig = vgui.Create("DButton", sidebar)
     mySqlConfig:Dock(TOP)
     mySqlConfig:DockMargin(5, 0, 5, 5)
     mySqlConfig:SetText(Chatlog.Translate("AdminMySQLSettings"))
@@ -115,7 +115,7 @@ function Chatlog:DrawManagerPanel(tabs)
         mySqlConfigFrame:MakePopup()
 
         if (reviewing) then
-            local reviewLabel = mySqlConfigFrame:Add("DLabel")
+            local reviewLabel = vgui.Create("DLabel", mySqlConfigFrame)
             reviewLabel:SetWrap(true)
             reviewLabel:SetAutoStretchVertical(true)
             reviewLabel:SetContentAlignment(5)
@@ -126,7 +126,7 @@ function Chatlog:DrawManagerPanel(tabs)
             reviewLabel:SetAutoStretchVertical(true)
         end
 
-        local ipLabel = mySqlConfigFrame:Add("DLabel")
+        local ipLabel = vgui.Create("DLabel", mySqlConfigFrame)
         ipLabel:SetText(Chatlog.Translate("MySQLHost"))
         ipLabel:Dock(TOP)
         ipLabel:DockMargin(5, 0, 5, -5)
@@ -134,7 +134,7 @@ function Chatlog:DrawManagerPanel(tabs)
 
         local fields = {}
 
-        local ip = mySqlConfigFrame:Add("DTextEntry")
+        local ip = vgui.Create("DTextEntry", mySqlConfigFrame)
         ip:SetPlaceholderText("127.0.0.1")
         ip:Dock(TOP)
         ip:DockMargin(5, 5, 5, 5)
@@ -147,13 +147,13 @@ function Chatlog:DrawManagerPanel(tabs)
             localConfig.mysql.ip = text
         end
 
-        local portLabel = mySqlConfigFrame:Add("DLabel")
+        local portLabel = vgui.Create("DLabel", mySqlConfigFrame)
         portLabel:SetText(Chatlog.Translate("MySQLPort"))
         portLabel:Dock(TOP)
         portLabel:DockMargin(5, 0, 5, -5)
         portLabel:SetTextColor(Chatlog.Colors.WHITE)
 
-        local port = mySqlConfigFrame:Add("DTextEntry")
+        local port = vgui.Create("DTextEntry", mySqlConfigFrame)
         port:SetPlaceholderText("3306")
         port:Dock(TOP)
         port:DockMargin(5, 5, 5, 5)
@@ -166,13 +166,13 @@ function Chatlog:DrawManagerPanel(tabs)
             localConfig.mysql.port = text
         end
 
-        local usernameLabel = mySqlConfigFrame:Add("DLabel")
+        local usernameLabel = vgui.Create("DLabel", mySqlConfigFrame)
         usernameLabel:SetText(Chatlog.Translate("MySQLUsername"))
         usernameLabel:Dock(TOP)
         usernameLabel:DockMargin(5, 0, 5, -5)
         usernameLabel:SetTextColor(Chatlog.Colors.WHITE)
 
-        local username = mySqlConfigFrame:Add("DTextEntry")
+        local username = vgui.Create("DTextEntry", mySqlConfigFrame)
         username:SetPlaceholderText("root")
         username:Dock(TOP)
         username:DockMargin(5, 5, 5, 5)
@@ -185,13 +185,13 @@ function Chatlog:DrawManagerPanel(tabs)
             localConfig.mysql.username = text
         end
 
-        local passwordLabel = mySqlConfigFrame:Add("DLabel")
+        local passwordLabel = vgui.Create("DLabel", mySqlConfigFrame)
         passwordLabel:SetText(Chatlog.Translate("MySQLPassword"))
         passwordLabel:Dock(TOP)
         passwordLabel:DockMargin(5, 0, 5, -5)
         passwordLabel:SetTextColor(Chatlog.Colors.WHITE)
 
-        local password = mySqlConfigFrame:Add("DTextEntry")
+        local password = vgui.Create("DTextEntry", mySqlConfigFrame)
         password:SetPlaceholderText("admin")
         password:Dock(TOP)
         password:DockMargin(5, 5, 5, 5)
@@ -204,13 +204,13 @@ function Chatlog:DrawManagerPanel(tabs)
             localConfig.mysql.password = text
         end
 
-        local databaseLabel = mySqlConfigFrame:Add("DLabel")
+        local databaseLabel = vgui.Create("DLabel", mySqlConfigFrame)
         databaseLabel:SetText(Chatlog.Translate("MySQLDatabase"))
         databaseLabel:Dock(TOP)
         databaseLabel:DockMargin(5, 0, 5, -5)
         databaseLabel:SetTextColor(Chatlog.Colors.WHITE)
 
-        local database = mySqlConfigFrame:Add("DTextEntry")
+        local database = vgui.Create("DTextEntry", mySqlConfigFrame)
         database:SetPlaceholderText("chatlog")
         database:Dock(TOP)
         database:DockMargin(5, 5, 5, 5)
@@ -235,7 +235,7 @@ function Chatlog:DrawManagerPanel(tabs)
             end
         end
 
-        local saveButton = mySqlConfigFrame:Add("DButton")
+        local saveButton = vgui.Create("DButton", mySqlConfigFrame)
         saveButton:SetText(Chatlog.Translate("SaveChanges"))
         saveButton:Dock(TOP)
         saveButton:DockMargin(5, 5, 5, 5)
@@ -253,7 +253,7 @@ function Chatlog:DrawManagerPanel(tabs)
         mySqlConfigFrame:SizeToChildren(false, true)
     end
 
-    local commit = sidebar:Add("DButton")
+    local commit = vgui.Create("DButton", sidebar)
     commit:Dock(TOP)
     commit:DockMargin(5, 0, 5, 5)
     commit:SetText(Chatlog.Translate("SaveChanges"))
@@ -278,25 +278,25 @@ function Chatlog:DrawManagerPanel(tabs)
 
     -- Privilege settings 
 
-    local groupView = managerPanel:Add("DPanel")
+    local groupView = vgui.Create("DPanel", managerPanel)
     groupView:Dock(TOP)
     groupView:DockMargin(0, 5, 5, 5)
     groupView:SetHeight(150)
     groupView:SetBackgroundColor(Chatlog.Colors["PANEL_DARK"])
 
-    local groupViewTitle = groupView:Add("DLabel")
+    local groupViewTitle = vgui.Create("DLabel", groupView)
     groupViewTitle:SetText(Chatlog.Translate("AdminPrivilegeTitle"))
     groupViewTitle:SetFont("ChatlogPanelTitle")
     groupViewTitle:SizeToContents()
     groupViewTitle:SetColor(Chatlog.Colors["WHITE"])
     groupViewTitle:SetPos(6, 3)
 
-    local readPresentLabel = groupView:Add("DLabel")
+    local readPresentLabel = vgui.Create("DLabel", groupView)
     readPresentLabel:SetText(Chatlog.Translate("AdminPrivilegeReadPresent"))
     readPresentLabel:Dock(TOP)
     readPresentLabel:DockMargin(5, 25, 5, 5)
 
-    local readPresent = groupView:Add("DComboBox")
+    local readPresent = vgui.Create("DComboBox", groupView)
     readPresent:SetText(Chatlog.Translate("AdminPrivilegeSelectGroup"))
     readPresent:SetDisabled(true)
     readPresent:Dock(TOP)
@@ -314,7 +314,7 @@ function Chatlog:DrawManagerPanel(tabs)
         localConfig.privileges[selGroup]["can_read_current_round"] = data
     end
 
-    local readTeam = groupView:Add("DCheckBoxLabel")
+    local readTeam = vgui.Create("DCheckBoxLabel", groupView)
     readTeam:SetText(Chatlog.Translate("AdminPrivilegeReadTeam"))
     readTeam:SetDisabled(true)
     readTeam:Dock(TOP)
@@ -324,7 +324,7 @@ function Chatlog:DrawManagerPanel(tabs)
         localConfig.privileges[selGroup]["can_read_team_messages"] = val
     end
 
-    local readDead = groupView:Add("DCheckBoxLabel")
+    local readDead = vgui.Create("DCheckBoxLabel", groupView)
     readDead:SetText(Chatlog.Translate("AdminPrivilegeReadDead"))
     readDead:SetDisabled(true)
     readDead:Dock(TOP)
@@ -334,7 +334,7 @@ function Chatlog:DrawManagerPanel(tabs)
         localConfig.privileges[selGroup]["can_read_dead_players"] = val
     end
 
-    local searchByDate = groupView:Add("DCheckBoxLabel")
+    local searchByDate = vgui.Create("DCheckBoxLabel", groupView)
     searchByDate:SetText(Chatlog.Translate("AdminPrivilegeSearchByDate"))
     searchByDate:SetDisabled(true)
     searchByDate:Dock(TOP)
@@ -344,7 +344,7 @@ function Chatlog:DrawManagerPanel(tabs)
         localConfig.privileges[selGroup]["can_search_old_logs_by_date"] = val
     end
 
-    local groupName = groupView:Add("DLabel")
+    local groupName = vgui.Create("DLabel", groupView)
     groupName:Dock(BOTTOM)
     groupName:DockMargin(5, 0, 0, 5)
     groupName:Center()
@@ -354,19 +354,19 @@ function Chatlog:DrawManagerPanel(tabs)
 
     -- Server settings
 
-    local serverView = managerPanel:Add("DPanel")
+    local serverView = vgui.Create("DPanel", managerPanel)
     serverView:Dock(FILL)
     serverView:DockMargin(0, 0, 5, 5)
     serverView:SetBackgroundColor(Chatlog.Colors["PANEL_LIGHT"])
 
-    local serverViewTitle = serverView:Add("DLabel")
+    local serverViewTitle = vgui.Create("DLabel", serverView)
     serverViewTitle:SetText(Chatlog.Translate("AdminServerTitle"))
     serverViewTitle:SetFont("ChatlogPanelTitle")
     serverViewTitle:SizeToContents()
     serverViewTitle:SetColor(Chatlog.Colors["BLACK"])
     serverViewTitle:SetPos(6, 3)
 
-    local quickKeybind = serverView:Add("DCheckBoxLabel")
+    local quickKeybind = vgui.Create("DCheckBoxLabel", serverView)
     quickKeybind:SetText(Chatlog.Translate("AdminServerKeybind"))
     quickKeybind:SetTooltip(Chatlog.Translate("AdminServerKeybindTooltip"))
     quickKeybind:SetTextColor(Chatlog.Colors["BLACK"])
@@ -378,7 +378,7 @@ function Chatlog:DrawManagerPanel(tabs)
         localConfig.keybind = val
     end
 
-    local dbUseMySQL = serverView:Add("DCheckBoxLabel")
+    local dbUseMySQL = vgui.Create("DCheckBoxLabel", serverView)
     dbUseMySQL:SetText(Chatlog.Translate("AdminServerUseMySQL"))
     dbUseMySQL:SetTooltip(Chatlog.Translate("AdminServerUseMySQLTooltip"))
     dbUseMySQL:SetTextColor(Chatlog.Colors["BLACK"])
@@ -393,7 +393,7 @@ function Chatlog:DrawManagerPanel(tabs)
         end
     end
 
-    local dbDayLimit = serverView:Add("DNumSlider")
+    local dbDayLimit = vgui.Create("DNumSlider", serverView)
     dbDayLimit:SetText(Chatlog.Translate("AdminServerDayLimit"))
     dbDayLimit:SetTooltip(Chatlog.Translate("AdminServerDayLimit"))
     dbDayLimit:SetDark(true)

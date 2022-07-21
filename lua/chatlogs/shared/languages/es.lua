@@ -150,4 +150,8 @@ ChatlogLanguage["es"] = {
     OldLogsDateBetween = "Rondas entre %s y %s",
     OldLogsDateLoad = "Cargar ronda",
 
+    ServerResponseNoRoundFound = "No se encontró ninguna ronda con ese código.",
+    ServerResponseInvalidCode = "Código inválido.",
+    ServerResponseOK = "Cargando ronda...",
+
 }

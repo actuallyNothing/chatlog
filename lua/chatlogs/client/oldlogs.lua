@@ -1,14 +1,14 @@
 local serverResponses = {
     [1] = function()
-        chat.AddText(Color(255, 0, 0), "No round found with that code.")
+        chat.AddText(Color(255, 0, 0), Chatlog.Translate("ServerResponseNoRoundFound"))
     end,
 
     [2] = function()
-        chat.AddText(Color(255, 255, 0), "Code is invalid.")
+        chat.AddText(Color(255, 255, 0), Chatlog.Translate("ServerResponseInvalidCode"))
     end,
 
     [3] = function(tabs)
-        chat.AddText(Color(0, 255, 0), "Loading round...")
+        chat.AddText(Color(0, 255, 0), Chatlog.Translate("ServerResponseOK"))
         tabs:SwitchToName(Chatlog.Translate("ChatTab"))
     end
 }
@@ -105,14 +105,17 @@ function Chatlog:DrawOldLogs(tabs)
     codeEntry:SetUpdateOnType(true)
 
     function codeEntry:OnValueChange(value)
+
         if (#value ~= 6) then
             self:SetTextColor(Chatlog.Colors["RED"])
         else
             self:SetTextColor(Chatlog.Colors["BLACK"])
         end
+
     end
 
     function codeEntry:OnLoseFocus()
+
         if (#self:GetValue() > 6) then
             self:SetValue(self:GetValue():sub(1, 6))
             self:SetText(self:GetValue():sub(1, 6))
@@ -120,6 +123,7 @@ function Chatlog:DrawOldLogs(tabs)
 
         self:SetValue(self:GetValue():upper())
         self:SetText(self:GetValue():upper())
+
     end
 
     local codeEnterButton = vgui.Create("DButton", codePanel)
@@ -194,9 +198,11 @@ function Chatlog:DrawOldLogs(tabs)
         local years = latest[1] - older[1]
 
         for y = 0, years do
+
             local year = latest[1] - y
 
             if Chatlog.OldLogsDays[year] then
+
                 local node_year = dateTree:AddNode(tostring(year))
                 node_year.year = year
                 local start_range
@@ -217,7 +223,9 @@ function Chatlog:DrawOldLogs(tabs)
                 end
 
                 for m = start_range, end_range do
+
                     if Chatlog.OldLogsDays[year][m] then
+
                         local month = Chatlog.Translate("Month" .. m)
                         local node_month = node_year:AddNode(month)
                         node_month.year = year
@@ -226,6 +234,7 @@ function Chatlog:DrawOldLogs(tabs)
                         local number_of_days
 
                         if m == 2 then
+
                             local real_year = 2000 + year
 
                             if real_year % 4 == 0 and not (real_year % 100 == 0 and real_year % 400 ~= 0) then
@@ -233,12 +242,15 @@ function Chatlog:DrawOldLogs(tabs)
                             else
                                 number_of_days = 28
                             end
+
                         else
                             number_of_days = (m % 2 == 0) and 31 or 30
                         end
 
                         for d = 1, number_of_days do
+
                             if Chatlog.OldLogsDays[year][m][d] then
+
                                 local day = node_month:AddNode(tostring(d))
                                 day.year = node_month.year
                                 day.month = node_month.month
@@ -247,18 +259,27 @@ function Chatlog:DrawOldLogs(tabs)
                                 day.old_SetExpanded = day.SetExpanded
 
                                 day.SetExpanded = function(pnl, expand, animation)
+
                                     if expand then
                                         LoadLogs(day)
                                     end
 
                                     return pnl.old_SetExpanded(pnl, expand, animation)
+
                                 end
+
                             end
+
                         end
+
                     end
+
                 end
+
             end
+
         end
+
     end
 
     dateTree.OnNodeSelected = function(tree, node)
