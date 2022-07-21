@@ -1,6 +1,4 @@
-﻿CreateClientConVar("chatlog_hide_dead", 0, true, false)
-
--- Fonts
+﻿-- Fonts
 surface.CreateFont("ChatlogMessageLabel", {
     font = "DermaLarge",
     size = 15,

@@ -11,6 +11,8 @@
 
     text_traitor = {255, 255, 201, 255},
     text_detective = {201, 255, 255, 255},
+
+    radio = {168, 168, 168, 255},
 }
 
 function Chatlog.DrawTextPanel(chatlogTab)
@@ -55,7 +57,16 @@ function Chatlog.DrawTextPanel(chatlogTab)
         richText:InsertColorChange(255, 255, 255, 255)
         richText:AppendText(string.format("[%s] ", Chatlog.FormatTime(log.curtime - round.curtime)))
         richText:InsertColorChange(unpack(textColors[log.role]))
-        richText:AppendText(Chatlog.Translate(log.role) .. Chatlog.Translate("TextPanelTo") .. (log.teamChat and Chatlog.Translate("TextPanelTeam") or Chatlog.Translate("TextPanelAll")) .. ":\n")
+        richText:AppendText(Chatlog.Translate(log.role))
+
+        if (log.radio) then
+            richText:InsertColorChange(unpack(textColors.radio))
+            richText:AppendText(Chatlog.Translate("TextPanelOnRadio"))
+        else
+            richText:AppendText(Chatlog.Translate("TextPanelTo") .. (log.teamChat and Chatlog.Translate("TextPanelTeam") or Chatlog.Translate("TextPanelAll")))
+        end
+
+        richText:AppendText(":\n")
 
         if (log.teamChat) then
             richText:InsertColorChange(unpack(textColors[log.role]))

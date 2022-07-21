@@ -73,6 +73,7 @@ ChatlogLanguage["en"] = {
     TextPanelTo = " to ",
     TextPanelTeam = "TEAM",
     TextPanelAll = "ALL",
+    TextPanelOnRadio = " ON RADIO",
     TextPanelDeadPrefix = "*DEAD* ",
 
     PlayerListButtonShow = "  Show players",

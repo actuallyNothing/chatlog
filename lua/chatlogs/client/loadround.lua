@@ -14,6 +14,40 @@ function Chatlog.FormatTime(seconds)
     end
 end
 
+function Chatlog.RadioToReadable(players, log)
+
+    -- TTT @ cl_voice.lua
+    local target = log.target
+    local cmd = log.cmd
+    local param = target and target.name
+    local lang_param = LANG.GetNameParam(param)
+
+    if (lang_param) then
+        if (lang_param == "quick_corpse_id") then
+            -- special case where nested translation is needed
+            param = LANG.GetPTranslation(lang_param, {
+                player = target.steamID
+            })
+        else
+            param = LANG.GetTranslation(lang_param)
+        end
+
+    elseif (LANG.GetRawTranslation(param)) then
+        param = LANG.GetTranslation(param)
+    end
+
+    local text = LANG.GetPTranslation(cmd, {
+        player = param
+    })
+
+    if (lang_param) then
+        text = util.Capitalize(text)
+    end
+
+    return text
+
+end
+
 function Chatlog.LoadRound(round, isOld)
 
     local loglist = Chatlog.chatLogList
@@ -50,33 +84,41 @@ function Chatlog.LoadRound(round, isOld)
 
             -- Filtering and privileges
 
-            if ((not Chatlog:CanReadTeam() and v["teamChat"]) or (not Chatlog:CanReadDead() and v.role == "spectator")) then isValid = false end
+            if (not v.radio) then
 
-            -- if (plyFilter ~= nil and playerList[v.steamID].nick ~= plyFilter) then isValid = false end
+                if ((not Chatlog:CanReadTeam() and v["teamChat"]) or (not Chatlog:CanReadDead() and v.role == "spectator")) then isValid = false end
 
-            if (Chatlog.Filters.team and not v["teamChat"]) then isValid = false end
+                if (Chatlog.Filters.team and not v["teamChat"]) then isValid = false end
 
-            if (Chatlog.Filters.hideDead and v.role == "spectator") then isValid = false end
+                if (Chatlog.Filters.hideDead and v.role == "spectator") then isValid = false end
 
-            if (isValid and Chatlog.Filters.text.enabled and not table.IsEmpty(Chatlog.Filters.text.strings)) then
-                local show = false
+                if (isValid and Chatlog.Filters.text.enabled and not table.IsEmpty(Chatlog.Filters.text.strings)) then
+                    local show = false
 
-                for _, substr in ipairs(Chatlog.Filters.text.strings) do
-                    if (string.find(v.text, substr:lower()) ~= nil) then show = true end
+                    for _, substr in ipairs(Chatlog.Filters.text.strings) do
+                        if (string.find(v.text, substr:lower()) ~= nil) then show = true end
+                    end
+
+                    if (not show) then isValid = false end
                 end
 
-                if (not show) then isValid = false end
-            end
+                if (isValid and Chatlog.Filters.players.enabled and not table.IsEmpty(Chatlog.Filters.players.steamids)) then
+                    isValid = Chatlog.Filters.players.steamids[v.steamID].show
+                end
 
-            if (isValid and Chatlog.Filters.players.enabled and not table.IsEmpty(Chatlog.Filters.players.steamids)) then
-                isValid = Chatlog.Filters.players.steamids[v.steamID].show
-            end
+                if (isValid and Chatlog.Filters.roles.enabled and not Chatlog.Filters.roles[v.role]) then
+                    isValid = false
+                end
 
-            if (isValid and Chatlog.Filters.roles.enabled and not Chatlog.Filters.roles[v.role]) then
-                isValid = false
+            else
+                -- Radio filter
             end
 
             if isValid then
+
+                if (v.radio) then
+                    v.text = Chatlog.RadioToReadable(playerList, v)
+                end
 
                 local lineMessage = v["text"]
                 local lineNick = playerList[v.steamID]["nick"]

@@ -48,10 +48,9 @@ util.AddNetworkString("SendOldChatlogRounds")
 Chatlog:ValidateConfiguration()
 Chatlog.InitializeDB()
 
-function Chatlog.Message(ply, text, teamChat)
+function Chatlog.Message(ply, text, teamChat, isRadio, radioTarget)
     if GetRoundState() ~= ROUND_ACTIVE then return end
 
-    local playerNick = ply:Nick()
     local steamID = ply:SteamID()
     local role = (ply:Team() == TEAM_SPECTATOR or not ply:Alive()) and "spectator" or Chatlog.roleStrings[ply:GetRole()]
 
@@ -60,23 +59,56 @@ function Chatlog.Message(ply, text, teamChat)
     end
 
     -- Insert this line into the server's current round
-    table.insert(Chatlog.CurrentRound.Log, {
-        text = text,
-        teamChat = teamChat,
+    local line = {
         steamID = steamID,
         role = role,
-        curtime = CurTime()
-    })
+        curtime = CurTime(),
+    }
 
-    -- Save player
-    if (not Chatlog.CurrentRound.Players[steamID]) then
-        Chatlog.CurrentRound.Players[steamID] = {
-            nick = playerNick
-        }
+    if (not isRadio) then
+        line.text = text
+        line.teamChat = teamChat
+    else
+        line.radio = true
+        line.cmd = text
+        line.teamChat = false
+
+        if (not table.IsEmpty(radioTarget)) then
+            line.target = {
+                name = radioTarget.name,
+                steamID = radioTarget.steamID
+            }
+        end
     end
+
+    table.insert(Chatlog.CurrentRound.Log, line)
+end
+
+function Chatlog.RadioMessage(ply, cmdName, cmdTarget)
+
+    local target = {}
+
+    if isstring(cmdTarget) then
+        target.name = LANG.NameParam(cmdTarget)
+    else
+        if IsValid(cmdTarget) then
+            if cmdTarget:IsPlayer() then
+                target.name = cmdTarget:Nick()
+                target.steamID = cmdTarget:SteamID()
+            elseif cmdTarget:GetClass() == "prop_ragdoll" then
+                -- target.name = CORPSE.GetPlayerNick(cmdTarget, "[disconnected]") .. "\'s corpse"
+                target.name = LANG.NameParam("quick_corpse_id")
+                target.steamID = cmdTarget.sid
+            end
+        end
+    end
+
+    Chatlog.Message(ply, cmdName, nil, true, target)
+
 end
 
 hook.Add("PlayerSay", "ChatlogMessage", Chatlog.Message)
+hook.Add("TTTPlayerRadioCommand", "ChatlogRadio", Chatlog.RadioMessage)
 
 hook.Add("InitPostEntity", "ChatlogServerInit", function()
     Chatlog:UpdateConfiguration(false)

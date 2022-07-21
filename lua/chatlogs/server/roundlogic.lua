@@ -164,6 +164,13 @@ hook.Add("TTTBeginRound", "ChatlogRoundStart", function()
     Chatlog.CurrentRound.curtime = CurTime()
     Chatlog.CurrentRound.map = game.GetMap()
 
+    for k,v in pairs(player.GetAll()) do
+        Chatlog.CurrentRound.Players[v:SteamID()] = {
+            nick = v:Nick(),
+            role = v:GetRole()
+        }
+    end
+
     setValidCode()
 end)
 
