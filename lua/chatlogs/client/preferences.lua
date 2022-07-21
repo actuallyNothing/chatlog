@@ -41,10 +41,16 @@ Chatlog.Colors = {
     ["ROLE_TRAITOR"] = Color(150, 0, 0),
     ["ROLE_DETECTIVE"] = Color(0, 0, 255),
     ["ROLE_SPECTATOR"] = Color(0, 0, 0, 185),
+
+    ["NAME_TRAITOR"] = Color(255, 0, 0),
+    ["NAME_DETECTIVE"] = Color(0, 0, 255),
+
     ["HIGHLIGHT_TRAITOR"] = Color(255, 0, 0, 50),
     ["HIGHLIGHT_DETECTIVE"] = Color(0, 0, 255, 50),
     ["HIGHLIGHT_SPECTATOR"] = Color(0, 0, 0, 125),
-    ["TEXTPANEL_BACKGROUND"] = Color(75, 75, 75)
+
+    ["TEXTPANEL_BACKGROUND"] = Color(75, 75, 75),
+    ["RADIO_MESSAGE"] = Color(0, 225, 255, 50)
 }
 
 function Chatlog.GetColor(type, color)

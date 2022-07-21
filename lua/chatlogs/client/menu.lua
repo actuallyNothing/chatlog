@@ -1,13 +1,14 @@
 ﻿function Chatlog:OpenMenu()
 
-    client = LocalPlayer()
+    local client = LocalPlayer()
+    local height = ScrH() > 600 and 600 or 440
 
     Chatlog.Filters.players.steamids = {}
 
     local setting
     self.filteredPlayer = nil
     self.Menu = vgui.Create("DFrame")
-    self.Menu:SetSize(600, 440)
+    self.Menu:SetSize(600, height)
     self.Menu:SetTitle("TTT Chatlog - v" .. self.Version)
     self.Menu:MakePopup()
     self.Menu:Center()
@@ -24,6 +25,7 @@
     chatlogTab:Dock(FILL)
     chatlogTab:DockMargin(5, -2, 5, 5)
     chatlogTab:InvalidateLayout(true)
+    chatlogTab.Height = height
 
     local roundInfo = vgui.Create("DPanel", chatlogTab)
     roundInfo:Dock(BOTTOM)
@@ -74,10 +76,10 @@
     roundInfo.copyCode:SetImage("icon16/tag_blue.png")
     roundInfo.copyCode:SetSize(16, 16)
     roundInfo.copyCode:SetPos(roundInfo.codeLabel:GetX() - 20, 5)
-    roundInfo.copyCode:SetTooltip("Copy this round's code")
+    roundInfo.copyCode:SetTooltip(Chatlog.Translate("CopyRoundCode"))
     roundInfo.copyCode.DoClick = function()
         SetClipboardText(roundInfo.codeLabel:GetText())
-        chat.AddText(Chatlog.Colors.WHITE, "Copied this round's code to clipboard! (" .. roundInfo.codeLabel:GetText() .. ")")
+        chat.AddText(Chatlog.Colors.WHITE, string.format(Chatlog.Translate("CopiedRoundCode"), roundInfo.codeLabel:GetText()))
     end
     roundInfo.codeLabel.DoClick = roundInfo.copyCode.DoClick
 
@@ -94,7 +96,6 @@
 
         roundInfo.codeLabel:SetText(round.code or Chatlog.Translate("RoundInfoError"))
         roundInfo.codeLabel:SizeToContents()
-        -- roundInfo.copyCode
     end)
 
     self.chatLogList = vgui.Create("DListView", chatlogTab)
@@ -102,7 +103,7 @@
     chatLoglist:Dock(BOTTOM)
     chatLoglist:DockMargin(5, 5, 5, 0)
     chatLoglist:SetSortable(false)
-    chatLoglist:SetHeight(210)
+    chatLoglist:SetHeight(370 - (height == 600 and 0 or 160))
     chatLoglist:SetMultiSelect(false)
 
     local column = chatLoglist:AddColumn(Chatlog.Translate("Time"))
@@ -293,6 +294,10 @@
 
     function tabs:OnActiveTabChanged(old, new)
         Chatlog.Menu:SetKeyboardInputEnabled(new:GetText() == Chatlog.Translate("OldLogsTab"))
+
+        if (new:GetPanel().Height) then
+            Chatlog.Menu:SetHeight(new:GetPanel().Height)
+        end
     end
 
 end

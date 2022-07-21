@@ -2,6 +2,7 @@
 
     -- Settings tab
     local settingsPanel = vgui.Create("DPanel")
+    settingsPanel.Height = 440
 
     settingsPanel:SetBackgroundColor(Color(0, 0, 0, 0))
 

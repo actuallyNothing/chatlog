@@ -2,12 +2,6 @@
 Chatlog.OldRounds = {}
 Chatlog.CurrentRound = Chatlog.CurrentRound or {}
 
-Chatlog.roleStrings = {
-    [0] = "innocent",
-    [1] = "traitor",
-    [2] = "detective"
-}
-
 AddCSLuaFile("chatlogs/shared/lang.lua")
 AddCSLuaFile("chatlogs/shared/privileges.lua")
 AddCSLuaFile("chatlogs/client/preferences.lua")

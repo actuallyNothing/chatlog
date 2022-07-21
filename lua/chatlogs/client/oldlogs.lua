@@ -67,6 +67,7 @@ function Chatlog:DrawOldLogs(tabs)
 
     Chatlog.OldLogs = vgui.Create("DPanel")
     local panel = Chatlog.OldLogs
+    panel.Height = 440
 
     -- Search by code
 

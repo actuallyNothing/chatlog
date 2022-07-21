@@ -1,3 +1,7 @@
+local function onlyFirstLetterCapital(str)
+    return string.upper(string.sub(str, 1, 1)) .. string.lower(string.sub(str, 2))
+end
+
 function Chatlog.DrawPlayerList(parent, y, height)
 
     if (not IsValid(parent)) then return end
@@ -24,15 +28,20 @@ function Chatlog.DrawPlayerList(parent, y, height)
     listview:SetMultiSelect(false)
     listview:AddColumn(Chatlog.Translate("PlayerListName"))
     listview:AddColumn("SteamID")
+    listview:AddColumn(Chatlog.Translate("Role"))
     listview:AddLine(Chatlog.Translate("SelectARound"), "")
 
     hook.Add("ChatlogRoundLoaded", "ChatlogPlayerList", function(round)
         listview:Clear()
 
         if (not round.Players) then round.Players = {} end
+        local rolestr
 
         for k, v in pairs(round.Players) do
-            local line = listview:AddLine(v.nick, k)
+
+            rolestr = onlyFirstLetterCapital(Chatlog.Translate(Chatlog.roleStrings[v.role]))
+
+            local line = listview:AddLine(v.nick, k, rolestr)
 
             line.OnRightClick = function()
                 local contextMenu = DermaMenu()
@@ -46,6 +55,7 @@ function Chatlog.DrawPlayerList(parent, y, height)
                 contextOption:SetIcon("icon16/key.png")
                 contextMenu:Open()
             end
+
         end
 
         if (table.Count(round.Players) < 1) then

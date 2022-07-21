@@ -23,6 +23,7 @@ function Chatlog:DrawManagerPanel(tabs)
 
     local selGroup
     local managerPanel = vgui.Create("DPanel")
+    managerPanel.Height = 440
     local sidebar = vgui.Create("DPanel", managerPanel)
     sidebar:Dock(LEFT)
     sidebar:SetWidth(125)

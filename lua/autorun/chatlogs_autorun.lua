@@ -16,6 +16,12 @@ Chatlog.Privileges = Chatlog.Privileges or {}
 Chatlog.TeamChatAccess = Chatlog.TeamChatAccess or {}
 ChatlogLanguage = ChatlogLanguage or {}
 
+Chatlog.roleStrings = {
+    [0] = "innocent",
+    [1] = "traitor",
+    [2] = "detective"
+}
+
 if not file.Exists("chatlog", "DATA") then
     file.CreateDir("chatlog")
 end

@@ -1,7 +1,7 @@
 ﻿local textColors = {
     innocent = {0, 255, 0, 255},
     traitor = {255, 0, 0, 255},
-    detective = {64, 64, 255, 255},
+    detective = {18, 201, 255, 255},
     spectator = {200, 200, 200, 255},
 
     name_alive = {0, 201, 0, 255},
@@ -12,7 +12,7 @@
     text_traitor = {255, 255, 201, 255},
     text_detective = {201, 255, 255, 255},
 
-    radio = {168, 168, 168, 255},
+    radio = {0, 225, 255, 255},
 }
 
 function Chatlog.DrawTextPanel(chatlogTab)

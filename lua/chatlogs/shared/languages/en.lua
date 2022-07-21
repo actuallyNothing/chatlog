@@ -161,8 +161,13 @@ ChatlogLanguage["en"] = {
     OldLogsDateBetween = "Rounds between %s and %s",
     OldLogsDateLoad = "Load round",
 
+    CopyRoundCode = "Copy this round's code",
+    CopiedRoundCode = "Copied this round's code to clipboard! (%s)",
+
     ServerResponseNoRoundFound = "No round found matching the given code.",
     ServerResponseInvalidCode = "Invalid code.",
     ServerResponseOK = "Loading round...",
+
+    Role = "Role",
 
 }
