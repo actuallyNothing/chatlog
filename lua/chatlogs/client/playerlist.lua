@@ -42,6 +42,7 @@ function Chatlog.DrawPlayerList(parent, y, height)
             rolestr = onlyFirstLetterCapital(Chatlog.Translate(Chatlog.roleStrings[v.role]))
 
             local line = listview:AddLine(v.nick, k, rolestr)
+            line:GetChild(2):SetTextColor(Chatlog.GetColor("name", Chatlog.roleStrings[v.role]))
 
             line.OnRightClick = function()
                 local contextMenu = DermaMenu()
@@ -64,12 +65,16 @@ function Chatlog.DrawPlayerList(parent, y, height)
     end)
 
     function panel.showPlayers()
+        if (panel.showing) then return end
+
         panel.showing = true
         panel:SetVisible(true)
         panel:MoveTo(5, y, 0.2, 0, 1, function() end)
     end
 
     function panel.hidePlayers()
+        if (not panel.showing) then return end
+
         panel.showing = false
         panel:MoveTo(580, y, 0.2, 0, 1, function() panel:SetVisible(false) end)
     end

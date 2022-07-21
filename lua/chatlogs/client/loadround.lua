@@ -134,9 +134,8 @@ function Chatlog.LoadRound(round, isOld)
 
                 local line = loglist:AddLine(lineTimestamp, lineNick, lineMessage, v.curtime)
 
-                if (not v.teamChat and (lineRole == "traitor" or lineRole == "detective")) then
-                    line:GetChild(1):SetTextColor(Chatlog.GetColor("name", lineRole))
-                end
+                -- Paint name with role color
+                line:GetChild(1):SetTextColor(Chatlog.GetColor("name", lineRole))
 
                 -- Paint team and dead chat lines
                 if (v["teamChat"] == true or lineRole == "spectator") then

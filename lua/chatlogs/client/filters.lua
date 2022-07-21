@@ -206,18 +206,26 @@ function Chatlog.DrawMoreFilters(parent, y, height)
     end)
 
     function panel.showFilters()
+        if (panel.showing) then return end
+
         panel.showing = true
         panel:SetVisible(true)
         panel:MoveTo(5, y, 0.2, 0, 1, function() end)
 
-        Chatlog.Menu:SetKeyboardInputEnabled(true)
+        if (IsValid(Chatlog.Menu)) then
+            Chatlog.Menu:SetKeyboardInputEnabled(true)
+        end
     end
 
     function panel.hideFilters()
+        if (not panel.showing) then return end
+
         panel.showing = false
         panel:MoveTo(-575, y, 0.2, 0, 1, function() panel:SetVisible(false) end)
 
-        Chatlog.Menu:SetKeyboardInputEnabled(false)
+        if (IsValid(Chatlog.Menu)) then
+            Chatlog.Menu:SetKeyboardInputEnabled(false)
+        end
     end
 
 end

@@ -26,8 +26,8 @@ surface.CreateFont("ChatlogPanelTitle", {
 })
 
 Chatlog.Colors = {
-    ["BLACK"] = Color(0, 0, 0),
-    ["WHITE"] = Color(255, 255, 255),
+    ["BLACK"] = color_black,
+    ["WHITE"] = color_white,
     ["YELLOW"] = Color(255, 255, 0),
     ["RED"] = Color(255, 0, 0),
     ["MAGENTA"] = Color(255, 0, 255),
@@ -37,13 +37,15 @@ Chatlog.Colors = {
     ["PANEL_LIGHT"] = Color(0, 0, 0, 95),
 
     -- Log colors
-    ["ROLE_INNOCENT"] = Color(0, 0, 0),
+    ["ROLE_INNOCENT"] = color_black,
     ["ROLE_TRAITOR"] = Color(150, 0, 0),
     ["ROLE_DETECTIVE"] = Color(0, 0, 255),
     ["ROLE_SPECTATOR"] = Color(0, 0, 0, 185),
 
+    ["NAME_INNOCENT"] = color_black,
     ["NAME_TRAITOR"] = Color(255, 0, 0),
     ["NAME_DETECTIVE"] = Color(0, 0, 255),
+    ["NAME_SPECTATOR"] = color_black,
 
     ["HIGHLIGHT_TRAITOR"] = Color(255, 0, 0, 50),
     ["HIGHLIGHT_DETECTIVE"] = Color(0, 0, 255, 50),
