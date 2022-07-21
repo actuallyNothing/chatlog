@@ -111,7 +111,9 @@ function Chatlog.LoadRound(round, isOld)
                 end
 
             else
-                -- Radio filter
+
+                if (Chatlog.Filters.hideRadio) then isValid = false end
+
             end
 
             if isValid then

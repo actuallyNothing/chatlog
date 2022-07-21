@@ -21,7 +21,7 @@ Chatlog.Filters = {
         }
     },
     team = false,
-    hideDead = false
+    hideRadio = false
 }
 
 include("chatlogs/client/preferences.lua")

@@ -57,7 +57,7 @@ ChatlogLanguage["en"] = {
     FiltersRolesTraitor = "Traitors",
     FiltersRolesDetective = "Detectives",
 
-    FiltersHideDead = "Hide dead players and spectators",
+    FiltersHideRadio = "Hide radio messages",
     FiltersOnlySubstringsTitle = "Show only messages containing:",
     FiltersOnlySubstringsPlaceholder = "c4, traitor, detective",
     FiltersOnlySubstringsTip = "Use commas to filter various words. Example: 'hello, world'",
