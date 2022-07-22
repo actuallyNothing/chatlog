@@ -9,7 +9,10 @@ local serverResponses = {
 
     [3] = function(tabs)
         chat.AddText(Color(0, 255, 0), Chatlog.Translate("ServerResponseOK"))
-        tabs:SwitchToName(Chatlog.Translate("ChatTab"))
+
+        if (IsValid(tabs)) then
+            tabs:SwitchToName(Chatlog.Translate("ChatTab"))
+        end
     end
 }
 
