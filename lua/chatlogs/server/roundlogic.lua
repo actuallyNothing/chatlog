@@ -99,6 +99,8 @@ net.Receive("AskOldChatlog", function(len, ply)
         return
     end
 
+    if (ply.LastChatlogRequest and (CurTime() - ply.LastChatlogRequest) < 2) then return end
+
     if (Chatlog.OldRounds[code]) then
         net.Start("SendOldChatlogResult")
         net.WriteUInt(3, 2)
@@ -130,6 +132,8 @@ net.Receive("AskOldChatlog", function(len, ply)
             Chatlog.SendTable(-2, ply, tosend)
         end)
     end
+
+    ply.LastChatlogRequest = CurTime()
 
 end)
 
