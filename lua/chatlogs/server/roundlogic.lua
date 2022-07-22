@@ -88,8 +88,6 @@ end)
 
 net.Receive("AskOldChatlog", function(len, ply)
 
-    if (not Chatlog:CanSearchByDate(ply)) then return end
-
     local code
     code = net.ReadString():upper()
 
