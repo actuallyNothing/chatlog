@@ -31,6 +31,7 @@ Chatlog.Colors = {
     ["YELLOW"] = Color(255, 255, 0),
     ["RED"] = Color(255, 0, 0),
     ["MAGENTA"] = Color(255, 0, 255),
+    ["GREEN"] = Color(0, 255, 0),
 
     -- Panel colors
     ["PANEL_DARK"] = Color(0, 0, 0, 245),
