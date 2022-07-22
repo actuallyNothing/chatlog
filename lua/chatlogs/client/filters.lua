@@ -9,54 +9,54 @@ function Chatlog.DrawMoreFilters(parent, y, height)
     panel:SetPos(-575, y)
 
     panel.Paint = function(self, w, h)
-        draw.RoundedBox(8, 0, 0, w, h, Color(172, 172, 172))
+        draw.RoundedBox(8, 0, 0, w, h, Chatlog.Colors.PANEL_SLIDE)
     end
 
     local title = vgui.Create("DLabel", panel)
     title:SetText(Chatlog.Translate("FiltersTitle"))
     title:SetFont("ChatlogMessageLabel")
-    title:SetTextColor(Color(0, 0, 0))
+    title:SetTextColor(Chatlog.Colors.BLACK)
     title:SetPos(10, 5)
 
     local filterTeam = vgui.Create("DCheckBoxLabel", panel)
     filterTeam:SetText(Chatlog.Translate("FiltersOnlyTeam"))
-    filterTeam:SetTextColor(Chatlog.Filters.team and Color(255, 255, 0) or Color(0, 0, 0))
+    filterTeam:SetTextColor(Chatlog.Filters.team and Chatlog.Colors.YELLOW or Chatlog.Colors.BLACK)
     filterTeam:SetPos(10, 30)
     filterTeam:SizeToContents()
 
     local filterRoles = vgui.Create("DCheckBoxLabel", panel)
     filterRoles:SetText(Chatlog.Translate("FiltersRoles"))
-    filterRoles:SetTextColor(Color(0, 0, 0))
+    filterRoles:SetTextColor(Chatlog.Colors.BLACK)
     filterRoles:SetPos(10, 50)
     filterRoles:SizeToContents()
 
     local filterRolesInnocent = vgui.Create("DCheckBoxLabel", panel)
     filterRolesInnocent:SetText(Chatlog.Translate("FiltersRolesInnocent"))
-    filterRolesInnocent:SetTextColor(Chatlog.Filters.roles.innocent and Color(255, 255, 0) or Color(0, 0, 0))
+    filterRolesInnocent:SetTextColor(Chatlog.Filters.roles.innocent and Chatlog.Colors.YELLOW or Chatlog.Colors.BLACK)
     filterRolesInnocent:SetPos(25, 70)
     filterRolesInnocent:SizeToContents()
 
     local filterRolesTraitor = vgui.Create("DCheckBoxLabel", panel)
     filterRolesTraitor:SetText(Chatlog.Translate("FiltersRolesTraitor"))
-    filterRolesTraitor:SetTextColor(Color(0, 0, 0))
+    filterRolesTraitor:SetTextColor(Chatlog.Colors.BLACK)
     filterRolesTraitor:SetPos(25, 90)
     filterRolesTraitor:SizeToContents()
 
     local filterRolesDetective = vgui.Create("DCheckBoxLabel", panel)
     filterRolesDetective:SetText(Chatlog.Translate("FiltersRolesDetective"))
-    filterRolesDetective:SetTextColor(Color(0, 0, 0))
+    filterRolesDetective:SetTextColor(Chatlog.Colors.BLACK)
     filterRolesDetective:SetPos(25, 110)
     filterRolesDetective:SizeToContents()
 
     local hideRadioCommands = vgui.Create("DCheckBoxLabel", panel)
     hideRadioCommands:SetText(Chatlog.Translate("FiltersHideRadio"))
-    hideRadioCommands:SetTextColor(Chatlog.Filters.hideRadio and Color(255, 255, 0) or Color(0, 0, 0))
+    hideRadioCommands:SetTextColor(Chatlog.Filters.hideRadio and Chatlog.Colors.YELLOW or Chatlog.Colors.BLACK)
     hideRadioCommands:SetPos(10, 130)
     hideRadioCommands:SizeToContents()
 
     filterTeam.OnChange = function(self, val)
         Chatlog.Filters.team = val
-        filterTeam:SetTextColor(val and Color(255, 255, 0) or Color(0, 0, 0))
+        filterTeam:SetTextColor(val and Chatlog.Colors.YELLOW or Chatlog.Colors.BLACK)
 
         if (val and Chatlog.Filters.roles.innocent) then
             filterRolesInnocent:SetValue(false)
@@ -66,7 +66,7 @@ function Chatlog.DrawMoreFilters(parent, y, height)
 
     filterRoles.OnChange = function(self, val)
         Chatlog.Filters.roles.enabled = val
-        filterRoles:SetTextColor(val and Color(255, 255, 0) or Color(0, 0, 0))
+        filterRoles:SetTextColor(val and Chatlog.Colors.YELLOW or Chatlog.Colors.BLACK)
 
         filterRolesInnocent:SetEnabled(val)
         filterRolesTraitor:SetEnabled(val)
@@ -75,7 +75,7 @@ function Chatlog.DrawMoreFilters(parent, y, height)
 
     filterRolesInnocent.OnChange = function(self, val)
         Chatlog.Filters.roles.innocent = val
-        filterRolesInnocent:SetTextColor(val and Color(255, 255, 0) or Color(0, 0, 0))
+        filterRolesInnocent:SetTextColor(val and Chatlog.Colors.YELLOW or Chatlog.Colors.BLACK)
 
         if (val and Chatlog.Filters.team) then
             filterTeam:SetValue(false)
@@ -85,17 +85,17 @@ function Chatlog.DrawMoreFilters(parent, y, height)
 
     filterRolesTraitor.OnChange = function(self, val)
         Chatlog.Filters.roles.traitor = val
-        filterRolesTraitor:SetTextColor(val and Color(255, 255, 0) or Color(0, 0, 0))
+        filterRolesTraitor:SetTextColor(val and Chatlog.Colors.YELLOW or Chatlog.Colors.BLACK)
     end
 
     filterRolesDetective.OnChange = function(self, val)
         Chatlog.Filters.roles.detective = val
-        filterRolesDetective:SetTextColor(val and Color(255, 255, 0) or Color(0, 0, 0))
+        filterRolesDetective:SetTextColor(val and Chatlog.Colors.YELLOW or Chatlog.Colors.BLACK)
     end
 
     hideRadioCommands.OnChange = function(self, val)
         Chatlog.Filters.hideRadio = val
-        hideRadioCommands:SetTextColor(val and Color(255, 255, 0) or Color(0, 0, 0))
+        hideRadioCommands:SetTextColor(val and Chatlog.Colors.YELLOW or Chatlog.Colors.BLACK)
     end
 
     filterTeam:SetValue(Chatlog.Filters.team)
@@ -110,7 +110,7 @@ function Chatlog.DrawMoreFilters(parent, y, height)
 
     local filterText = vgui.Create("DCheckBoxLabel", panel)
     filterText:SetText(Chatlog.Translate("FiltersOnlySubstringsTitle"))
-    filterText:SetTextColor(Color(0, 0, 0))
+    filterText:SetTextColor(Chatlog.Colors.BLACK)
     filterText:SetPos(10, 150)
     filterText:SizeToContents()
 
@@ -122,7 +122,7 @@ function Chatlog.DrawMoreFilters(parent, y, height)
 
     filterText.OnChange = function(self, val)
         Chatlog.Filters.text.enabled = val
-        filterText:SetTextColor(val and Color(255, 255, 0) or Color(0, 0, 0))
+        filterText:SetTextColor(val and Chatlog.Colors.YELLOW or Chatlog.Colors.BLACK)
         filterTextEntry:SetEnabled(val)
     end
 
@@ -145,13 +145,13 @@ function Chatlog.DrawMoreFilters(parent, y, height)
 
     local filterTextTip = vgui.Create("DLabel", panel)
     filterTextTip:SetText(Chatlog.Translate("FiltersOnlySubstringsTip"))
-    filterTextTip:SetTextColor(Color(0, 0, 0))
+    filterTextTip:SetTextColor(Chatlog.Colors.BLACK)
     filterTextTip:SetPos(10, 195)
     filterTextTip:SizeToContents()
 
     local filterPlayers = vgui.Create("DCheckBoxLabel", panel)
     filterPlayers:SetText(Chatlog.Translate("FiltersPlayers"))
-    filterPlayers:SetTextColor(Color(0, 0, 0))
+    filterPlayers:SetTextColor(Chatlog.Colors.BLACK)
     filterPlayers:SetPos(320, 10)
     filterPlayers:SizeToContents()
 
@@ -165,7 +165,7 @@ function Chatlog.DrawMoreFilters(parent, y, height)
 
     filterPlayers.OnChange = function(self, val)
         Chatlog.Filters.players.enabled = val
-        filterPlayers:SetTextColor(val and Color(255, 255, 0) or Color(0, 0, 0))
+        filterPlayers:SetTextColor(val and Chatlog.Colors.YELLOW or Chatlog.Colors.BLACK)
         filterPlayersList:SetEnabled(val)
     end
 

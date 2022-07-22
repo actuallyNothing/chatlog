@@ -1,14 +1,14 @@
 local serverResponses = {
     [1] = function()
-        chat.AddText(Color(255, 0, 0), Chatlog.Translate("ServerResponseNoRoundFound"))
+        chat.AddText(Chatlog.Colors.RED, Chatlog.Translate("ServerResponseNoRoundFound"))
     end,
 
     [2] = function()
-        chat.AddText(Color(255, 255, 0), Chatlog.Translate("ServerResponseInvalidCode"))
+        chat.AddText(Chatlog.Colors.YELLOW, Chatlog.Translate("ServerResponseInvalidCode"))
     end,
 
     [3] = function(tabs)
-        chat.AddText(Color(0, 255, 0), Chatlog.Translate("ServerResponseOK"))
+        chat.AddText(Chatlog.Colors.GREEN, Chatlog.Translate("ServerResponseOK"))
 
         if (IsValid(tabs)) then
             tabs:SwitchToName(Chatlog.Translate("ChatTab"))

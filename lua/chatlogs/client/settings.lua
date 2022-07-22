@@ -3,8 +3,7 @@
     -- Settings tab
     local settingsPanel = vgui.Create("DPanel")
     settingsPanel.Height = 440
-
-    settingsPanel:SetBackgroundColor(Color(0, 0, 0, 0))
+    settingsPanel.Paint = function() end
 
     -- Create a DForm
     local languageForm = vgui.Create("DForm", settingsPanel)
@@ -35,7 +34,7 @@
         RunConsoleCommand("chatlog_language", newLang)
         self.Menu:Close()
 
-        chat.AddText(Color(255, 255, 255), self.Translate("SwitchedLanguage"))
+        chat.AddText(Chatlog.Colors.WHITE, self.Translate("SwitchedLanguage"))
         RunConsoleCommand("chatlog")
 
     end
@@ -47,7 +46,7 @@
 
     -- Chatlog versioning and licensing label
     local versioning = vgui.Create("DLabel")
-    versioning:SetTextColor(Color(0, 0, 0))
+    versioning:SetTextColor(Chatlog.Colors.BLACK)
     versioning:SetFont("ChatlogVersioning")
     versioning:SetText(self.Translate("Licensing"))
     versioning:SizeToContents()

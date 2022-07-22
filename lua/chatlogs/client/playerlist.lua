@@ -13,13 +13,13 @@ function Chatlog.DrawPlayerList(parent, y, height)
     panel:SetPos(580, y)
 
     panel.Paint = function(self, w, h)
-        draw.RoundedBox(8, 0, 0, w, h, Color(172, 172, 172))
+        draw.RoundedBox(8, 0, 0, w, h, Chatlog.Colors.PANEL_SLIDE)
     end
 
     local title = vgui.Create("DLabel", panel)
     title:SetText(Chatlog.Translate("PlayerList"))
     title:SetFont("ChatlogMessageLabel")
-    title:SetTextColor(Color(0, 0, 0))
+    title:SetTextColor(Chatlog.Colors.BLACK)
     title:SetPos(10, 5)
 
     local listview = vgui.Create("DListView", panel)

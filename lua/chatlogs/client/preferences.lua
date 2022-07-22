@@ -35,6 +35,7 @@ Chatlog.Colors = {
     -- Panel colors
     ["PANEL_DARK"] = Color(0, 0, 0, 245),
     ["PANEL_LIGHT"] = Color(0, 0, 0, 95),
+    ["PANEL_SLIDE"] = Color(172, 172, 172),
 
     -- Log colors
     ["ROLE_INNOCENT"] = color_black,
