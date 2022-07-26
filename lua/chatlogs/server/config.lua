@@ -249,6 +249,8 @@ net.Receive("ChatlogCommitConfiguration", function(_, ply)
 end)
 
 net.Receive("ChatlogGetMySQLConfiguration", function(_, ply)
+    if (ply:GetUserGroup() ~= "superadmin") then return end
+
     net.Start("ChatlogSendMySQLConfiguration")
     net.WriteTable(Chatlog.Config.mysql)
     net.Send(ply)
