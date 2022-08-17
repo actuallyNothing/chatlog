@@ -70,8 +70,9 @@ This default configuration is written if there is not one already:
 ## Installation
 
 Drop the 'chatlogs' folder into the garrysmod/addons/ directory, inside your Garry's Mod installation.
-
 You can copy the default configuration, save it as /data/chatlog/chatlog_config.json and modify it to your liking before starting your server.
+
+**For using MySQL**, it is necessary to have the MySQLOO module installed: https://github.com/FredyH/MySQLOO
 
 ## Credits
 
